@@ -24,6 +24,10 @@ const testConfig = defineTestConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['src/test-setup.ts'],
+    alias: {
+      '@uiw/react-color': '@uiw/react-color/esm/index.js',
+      '@uiw/react-color-name': '@uiw/react-color-name/esm/index.js',
+    },
   },
 })
 
