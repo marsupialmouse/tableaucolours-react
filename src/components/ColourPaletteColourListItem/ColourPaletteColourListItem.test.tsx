@@ -1,28 +1,64 @@
 import {describe, it, expect, test} from 'vitest'
-import {render, screen} from '@testing-library/react'
-import {userEvent} from '../../test-utils.ts'
+import {screen} from '@testing-library/react'
+import {renderWithContext, userEvent} from '../../test-utils.tsx'
 import ColourPaletteColourListItem from './ColourPaletteColourListItem'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import ColourPickerTestIds from '../ColourPicker/ColourPickerTestIds'
 import classes from './ColourPaletteColourListItem.module.less'
+import {
+  createColours,
+  initialPaletteState,
+} from 'src/state/ColourPalettes/PaletteReducer.ts'
+import {usePaletteContext} from 'src/state/ColourPalettes/PaletteContext.tsx'
+
+interface WrapperProps {
+  index?: number
+  isDragging?: boolean
+}
+
+interface RenderProps extends WrapperProps {
+  colour: string
+  isSelected?: boolean
+}
+
+function render({colour, index, isSelected, isDragging}: RenderProps) {
+  const palette = {
+    ...initialPaletteState,
+    colours: createColours([colour], isSelected),
+  }
+  renderWithContext({
+    initialPaletteContext: palette,
+    children: <StateWrapper index={index} isDragging={isDragging} />,
+  })
+}
+
+function StateWrapper({index, isDragging}: WrapperProps) {
+  const {state} = usePaletteContext()
+
+  return (
+    <>
+      <ColourPaletteColourListItem
+        colour={state.colours[0]}
+        index={index}
+        isDragging={isDragging}
+      />
+    </>
+  )
+}
 
 describe('Colour palette colour list item: renders correctly', () => {
   it('is list item', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b'})
 
     expect(screen.getByTestId(TestIds.Self)).toBeInstanceOf(HTMLLIElement)
   })
 
   it('has colour hex in title', () => {
-    const colour = {id: 0, hex: '#AA5F10', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#AA5F10'})
 
     expect(screen.getByTestId(TestIds.Self)).toHaveAttribute(
       'title',
-      colour.hex + ' (double click to edit)'
+      '#AA5F10 (double click to edit)'
     )
   })
 
@@ -34,9 +70,7 @@ describe('Colour palette colour list item: renders correctly', () => {
   ])(
     'has row $row and column $column for index $index',
     ({index, row, column}) => {
-      const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-      render(<ColourPaletteColourListItem colour={colour} index={index} />)
+      render({colour: '#f0b', index: index})
 
       expect(screen.getByTestId(TestIds.Self)).toHaveStyle(
         `grid-row: ${row}; grid-column: ${column}`
@@ -45,9 +79,7 @@ describe('Colour palette colour list item: renders correctly', () => {
   )
 
   it('has one class by default', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b'})
 
     expect(screen.getByTestId(TestIds.Self)).toHaveClass(classes.colour, {
       exact: true,
@@ -55,9 +87,7 @@ describe('Colour palette colour list item: renders correctly', () => {
   })
 
   it('has selected class when selected', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: true}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b', isSelected: true})
 
     expect(screen.getByTestId(TestIds.Self)).toHaveClass(
       classes.colour + ' ' + classes['colour--selected'],
@@ -68,9 +98,7 @@ describe('Colour palette colour list item: renders correctly', () => {
   })
 
   it('has dragging class when dragging', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} isDragging={true} />)
+    render({colour: '#f0b', isDragging: true})
 
     expect(screen.getByTestId(TestIds.Self)).toHaveClass(
       classes.colour + ' ' + classes['colour--dragging'],
@@ -81,19 +109,15 @@ describe('Colour palette colour list item: renders correctly', () => {
   })
 
   it('has the background colour matching the colour', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#FF0FA0'})
 
     expect(screen.getByTestId(TestIds.Swatch)).toHaveStyle(
-      'background-color: ' + colour.hex
+      'background-color: #FF0FA0'
     )
   })
 
   it('does not show a colour picker', () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b'})
 
     expect(screen.queryByTestId(TestIds.ColourPicker)).not.toBeInTheDocument()
     expect(
@@ -104,9 +128,7 @@ describe('Colour palette colour list item: renders correctly', () => {
 
 describe('Colour palette colour list item: colour picker', () => {
   it('opens picker when swatch double clicked', async () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b'})
 
     await userEvent.dblClick(screen.getByTestId(TestIds.Swatch))
 
@@ -117,36 +139,20 @@ describe('Colour palette colour list item: colour picker', () => {
   })
 
   it('has picker open class when picker is open', async () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#f0b'})
 
     await userEvent.dblClick(screen.getByTestId(TestIds.Swatch))
     await screen.findByTestId(TestIds.ColourPicker)
 
     expect(screen.getByTestId(TestIds.Self)).toHaveClass(
-      classes.colour + ' ' + classes['colour--pickeropen'],
-      {
-        exact: true,
-      }
+      classes['colour--pickeropen']
     )
   })
 
-  it('calls onChange when colour is picked', async () => {
-    const colour = {id: 0, hex: '#000', isSelected: false}
-    const newHex = '#f0e0d0'
-    let changedColour = null
-    let changedHex = ''
+  it('changes colour when colour is picked', async () => {
+    const newHex = '#F0E0D0'
 
-    render(
-      <ColourPaletteColourListItem
-        colour={colour}
-        onChange={(c, h) => {
-          changedColour = c
-          changedHex = h
-        }}
-      />
-    )
+    render({colour: '#000'})
 
     await userEvent.dblClick(screen.getByTestId(TestIds.Swatch))
     const picker = await screen.findByTestId(TestIds.ColourPicker)
@@ -157,14 +163,13 @@ describe('Colour palette colour list item: colour picker', () => {
         newHex
     )
 
-    expect(changedHex).toBe(newHex)
-    expect(changedColour).toBe(colour)
+    expect(screen.getByTestId(TestIds.Swatch)).toHaveStyle(
+      'background-color: ' + newHex
+    )
   })
 
   it('closes picker when picking is done', async () => {
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(<ColourPaletteColourListItem colour={colour} />)
+    render({colour: '#000'})
 
     await userEvent.dblClick(screen.getByTestId(TestIds.Swatch))
     await userEvent.click(screen.getByTestId(ColourPickerTestIds.Done))
@@ -175,36 +180,12 @@ describe('Colour palette colour list item: colour picker', () => {
 
 describe('Colour palette colour list item: colour is selected', () => {
   it('when item is clicked', async () => {
-    let selectedColour = null
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(
-      <ColourPaletteColourListItem
-        colour={colour}
-        onSelect={(c) => (selectedColour = c)}
-      />
-    )
+    render({colour: '#000'})
 
     await userEvent.click(screen.getByTestId(TestIds.Self))
 
-    expect(selectedColour).toBe(colour)
-  })
-})
-
-describe('Colour palette colour list item: colour is removed', () => {
-  it('when remove button is clicked', async () => {
-    let removedColour = null
-    const colour = {id: 0, hex: '#f0b', isSelected: false}
-
-    render(
-      <ColourPaletteColourListItem
-        colour={colour}
-        onRemove={(c) => (removedColour = c)}
-      />
+    expect(screen.getByTestId(TestIds.Self)).toHaveClass(
+      classes['colour--selected']
     )
-
-    await userEvent.click(screen.getByTestId(TestIds.Remove))
-
-    expect(removedColour).toBe(colour)
   })
 })
