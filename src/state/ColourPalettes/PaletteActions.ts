@@ -4,6 +4,7 @@ export enum PaletteActionTypes {
   AddColour = 'AddColour',
   SelectColour = 'SelectColour',
   ChangeColour = 'ChangeColour',
+  MoveColour = 'MoveColour',
   RemoveColour = 'RemoveColour',
 }
 
@@ -22,6 +23,11 @@ export type ChangeColourAction = {
   payload: {colour: Colour; hex: string}
 }
 
+export type MoveColourAction = {
+  type: PaletteActionTypes.MoveColour
+  payload: {colour: Colour; newIndex: number}
+}
+
 export type RemoveColourAction = {
   type: PaletteActionTypes.RemoveColour
   payload: Colour
@@ -31,4 +37,5 @@ export type PaletteActions =
   | AddColourAction
   | SelectColourAction
   | ChangeColourAction
+  | MoveColourAction
   | RemoveColourAction

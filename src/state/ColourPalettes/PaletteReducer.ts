@@ -64,6 +64,13 @@ export function paletteReducer(draft: ColourPalette, action: PaletteActions) {
       draft.hasChanges = true
       break
 
+    case PaletteActionTypes.MoveColour:
+      let c = draft.colours
+      const oldIndex = c.findIndex((x) => x.id === action.payload.colour.id)
+      c.splice(action.payload.newIndex, 0, c.splice(oldIndex, 1)[0])
+      draft.hasChanges = true
+      break
+
     case PaletteActionTypes.SelectColour:
       draft.colours.forEach((x) => (x.isSelected = x.id === action.payload.id))
       break

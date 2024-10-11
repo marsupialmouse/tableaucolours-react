@@ -1,21 +1,30 @@
-import {useState} from 'react'
-import ColourPicker from 'components/ColourPicker/ColourPicker.tsx'
 import './App.less'
+import {PaletteContextProvider} from './state/ColourPalettes/PaletteContext'
+import ColourPaletteColourList from './components/ColourPaletteColourList/ColourPaletteColourList'
+import {
+  createColours,
+  initialPaletteState,
+} from './state/ColourPalettes/PaletteReducer'
 
 function App() {
-  const [hex, setHex] = useState<string>('#ff0')
+  const palette = {
+    ...initialPaletteState,
+    colours: createColours([
+      '#FF0000',
+      '#00FF00',
+      '#0000FF',
+      '#000',
+      '#FFF',
+      '#CCC',
+    ]),
+  }
 
   return (
     <>
       <div style={{width: '20rem'}}>
-        <ColourPicker
-          hex="#f00"
-          onChange={(h) => {
-            setHex(h)
-            console.log(h)
-          }}
-          onDone={() => console.log('Done: ' + hex)}
-        />
+        <PaletteContextProvider initialState={palette}>
+          <ColourPaletteColourList />
+        </PaletteContextProvider>
       </div>
     </>
   )

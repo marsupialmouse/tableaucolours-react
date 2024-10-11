@@ -1,6 +1,6 @@
 import {describe, it, expect} from 'vitest'
 import {render, screen} from '@testing-library/react'
-import {userEvent} from '../../test-utils.ts'
+import {userEvent} from '../../test-utils.tsx'
 import {PaletteContextProvider, usePaletteContext} from './PaletteContext.tsx'
 import {PaletteActionTypes} from './PaletteActions.ts'
 import {
@@ -122,6 +122,41 @@ describe('Palette Context', () => {
     await userEvent.click(screen.getByTestId('button'))
 
     expect(screen.getByTestId('colours')).toHaveTextContent('N N Y N')
+  })
+
+  it('moves colour in state', async () => {
+    const TestComponent = function () {
+      const {state, dispatch} = usePaletteContext()
+      return (
+        <div>
+          <span data-testid="colours">
+            {state.colours.map((x) => x.hex).join(' ')}
+          </span>
+          <button
+            data-testid="button"
+            onClick={() =>
+              dispatch({
+                type: PaletteActionTypes.MoveColour,
+                payload: {colour: state.colours[2], newIndex: 0},
+              })
+            }
+          ></button>
+        </div>
+      )
+    }
+
+    render(
+      <PaletteContextProvider
+        initialState={createPalette(['#FF0000', '#00FF00', '#0000FF'])}
+      >
+        <TestComponent />
+      </PaletteContextProvider>
+    )
+    await userEvent.click(screen.getByTestId('button'))
+
+    expect(screen.getByTestId('colours')).toHaveTextContent(
+      '#0000FF #FF0000 #00FF00'
+    )
   })
 
   it('removes colour from state', async () => {
