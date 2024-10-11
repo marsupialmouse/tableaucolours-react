@@ -1,5 +1,5 @@
 import {describe, it, expect, test} from 'vitest'
-import {render, screen, waitForElementToBeRemoved} from '@testing-library/react'
+import {render, screen} from '@testing-library/react'
 import {userEvent} from '../../test-utils.ts'
 import ColourPaletteColourListItem from './ColourPaletteColourListItem'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'

@@ -3,12 +3,7 @@ import ColourPicker from '../ColourPicker/ColourPicker'
 import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import {clsx} from 'clsx'
-
-export interface Colour {
-  id: number
-  hex: string
-  isSelected: boolean
-}
+import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
 
 export interface ColourPaletteColourListItemProps {
   colour: Colour
