@@ -9,7 +9,7 @@ import {
   createColours,
   initialPaletteState,
 } from 'src/state/ColourPalettes/PaletteReducer.ts'
-import {usePaletteContext} from 'src/state/ColourPalettes/PaletteContext.tsx'
+import {usePalette} from 'src/state/ColourPalettes/PaletteContext.tsx'
 
 interface WrapperProps {
   index?: number
@@ -33,7 +33,7 @@ function render({colour, index, isSelected, isDragging}: RenderProps) {
 }
 
 function StateWrapper({index, isDragging}: WrapperProps) {
-  const {state} = usePaletteContext()
+  const state = usePalette()
 
   return (
     <>

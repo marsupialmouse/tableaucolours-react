@@ -4,7 +4,7 @@ import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import {clsx} from 'clsx'
 import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
-import {usePaletteContext} from 'src/state/ColourPalettes/PaletteContext'
+import {usePaletteDispatch} from 'src/state/ColourPalettes/PaletteContext'
 import {PaletteActionTypes} from 'src/state/ColourPalettes/PaletteActions'
 
 export interface ColourPaletteColourListItemProps {
@@ -18,7 +18,7 @@ export default function ColourPaletteColourListItem({
   index = 0,
   isDragging = false,
 }: ColourPaletteColourListItemProps) {
-  const {dispatch} = usePaletteContext()
+  const dispatch = usePaletteDispatch()
   const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false)
 
   const column = Math.floor(index / 5) + 1

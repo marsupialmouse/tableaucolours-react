@@ -7,12 +7,9 @@ import {
   paletteReducer,
 } from './PaletteReducer'
 
-type PaletteContextType = {
-  state: ColourPalette
-  dispatch: React.Dispatch<PaletteActions>
-}
-
-const PaletteContext = createContext<PaletteContextType | null>(null)
+const PaletteContext = createContext<ColourPalette | null>(null)
+const PaletteDispatchContext =
+  createContext<React.Dispatch<PaletteActions> | null>(null)
 
 type ContextProviderProps = {
   initialState?: ColourPalette
@@ -29,13 +26,15 @@ export function PaletteContextProvider({
   )
 
   return (
-    <PaletteContext.Provider value={{state, dispatch}}>
-      {children}
+    <PaletteContext.Provider value={state}>
+      <PaletteDispatchContext.Provider value={dispatch}>
+        {children}
+      </PaletteDispatchContext.Provider>
     </PaletteContext.Provider>
   )
 }
 
-export function usePaletteContext() {
+export function usePalette() {
   const context = useContext(PaletteContext)
 
   if (!context) {
@@ -45,4 +44,16 @@ export function usePaletteContext() {
   }
 
   return context
+}
+
+export function usePaletteDispatch() {
+  const dispatch = useContext(PaletteDispatchContext)
+
+  if (!dispatch) {
+    throw new Error(
+      'The Palette Dispatch Context must be used within an PaletteContextProvider'
+    )
+  }
+
+  return dispatch
 }

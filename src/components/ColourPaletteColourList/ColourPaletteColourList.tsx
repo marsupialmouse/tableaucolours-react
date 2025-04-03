@@ -1,4 +1,7 @@
-import {usePaletteContext} from 'src/state/ColourPalettes/PaletteContext'
+import {
+  usePalette,
+  usePaletteDispatch,
+} from 'src/state/ColourPalettes/PaletteContext'
 import classes from './ColourPaletteColourList.module.less'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem'
 import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
@@ -6,7 +9,8 @@ import {PaletteActionTypes} from 'src/state/ColourPalettes/PaletteActions'
 import {useEffect, KeyboardEvent} from 'react'
 
 export default function ColourPaletteColourList() {
-  const {state, dispatch} = usePaletteContext()
+  const state = usePalette()
+  const dispatch = usePaletteDispatch()
 
   useEffect(() => {
     window.addEventListener('keyup', keyUp, false)

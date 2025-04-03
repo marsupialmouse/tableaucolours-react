@@ -1,7 +1,11 @@
 import {describe, it, expect} from 'vitest'
 import {render, screen} from '@testing-library/react'
 import {userEvent} from '../../test-utils.tsx'
-import {PaletteContextProvider, usePaletteContext} from './PaletteContext.tsx'
+import {
+  PaletteContextProvider,
+  usePalette,
+  usePaletteDispatch,
+} from './PaletteContext.tsx'
 import {PaletteActionTypes} from './PaletteActions.ts'
 import {
   ColourPalette,
@@ -26,7 +30,8 @@ function createPalette(
 describe('Palette Context', () => {
   it('adds a colour to state', async () => {
     const TestComponent = function () {
-      const {state, dispatch} = usePaletteContext()
+      const state = usePalette()
+      const dispatch = usePaletteDispatch()
       return (
         <div>
           <span data-testid="colours">
@@ -58,7 +63,8 @@ describe('Palette Context', () => {
 
   it('changes colour in state', async () => {
     const TestComponent = function () {
-      const {state, dispatch} = usePaletteContext()
+      const state = usePalette()
+      const dispatch = usePaletteDispatch()
       return (
         <div>
           <span data-testid="colours">
@@ -93,7 +99,8 @@ describe('Palette Context', () => {
 
   it('selects colour in state', async () => {
     const TestComponent = function () {
-      const {state, dispatch} = usePaletteContext()
+      const state = usePalette()
+      const dispatch = usePaletteDispatch()
       return (
         <div>
           <span data-testid="colours">
@@ -126,7 +133,8 @@ describe('Palette Context', () => {
 
   it('moves colour in state', async () => {
     const TestComponent = function () {
-      const {state, dispatch} = usePaletteContext()
+      const state = usePalette()
+      const dispatch = usePaletteDispatch()
       return (
         <div>
           <span data-testid="colours">
@@ -161,7 +169,8 @@ describe('Palette Context', () => {
 
   it('removes colour from state', async () => {
     const TestComponent = function () {
-      const {state, dispatch} = usePaletteContext()
+      const state = usePalette()
+      const dispatch = usePaletteDispatch()
       return (
         <div>
           <span data-testid="colours">
