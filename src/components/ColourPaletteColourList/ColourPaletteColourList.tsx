@@ -103,7 +103,7 @@ export default function ColourPaletteColourList() {
   return (
     <ul className={classes.colourlist}>
       {state.colours.map((c, i) => (
-        <ColourPaletteColourListItem colour={c} index={i} />
+        <ColourPaletteColourListItem colour={c} index={i} key={c.id} />
       ))}
     </ul>
   )

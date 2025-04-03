@@ -32,7 +32,6 @@ export default function ColourPaletteColourListItem({
 
   return (
     <li
-      key={colour.id}
       className={classNames}
       title={colour.hex + ' (double click to edit)'}
       style={{gridColumn: column, gridRow: row}}
