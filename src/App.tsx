@@ -8,6 +8,7 @@ import {
 import {PaletteType, PaletteTypes} from './state/ColourPalettes/PaletteTypes'
 import ColourPaletteTypeSelector from './components/ColourPaletteTypeSelector/ColourPaletteTypeSelector'
 import {useState} from 'react'
+import ColourPalettePreview from './components/ColourPalettePreview/ColourPalettePreview'
 
 function App() {
   const [selectedType, setSelectedType] = useState(PaletteTypes.sequential)
@@ -37,6 +38,7 @@ function App() {
             tabIndex={1}
           />
           <ColourPaletteColourList />
+          <ColourPalettePreview type={selectedType} colours={palette.colours} />
         </PaletteContextProvider>
       </div>
     </>
