@@ -1,4 +1,4 @@
-import {describe, it, expect, test} from 'vitest'
+import {describe, it, expect} from 'vitest'
 import {screen, render} from '@testing-library/react'
 import ColourPaletteTypeSelectorItem from './ColourPaletteTypeSelectorItem'
 import {default as TestIds} from './ColourPaletteTypeSelectorItemTestIds'

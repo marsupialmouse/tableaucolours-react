@@ -5,8 +5,12 @@ import {
   createColours,
   initialPaletteState,
 } from './state/ColourPalettes/PaletteReducer'
+import {PaletteType, PaletteTypes} from './state/ColourPalettes/PaletteTypes'
+import ColourPaletteTypeSelector from './components/ColourPaletteTypeSelector/ColourPaletteTypeSelector'
+import {useState} from 'react'
 
 function App() {
+  const [selectedType, setSelectedType] = useState(PaletteTypes.sequential)
   const palette = {
     ...initialPaletteState,
     colours: createColours([
@@ -19,10 +23,19 @@ function App() {
     ]),
   }
 
+  function handleTypeSelected(type: PaletteType): void {
+    setSelectedType(type)
+  }
+
   return (
     <>
       <div style={{width: '20rem'}}>
         <PaletteContextProvider initialState={palette}>
+          <ColourPaletteTypeSelector
+            selectedType={selectedType}
+            onTypeSelected={handleTypeSelected}
+            tabIndex={1}
+          />
           <ColourPaletteColourList />
         </PaletteContextProvider>
       </div>

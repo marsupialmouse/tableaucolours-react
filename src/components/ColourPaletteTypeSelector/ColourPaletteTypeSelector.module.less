@@ -1,0 +1,76 @@
+@import 'src/variables.less';
+
+.palettetypes {
+  display: block;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 3.4rem;
+  overflow: visible;
+
+  &-select {
+    position: relative;
+    background-color: #fff;
+    border-radius: 0.2rem;
+    box-shadow: @box-shadow;
+    z-index: 100;
+    user-select: none;
+
+    &:hover {
+      box-shadow: @box-shadow-hover;
+    }
+
+    &:focus,
+    &:focus:hover {
+      box-shadow: @box-shadow-active;
+    }
+  }
+
+  &-selectedtype {
+    margin-right: 3rem;
+  }
+
+  &-selectindicator {
+    position: absolute;
+    box-sizing: border-box;
+    width: 3rem;
+    text-align: center;
+    top: 0.6rem;
+    right: 0.2rem;
+    font-size: 1.8rem;
+    color: @tool-colour;
+  }
+
+  &-list {
+    display: none;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: @border;
+    border-radius: 0.2rem;
+    background-color: #fff;
+    box-shadow: @box-shadow;
+    z-index: 99;
+
+    &--open {
+      display: block;
+    }
+  }
+
+  &-type {
+    border-top: @border;
+    padding-right: 3rem;
+    background-color: #fff;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+
+    &--selected,
+    &--selected:hover {
+      background-color: @background-colour-selected;
+    }
+  }
+}
