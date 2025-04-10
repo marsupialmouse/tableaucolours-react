@@ -3,7 +3,7 @@ import {
   initialPaletteState,
 } from 'src/state/ColourPalettes/PaletteReducer'
 import {renderWithContext, userEvent} from 'src/test-utils'
-import {describe, expect, it, vi} from 'vitest'
+import {describe, expect, it} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteGetCode from './ColourPaletteGetCode'
 import {PaletteType, PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'

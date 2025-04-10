@@ -21,6 +21,10 @@ export class PaletteTypes {
   static sequential = PaletteTypes.#add('ordered-sequential', 'Sequential')
   static diverging = PaletteTypes.#add('ordered-diverging', 'Diverging')
 
+  static find(id: string | undefined): PaletteType | undefined {
+    return id == undefined ? undefined : PaletteTypes.#types[id]
+  }
+
   static get(id: string): PaletteType {
     return PaletteTypes.#types[id]
   }
