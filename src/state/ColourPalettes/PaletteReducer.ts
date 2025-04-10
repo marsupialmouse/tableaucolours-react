@@ -17,6 +17,9 @@ export interface ColourPalette {
 
 let nextColourId = 1
 
+const defaultType = PaletteTypes.regular
+const maximumColours = 20
+
 export function createColours(
   colours?: string[],
   selectFirstColour?: boolean
@@ -36,8 +39,6 @@ export function createColour(hex: string, isSelected?: boolean): Colour {
   }
 }
 
-const defaultType = PaletteTypes.regular
-
 export const initialPaletteState: ColourPalette = {
   name: '',
   type: defaultType,
@@ -47,10 +48,28 @@ export const initialPaletteState: ColourPalette = {
 }
 
 export function paletteReducer(draft: ColourPalette, action: PaletteActions) {
+  function selectColour(colour: Colour, colours: Colour[]) {
+    colours.forEach((x) => (x.isSelected = x.id === colour.id))
+  }
+
+  function replaceColours(palette: ColourPalette, colours?: string[]) {
+    palette.colours = createColours(
+      colours && colours.length > maximumColours
+        ? colours.slice(0, maximumColours)
+        : colours,
+      true
+    )
+    palette.hasChanges = true
+  }
+
   switch (action.type) {
     case PaletteActionTypes.AddColour:
-      draft.colours.push(createColour(action.payload))
-      draft.hasChanges = true
+      if (draft.colours.length < maximumColours) {
+        const colour = createColour(action.payload ?? '#FFFFFF')
+        draft.colours.push(colour)
+        selectColour(colour, draft.colours)
+        draft.hasChanges = true
+      }
       break
 
     case PaletteActionTypes.ChangeColour:
@@ -72,7 +91,18 @@ export function paletteReducer(draft: ColourPalette, action: PaletteActions) {
       break
 
     case PaletteActionTypes.SelectColour:
-      draft.colours.forEach((x) => (x.isSelected = x.id === action.payload.id))
+      selectColour(action.payload, draft.colours)
+      break
+
+    case PaletteActionTypes.ReplaceColours:
+      replaceColours(draft, action.payload)
+      break
+
+    case PaletteActionTypes.ReplacePalette:
+      draft.name = action.payload?.name || ''
+      draft.type = action.payload?.type || defaultType
+      replaceColours(draft, action.payload?.colours)
+      draft.hasChanges = true
       break
   }
 }
