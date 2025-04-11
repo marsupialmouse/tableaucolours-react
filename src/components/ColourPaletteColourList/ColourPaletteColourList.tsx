@@ -1,11 +1,11 @@
 import {
   usePalette,
   usePaletteDispatch,
-} from 'src/state/ColourPalettes/PaletteContext'
+} from 'src/stores/ColourPalettes/PaletteContext'
 import classes from './ColourPaletteColourList.module.less'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem'
-import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
-import {PaletteActionTypes} from 'src/state/ColourPalettes/PaletteActions'
+import {Colour} from 'src/types/Colour'
+import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
 import {useEffect, KeyboardEvent} from 'react'
 
 export default function ColourPaletteColourList() {

@@ -1,17 +1,19 @@
 import './App.less'
-import {PaletteContextProvider} from './state/ColourPalettes/PaletteContext'
+import {PaletteContextProvider} from './stores/ColourPalettes/PaletteContext'
 import ColourPaletteColourList from './components/ColourPaletteColourList/ColourPaletteColourList'
 import {
   createColours,
   initialPaletteState,
-} from './state/ColourPalettes/PaletteReducer'
-import {PaletteType, PaletteTypes} from './state/ColourPalettes/PaletteTypes'
+} from './stores/ColourPalettes/PaletteReducer'
+import {ColourPaletteType, ColourPaletteTypes} from './types/ColourPaletteTypes'
 import ColourPaletteTypeSelector from './components/ColourPaletteTypeSelector/ColourPaletteTypeSelector'
 import {useState} from 'react'
 import ColourPalettePreview from './components/ColourPalettePreview/ColourPalettePreview'
 
 function App() {
-  const [selectedType, setSelectedType] = useState(PaletteTypes.sequential)
+  const [selectedType, setSelectedType] = useState(
+    ColourPaletteTypes.sequential
+  )
   const palette = {
     ...initialPaletteState,
     colours: createColours([
@@ -24,7 +26,7 @@ function App() {
     ]),
   }
 
-  function handleTypeSelected(type: PaletteType): void {
+  function handleTypeSelected(type: ColourPaletteType): void {
     setSelectedType(type)
   }
 

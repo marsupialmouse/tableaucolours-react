@@ -1,10 +1,10 @@
-import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
-import {PaletteType} from 'src/state/ColourPalettes/PaletteTypes'
+import {Colour} from 'src/types/Colour'
+import {ColourPaletteType} from 'src/types/ColourPaletteTypes'
 import he from 'he'
 
 export interface TpsColourPalette {
   name: string
-  type: PaletteType | string
+  type: ColourPaletteType | string
   colours: Array<Colour> | Array<string>
 }
 
@@ -32,7 +32,7 @@ function replacePalettesInTpsXml(
 function colourPaletteXml({name, type, colours}: TpsColourPalette) {
   let x = `<color-palette name="${he.encode(name, {
     useNamedReferences: true,
-  })}" type="${type instanceof PaletteType ? type.id : type}">\n`
+  })}" type="${type instanceof ColourPaletteType ? type.id : type}">\n`
 
   colours.forEach(
     (c) => (x += `    <color>${typeof c == 'string' ? c : c.hex}</color>\n`)

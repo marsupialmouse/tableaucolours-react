@@ -1,41 +1,49 @@
 import {describe, it, expect, vi, test} from 'vitest'
 import {screen, render, waitFor} from '@testing-library/react'
-import {userEvent} from '../../test-utils.tsx'
+import {userEvent} from '../../testing/test-utils.tsx'
 import ColourPaletteTypeSelector from './ColourPaletteTypeSelector'
 import {default as TestIds} from './ColourPaletteTypeSelectorTestIds'
 import classes from './ColourPaletteTypeSelector.module.less'
-import {PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes.ts'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes.ts'
 
 const types = [
-  PaletteTypes.regular,
-  PaletteTypes.sequential,
-  PaletteTypes.diverging,
+  ColourPaletteTypes.regular,
+  ColourPaletteTypes.sequential,
+  ColourPaletteTypes.diverging,
 ]
 
 describe('Colour palette type selector', () => {
   it('renders as as a div', () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     expect(screen.getByTestId(TestIds.Self)).toBeInstanceOf(HTMLDivElement)
   })
 
   it('renders all types as options', () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     const selector = screen.getByTestId(TestIds.Selector)
     expect(selector).toBeInstanceOf(HTMLUListElement)
     expect(selector.childNodes.length).toEqual(3)
-    expect(selector.childNodes[0]).toHaveTextContent(PaletteTypes.regular.name)
+    expect(selector.childNodes[0]).toHaveTextContent(
+      ColourPaletteTypes.regular.name
+    )
     expect(selector.childNodes[1]).toHaveTextContent(
-      PaletteTypes.sequential.name
+      ColourPaletteTypes.sequential.name
     )
     expect(selector.childNodes[2]).toHaveTextContent(
-      PaletteTypes.diverging.name
+      ColourPaletteTypes.diverging.name
     )
   })
 
   it('should not have tabindex on selected type when not set', () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     expect(screen.getByTestId(TestIds.Selected)).not.toHaveAttribute('tabindex')
   })
@@ -43,7 +51,7 @@ describe('Colour palette type selector', () => {
   it('should have tabindex on selected type when set', () => {
     render(
       <ColourPaletteTypeSelector
-        selectedType={PaletteTypes.regular}
+        selectedType={ColourPaletteTypes.regular}
         tabIndex={13}
       />
     )
@@ -55,7 +63,9 @@ describe('Colour palette type selector', () => {
   })
 
   it('does not show type list when first rendered', () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     expect(screen.getByTestId(TestIds.Selector)).not.toHaveClass(
       classes['palettetypes-list--open']
@@ -63,7 +73,9 @@ describe('Colour palette type selector', () => {
   })
 
   it('shows type list when selected type is clicked', async () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     await userEvent.click(screen.getByTestId(TestIds.Selected))
 
@@ -73,7 +85,9 @@ describe('Colour palette type selector', () => {
   })
 
   it('hides type list when open list clicked', async () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     await userEvent.click(screen.getByTestId(TestIds.Selected))
     await userEvent.click(screen.getByTestId(TestIds.Selector).children[0])
@@ -87,7 +101,7 @@ describe('Colour palette type selector', () => {
     const mockTypeSelected = vi.fn()
     render(
       <ColourPaletteTypeSelector
-        selectedType={PaletteTypes.regular}
+        selectedType={ColourPaletteTypes.regular}
         onTypeSelected={mockTypeSelected}
       />
     )
@@ -102,7 +116,9 @@ describe('Colour palette type selector', () => {
   })
 
   it('does not open type list when window is clicked', async () => {
-    render(<ColourPaletteTypeSelector selectedType={PaletteTypes.regular} />)
+    render(
+      <ColourPaletteTypeSelector selectedType={ColourPaletteTypes.regular} />
+    )
 
     await userEvent.click(document.body)
 
@@ -116,7 +132,7 @@ describe('Colour palette type selector', () => {
 
     render(
       <ColourPaletteTypeSelector
-        selectedType={PaletteTypes.regular}
+        selectedType={ColourPaletteTypes.regular}
         onTypeSelected={mockTypeSelected}
       />
     )
@@ -227,7 +243,7 @@ describe('Colour palette type selector', () => {
     it('the type list is opened if closed', async () => {
       render(
         <ColourPaletteTypeSelector
-          selectedType={PaletteTypes.regular}
+          selectedType={ColourPaletteTypes.regular}
           tabIndex={1}
         />
       )
@@ -243,7 +259,7 @@ describe('Colour palette type selector', () => {
     it('the type list is closed if open', async () => {
       render(
         <ColourPaletteTypeSelector
-          selectedType={PaletteTypes.sequential}
+          selectedType={ColourPaletteTypes.sequential}
           tabIndex={1}
         />
       )
@@ -260,7 +276,7 @@ describe('Colour palette type selector', () => {
   it('gives focus to selected type element when type selected', async () => {
     render(
       <ColourPaletteTypeSelector
-        selectedType={PaletteTypes.regular}
+        selectedType={ColourPaletteTypes.regular}
         tabIndex={1}
       />
     )

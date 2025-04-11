@@ -1,11 +1,11 @@
-import {PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {describe, expect, it} from 'vitest'
 import {colourPaletteXml, replacePalettesInTpsXml} from './TpsWriter'
 
 describe('Generates TPS XML colour palette', () => {
   it('including name, type and colours', () => {
     const name = 'Midweek Mayhem'
-    const type = PaletteTypes.sequential
+    const type = ColourPaletteTypes.sequential
     const colours = ['#ffffff', '#00ff00', '#000000']
 
     const xml = colourPaletteXml({name, type, colours})
@@ -20,7 +20,7 @@ describe('Generates TPS XML colour palette', () => {
   it('encodes name in XML', () => {
     const xml = colourPaletteXml({
       name: '<xml "name">',
-      type: PaletteTypes.regular,
+      type: ColourPaletteTypes.regular,
       colours: ['#fff'],
     })
 
@@ -41,7 +41,7 @@ describe('Generates TPS XML colour palette', () => {
   it('includes hex value of Colour instances', () => {
     const xml = colourPaletteXml({
       name: 'X',
-      type: PaletteTypes.regular,
+      type: ColourPaletteTypes.regular,
       colours: [{hex: '#aa00bb', id: 1, isSelected: false}],
     })
 
@@ -54,7 +54,7 @@ describe('Generates TPS XML colour palette', () => {
 describe('Replaces colour palettes in TPS XML', () => {
   it('replaces existing colour paletes', () => {
     const palettes = [
-      {name: 'Max', type: PaletteTypes.regular, colours: ['#f0f']},
+      {name: 'Max', type: ColourPaletteTypes.regular, colours: ['#f0f']},
       {
         name: 'David',
         type: 'tools-out',
@@ -87,7 +87,7 @@ describe('Replaces colour palettes in TPS XML', () => {
 
   it('does not replace other preferences', () => {
     const palettes = [
-      {name: 'Brakes', type: PaletteTypes.regular, colours: ['#f0f']},
+      {name: 'Brakes', type: ColourPaletteTypes.regular, colours: ['#f0f']},
     ]
     const originalXml = `<workbook>
 	<preferences>

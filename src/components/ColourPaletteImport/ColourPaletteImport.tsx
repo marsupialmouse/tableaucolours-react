@@ -3,9 +3,9 @@ import classes from './ColourPaletteImport.module.less'
 import {default as TestIds} from './ColourPaletteImportTestIds'
 import clsx from 'clsx'
 import {parseColourPalette, ParsedPalette} from 'src/utils/TpsParser'
-import {usePaletteDispatch} from 'src/state/ColourPalettes/PaletteContext'
-import {PaletteActionTypes} from 'src/state/ColourPalettes/PaletteActions'
-import {PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {usePaletteDispatch} from 'src/stores/ColourPalettes/PaletteContext'
+import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 
 export interface ColourPaletteImportProps {
   onDone?: () => void
@@ -33,7 +33,7 @@ export default function ColourPaletteImport({
       type: PaletteActionTypes.ReplacePalette,
       payload: {
         name: palette?.name,
-        type: PaletteTypes.find(palette?.type),
+        type: ColourPaletteTypes.find(palette?.type),
         colours: palette?.colours,
       },
     })

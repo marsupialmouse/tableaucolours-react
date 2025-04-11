@@ -3,18 +3,18 @@ import {screen, render} from '@testing-library/react'
 import ColourPaletteTypeSelectorItem from './ColourPaletteTypeSelectorItem'
 import {default as TestIds} from './ColourPaletteTypeSelectorItemTestIds'
 import classes from './ColourPaletteTypeSelectorItem.module.less'
-import {PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes.ts'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 
 describe('Colour palette type selector item', () => {
   it('renders as as a div', () => {
-    render(<ColourPaletteTypeSelectorItem type={PaletteTypes.regular} />)
+    render(<ColourPaletteTypeSelectorItem type={ColourPaletteTypes.regular} />)
 
     expect(screen.getByTestId(TestIds.Self)).toBeInstanceOf(HTMLDivElement)
   })
   describe.each([
-    {type: PaletteTypes.regular},
-    {type: PaletteTypes.diverging},
-    {type: PaletteTypes.sequential},
+    {type: ColourPaletteTypes.regular},
+    {type: ColourPaletteTypes.diverging},
+    {type: ColourPaletteTypes.sequential},
   ])('When type is $type.name', ({type}) => {
     it(`has ${type.id} in example class name`, () => {
       render(<ColourPaletteTypeSelectorItem type={type} />)

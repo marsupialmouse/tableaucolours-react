@@ -1,4 +1,4 @@
-import {usePalette} from 'src/state/ColourPalettes/PaletteContext'
+import {usePalette} from 'src/stores/ColourPalettes/PaletteContext'
 import classes from './ColourPaletteGetCode.module.less'
 import {default as TestIds} from './ColourPaletteGetCodeTestIds'
 import {colourPaletteXml} from 'src/utils/TpsWriter'

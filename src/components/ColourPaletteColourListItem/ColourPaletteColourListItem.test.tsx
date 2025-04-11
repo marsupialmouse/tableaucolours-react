@@ -1,6 +1,6 @@
 import {describe, it, expect, test} from 'vitest'
 import {screen} from '@testing-library/react'
-import {renderWithContext, userEvent} from '../../test-utils.tsx'
+import {renderWithContext, userEvent} from '../../testing/test-utils.tsx'
 import ColourPaletteColourListItem from './ColourPaletteColourListItem'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import ColourPickerTestIds from '../ColourPicker/ColourPickerTestIds'
@@ -8,8 +8,8 @@ import classes from './ColourPaletteColourListItem.module.less'
 import {
   createColours,
   initialPaletteState,
-} from 'src/state/ColourPalettes/PaletteReducer.ts'
-import {usePalette} from 'src/state/ColourPalettes/PaletteContext.tsx'
+} from 'src/stores/ColourPalettes/PaletteReducer.ts'
+import {usePalette} from 'src/stores/ColourPalettes/PaletteContext.tsx'
 
 interface WrapperProps {
   index?: number

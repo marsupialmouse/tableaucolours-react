@@ -1,9 +1,7 @@
 import * as testingLibraryUserEvent from '@testing-library/user-event'
-import {
-  ColourPalette,
-  initialPaletteState,
-} from './state/ColourPalettes/PaletteReducer'
-import {PaletteContextProvider} from './state/ColourPalettes/PaletteContext'
+import {initialPaletteState} from '../stores/ColourPalettes/PaletteReducer'
+import {ColourPalette} from '../types/ColourPalette'
+import {PaletteContextProvider} from '../stores/ColourPalettes/PaletteContext'
 import {ReactNode} from 'react'
 import {render} from '@testing-library/react'
 

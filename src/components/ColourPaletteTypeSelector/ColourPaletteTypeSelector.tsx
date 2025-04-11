@@ -1,20 +1,23 @@
 import {KeyboardEvent, useEffect, useRef, useState} from 'react'
-import {PaletteType, PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {
+  ColourPaletteType,
+  ColourPaletteTypes,
+} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPaletteTypeSelector.module.less'
 import {default as TestIds} from './ColourPaletteTypeSelectorTestIds'
 import {clsx} from 'clsx'
 import ColourPaletteTypeSelectorItem from '../ColourPaletteTypeSelectorItem/ColourPaletteTypeSelectorItem'
 
 export interface ColourPaletteTypeSelectorProps {
-  selectedType: PaletteType
-  onTypeSelected?: (type: PaletteType) => void
+  selectedType: ColourPaletteType
+  onTypeSelected?: (type: ColourPaletteType) => void
   tabIndex?: number // Keyboard/focus events only work if tabIndex is set
 }
 
 const types = [
-  PaletteTypes.regular,
-  PaletteTypes.sequential,
-  PaletteTypes.diverging,
+  ColourPaletteTypes.regular,
+  ColourPaletteTypes.sequential,
+  ColourPaletteTypes.diverging,
 ]
 
 export default function ColourPaletteTypeSelector({
@@ -81,7 +84,7 @@ export default function ColourPaletteTypeSelector({
     }
   }
 
-  function handleTypeClick(type: PaletteType) {
+  function handleTypeClick(type: ColourPaletteType) {
     onTypeSelected?.(type)
     selectedElement.current?.focus()
     closeSelector()

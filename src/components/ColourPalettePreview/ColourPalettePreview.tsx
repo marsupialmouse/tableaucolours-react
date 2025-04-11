@@ -1,10 +1,13 @@
-import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
-import {PaletteType, PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {Colour} from 'src/types/Colour'
+import {
+  ColourPaletteType,
+  ColourPaletteTypes,
+} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPalettePreview.module.less'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
 
 export interface ColourPalettePreviewProps {
-  type: PaletteType
+  type: ColourPaletteType
   colours: Colour[]
 }
 
@@ -14,11 +17,11 @@ export default function ColourPalettePreview({
 }: ColourPalettePreviewProps) {
   function getBackgroundStyle() {
     switch (type) {
-      case PaletteTypes.regular:
+      case ColourPaletteTypes.regular:
         return regular()
 
-      case PaletteTypes.diverging:
-      case PaletteTypes.sequential:
+      case ColourPaletteTypes.diverging:
+      case ColourPaletteTypes.sequential:
         return ordered()
 
       default:

@@ -1,5 +1,5 @@
-import {Colour} from './PaletteReducer'
-import {PaletteType} from './PaletteTypes'
+import {Colour} from '../../types/Colour'
+import {ColourPaletteType} from '../../types/ColourPaletteTypes'
 
 export enum PaletteActionTypes {
   AddColour = 'AddColour',
@@ -43,7 +43,7 @@ export type ReplaceColoursAction = {
 
 export type ReplacePaletteAction = {
   type: PaletteActionTypes.ReplacePalette
-  payload?: {name?: string; type?: PaletteType; colours?: string[]}
+  payload?: {name?: string; type?: ColourPaletteType; colours?: string[]}
 }
 
 export type PaletteActions =

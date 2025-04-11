@@ -1,19 +1,22 @@
 import {
   createColours,
   initialPaletteState,
-} from 'src/state/ColourPalettes/PaletteReducer'
-import {renderWithContext, userEvent} from 'src/test-utils'
+} from 'src/stores/ColourPalettes/PaletteReducer'
+import {renderWithContext, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it, vi} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteImport from './ColourPaletteImport'
 import classes from './ColourPaletteImport.module.less'
-import {PaletteType, PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {
+  ColourPaletteType,
+  ColourPaletteTypes,
+} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteImportTestIds'
-import {usePalette} from 'src/state/ColourPalettes/PaletteContext'
+import {usePalette} from 'src/stores/ColourPalettes/PaletteContext'
 
 interface RenderProps {
   name?: string
-  type?: PaletteType
+  type?: ColourPaletteType
   colours?: string[]
   onDone?(): void
 }
@@ -125,7 +128,7 @@ describe('Colour Palette Import component', () => {
 
   it('imports valid xml into state when import button clicked', async () => {
     const name = 'Hello!'
-    const type = PaletteTypes.sequential
+    const type = ColourPaletteTypes.sequential
     const colours = ['#012', '#789']
     render()
 
@@ -152,7 +155,7 @@ describe('Colour Palette Import component', () => {
     await userEvent.click(screen.getByTestId(TestIds.ImportButton))
 
     expect(screen.getByTestId('contextpalette-type')).toHaveTextContent(
-      PaletteTypes.regular.id
+      ColourPaletteTypes.regular.id
     )
   })
 
@@ -196,7 +199,7 @@ describe('Colour Palette Import component', () => {
 
   it('does not import palette when Cancel is clicked', async () => {
     const name = 'Hello!'
-    const type = PaletteTypes.sequential
+    const type = ColourPaletteTypes.sequential
     const colours = ['#012', '#789']
     render({name, type, colours})
 

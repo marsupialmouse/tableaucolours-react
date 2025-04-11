@@ -1,11 +1,8 @@
 import {createContext, ReactNode, useContext} from 'react'
 import {useImmerReducer} from 'use-immer'
 import {PaletteActions} from './PaletteActions'
-import {
-  ColourPalette,
-  initialPaletteState,
-  paletteReducer,
-} from './PaletteReducer'
+import {initialPaletteState, paletteReducer} from './PaletteReducer'
+import {ColourPalette} from '../../types/ColourPalette'
 
 const PaletteContext = createContext<ColourPalette | null>(null)
 const PaletteDispatchContext =

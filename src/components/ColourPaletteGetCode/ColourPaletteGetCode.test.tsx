@@ -1,18 +1,21 @@
 import {
   createColours,
   initialPaletteState,
-} from 'src/state/ColourPalettes/PaletteReducer'
-import {renderWithContext, userEvent} from 'src/test-utils'
+} from 'src/stores/ColourPalettes/PaletteReducer'
+import {renderWithContext, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteGetCode from './ColourPaletteGetCode'
-import {PaletteType, PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes'
+import {
+  ColourPaletteType,
+  ColourPaletteTypes,
+} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteGetCodeTestIds'
 import {colourPaletteXml} from 'src/utils/TpsWriter'
 
 interface RenderProps {
   name: string
-  type: PaletteType
+  type: ColourPaletteType
   colours: string[]
 }
 
@@ -36,7 +39,7 @@ describe('Colour palette get code', () => {
   it('displays colour palette xml for context palette', () => {
     const palette = {
       name: 'Sizzletown',
-      type: PaletteTypes.sequential,
+      type: ColourPaletteTypes.sequential,
       colours: ['#00A'],
     }
 
@@ -70,7 +73,7 @@ describe('Colour palette get code', () => {
   it('copies XML to clipboard when button is clicked', async () => {
     const palette = {
       name: 'Dishwasher',
-      type: PaletteTypes.diverging,
+      type: ColourPaletteTypes.diverging,
       colours: ['#005'],
     }
     render(palette)

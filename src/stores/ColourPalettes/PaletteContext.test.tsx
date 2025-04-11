@@ -1,22 +1,22 @@
 import {describe, it, expect} from 'vitest'
 import {render, screen} from '@testing-library/react'
-import {userEvent} from '../../test-utils.tsx'
+import {userEvent} from '../../testing/test-utils.tsx'
 import {
   PaletteContextProvider,
   usePalette,
   usePaletteDispatch,
 } from './PaletteContext.tsx'
 import {PaletteActions, PaletteActionTypes} from './PaletteActions.ts'
+import {createColours, initialPaletteState} from './PaletteReducer.ts'
+import {ColourPalette} from '../../types/ColourPalette.ts'
 import {
-  ColourPalette,
-  createColours,
-  initialPaletteState,
-} from './PaletteReducer.ts'
-import {PaletteType, PaletteTypes} from './PaletteTypes.ts'
+  ColourPaletteType,
+  ColourPaletteTypes,
+} from '../../types/ColourPaletteTypes.ts'
 
 function createPalette(
   name?: string,
-  type?: PaletteType,
+  type?: ColourPaletteType,
   colours?: string[],
   selectFirstColour?: boolean
 ): ColourPalette {
@@ -276,7 +276,7 @@ describe('Palette Context', () => {
 
   it('replaces colour palette with empty palette', async () => {
     renderWithContext({
-      initialState: createPalette('Cornered', PaletteTypes.sequential, [
+      initialState: createPalette('Cornered', ColourPaletteTypes.sequential, [
         '#000',
         '#F0F',
         '#0F0',
@@ -290,13 +290,15 @@ describe('Palette Context', () => {
 
     expect(screen.getByTestId('hasChanges').textContent).toBe('true')
     expect(screen.getByTestId('name').textContent).toBe('')
-    expect(screen.getByTestId('type').textContent).toBe(PaletteTypes.regular.id)
+    expect(screen.getByTestId('type').textContent).toBe(
+      ColourPaletteTypes.regular.id
+    )
     expect(screen.getByTestId('colours').textContent).toBe('#FFFFFF')
   })
 
   it('replaces colour palette', async () => {
     const name = 'Go'
-    const type = PaletteTypes.diverging
+    const type = ColourPaletteTypes.diverging
     const colours = ['#000', '#111', '#333']
 
     renderWithContext({

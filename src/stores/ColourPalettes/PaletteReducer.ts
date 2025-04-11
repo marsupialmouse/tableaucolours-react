@@ -1,23 +1,11 @@
 import {PaletteActions, PaletteActionTypes} from './PaletteActions'
-import {PaletteType, PaletteTypes} from './PaletteTypes'
-
-export interface Colour {
-  id: number
-  hex: string
-  isSelected: boolean
-}
-
-export interface ColourPalette {
-  name: string
-  type: PaletteType
-  colours: Colour[]
-  isOpen: boolean
-  hasChanges: boolean
-}
+import {ColourPaletteTypes} from '../../types/ColourPaletteTypes'
+import {Colour} from '../../types/Colour'
+import {ColourPalette} from '../../types/ColourPalette'
 
 let nextColourId = 1
 
-const defaultType = PaletteTypes.regular
+const defaultType = ColourPaletteTypes.regular
 const maximumColours = 20
 
 export function createColours(

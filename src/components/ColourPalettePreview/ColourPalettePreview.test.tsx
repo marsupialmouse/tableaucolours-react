@@ -2,8 +2,8 @@ import {describe, it, expect} from 'vitest'
 import {screen, render} from '@testing-library/react'
 import ColourPalettePreview from './ColourPalettePreview'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
-import {PaletteTypes} from 'src/state/ColourPalettes/PaletteTypes.ts'
-import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
+import {Colour} from 'src/types/Colour'
 
 let id = 0
 
@@ -15,7 +15,7 @@ describe('Colour palette type selector', () => {
   it('renders as as a div', () => {
     render(
       <ColourPalettePreview
-        type={PaletteTypes.regular}
+        type={ColourPaletteTypes.regular}
         colours={[colour('#fff')]}
       />
     )

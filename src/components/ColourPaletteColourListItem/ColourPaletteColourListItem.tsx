@@ -3,9 +3,9 @@ import ColourPicker from '../ColourPicker/ColourPicker'
 import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import {clsx} from 'clsx'
-import {Colour} from 'src/state/ColourPalettes/PaletteReducer'
-import {usePaletteDispatch} from 'src/state/ColourPalettes/PaletteContext'
-import {PaletteActionTypes} from 'src/state/ColourPalettes/PaletteActions'
+import {Colour} from 'src/types/Colour'
+import {usePaletteDispatch} from 'src/stores/ColourPalettes/PaletteContext'
+import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
 
 export interface ColourPaletteColourListItemProps {
   colour: Colour

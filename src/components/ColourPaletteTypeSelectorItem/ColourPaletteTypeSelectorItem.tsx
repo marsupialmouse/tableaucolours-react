@@ -1,9 +1,9 @@
-import {PaletteType} from 'src/state/ColourPalettes/PaletteTypes'
+import {ColourPaletteType} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPaletteTypeSelectorItem.module.less'
 import {default as TestIds} from './ColourPaletteTypeSelectorItemTestIds'
 
 export interface ColourPaletteTypeSelectorItemProps {
-  type: PaletteType
+  type: ColourPaletteType
 }
 
 export default function ColourPaletteTypeSelectorItem({
