@@ -3,22 +3,28 @@ import ColourPicker from '../ColourPicker/ColourPicker'
 import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import {clsx} from 'clsx'
-import {Colour} from 'src/types/Colour'
-import {usePaletteDispatch} from 'src/stores/ColourPalettes/PaletteContext'
-import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
+import {
+  Colour,
+  colourChanged,
+  colourRemoved,
+  colourSelected,
+} from 'src/stores/colourpalette/colourPaletteSlice'
+import {useDispatch} from 'react-redux'
 
 export interface ColourPaletteColourListItemProps {
   colour: Colour
+  canRemove: boolean
   index?: number
   isDragging?: boolean
 }
 
 export default function ColourPaletteColourListItem({
   colour,
+  canRemove,
   index = 0,
   isDragging = false,
 }: ColourPaletteColourListItemProps) {
-  const dispatch = usePaletteDispatch()
+  const dispatch = useDispatch()
   const [isPickerOpen, setIsPickerOpen] = useState<boolean>(false)
 
   const column = Math.floor(index / 5) + 1
@@ -35,9 +41,7 @@ export default function ColourPaletteColourListItem({
       className={classNames}
       title={colour.hex + ' (double click to edit)'}
       style={{gridColumn: column, gridRow: row}}
-      onClick={() =>
-        dispatch({type: PaletteActionTypes.SelectColour, payload: colour})
-      }
+      onClick={() => dispatch(colourSelected({colour}))}
       data-testid={TestIds.Self}
     >
       <div
@@ -46,31 +50,25 @@ export default function ColourPaletteColourListItem({
         onDoubleClick={() => setIsPickerOpen(true)}
         data-testid={TestIds.Swatch}
       ></div>
-      <div
-        className={classes['colour-remove']}
-        title="Delete colour"
-        data-testid={TestIds.Remove}
-        onClick={(e) => {
-          dispatch({type: PaletteActionTypes.RemoveColour, payload: colour})
-          e.stopPropagation()
-          e.stopPropagation()
-        }}
-      >
-        <span className="fas fa-times"></span>
-      </div>
-      {isPickerOpen && (
+      {canRemove && (
         <div
-          className={classes['colour-picker']}
-          data-testid={TestIds.ColourPicker}
+          className={classes['colour-remove']}
+          title="Delete colour"
+          data-testid={TestIds.Remove}
+          onClick={(e) => {
+            dispatch(colourRemoved({colour}))
+            e.stopPropagation()
+            e.stopPropagation()
+          }}
         >
+          <span className="fas fa-times"></span>
+        </div>
+      )}
+      {isPickerOpen && (
+        <div className={classes['colour-picker']} data-testid={TestIds.ColourPicker}>
           <ColourPicker
             hex={colour.hex}
-            onChange={(hex) =>
-              dispatch({
-                type: PaletteActionTypes.ChangeColour,
-                payload: {colour, hex},
-              })
-            }
+            onChange={(hex) => dispatch(colourChanged({colour, hex}))}
             onDone={() => setIsPickerOpen(false)}
           />
         </div>

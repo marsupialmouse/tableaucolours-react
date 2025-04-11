@@ -1,8 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit/react'
-import {
-  ColourPaletteType,
-  ColourPaletteTypes,
-} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {RootState} from '../store'
 
 const defaultColourPaletteType = ColourPaletteTypes.regular
@@ -17,28 +14,10 @@ export interface ColourPaletteState {
   hasChanges: boolean
 }
 
-export class Colour {
+export interface Colour {
   id: number
   hex: string
   isSelected: boolean
-
-  constructor(id: number, hex: string, isSelected: boolean) {
-    this.id = id
-    this.hex = (hex ? hex : '#FFFFFF').toUpperCase()
-    this.isSelected = isSelected === true
-  }
-
-  static create(hex?: string, isSelected?: boolean): Colour {
-    return new Colour(lastColourId++, hex ?? '', isSelected === true)
-  }
-}
-
-function createColours(
-  colours?: string[],
-  selectFirstColour?: boolean
-): Colour[] {
-  colours = colours || ['#FFFFFF']
-  return colours.map((c, i) => Colour.create(c, selectFirstColour && i === 0))
 }
 
 const initialState: ColourPaletteState = {
@@ -49,37 +28,73 @@ const initialState: ColourPaletteState = {
   hasChanges: false,
 }
 
+function createColour(hex?: string, isSelected?: boolean): Colour {
+  return {
+    id: lastColourId++,
+    hex: (hex ? hex : '#FFFFFF').toUpperCase(),
+    isSelected: isSelected === true,
+  }
+}
+
+function createColours(colours?: string[], selectFirstColour?: boolean): Colour[] {
+  colours = colours || ['#FFFFFF']
+  return colours.map((c, i) => createColour(c, selectFirstColour && i === 0))
+}
+
+const replaceColours = (state: ColourPaletteState, hexes: string[]) => {
+  state.colours = createColours(
+    hexes.length > maximumColours ? hexes.slice(0, maximumColours) : hexes,
+    true
+  )
+  state.hasChanges = true
+}
+
+const replacePalette = (
+  state: ColourPaletteState,
+  name: string,
+  type: ColourPaletteType,
+  colourHexes: string[]
+) => {
+  state.name = name || ''
+  state.type = type || defaultColourPaletteType
+  state.hasChanges = true
+  replaceColours(state, colourHexes)
+}
+
+const selectColour = (state: ColourPaletteState, colour: Colour) =>
+  state.colours.forEach((x) => (x.isSelected = x.id === colour.id))
+
 export const colourPaletteSlice = createSlice({
   name: 'colourPalette',
   initialState,
   reducers: {
     colourAdded(state, action: PayloadAction<{hex?: string}>) {
       if (state.colours.length >= maximumColours) return
-
-      const colour = Colour.create(action.payload.hex ?? '#FFFFFF')
+      const colour = createColour(action.payload.hex ?? '#FFFFFF')
       state.colours.push(colour)
       state.hasChanges = true
-      colourPaletteSlice.actions.colourSelected({colour})
+      selectColour(state, colour)
     },
 
     colourChanged(state, action: PayloadAction<{colour: Colour; hex: string}>) {
-      state.colours.find((x) => x.id === action.payload.colour.id)!.hex =
-        action.payload.hex
+      state.colours.find((x) => x.id === action.payload.colour.id)!.hex = action.payload.hex
       state.hasChanges = true
     },
 
     colourRemoved(state, action: PayloadAction<{colour: Colour}>) {
-      state.colours = state.colours.filter(
-        (x) => x.id !== action.payload.colour.id
-      )
+      const c = state.colours
+      const index = c.findIndex((x) => x.id === action.payload.colour.id)
+      if (index < 0) return
+      c.splice(index, 1)
       state.hasChanges = true
+      if (!action.payload.colour.isSelected) return
+      selectColour(state, c[index >= c.length ? c.length - 1 : index])
     },
 
     colourMoved(
       state,
       action: PayloadAction<{
         colour: Colour
-        oldIndex: number
         newIndex: number
       }>
     ) {
@@ -90,22 +105,15 @@ export const colourPaletteSlice = createSlice({
     },
 
     colourSelected(state, action: PayloadAction<{colour: Colour}>) {
-      state.colours.forEach(
-        (x) => (x.isSelected = x.id === action.payload.colour.id)
-      )
+      selectColour(state, action.payload.colour)
     },
 
     coloursReplaced(state, action: PayloadAction<{hexes: string[]}>) {
-      const hexes = action?.payload.hexes || []
-      state.colours = createColours(
-        hexes.length > maximumColours ? hexes.slice(0, maximumColours) : hexes,
-        true
-      )
-      state.hasChanges = true
+      replaceColours(state, action?.payload.hexes || [])
     },
 
-    coloursReset() {
-      colourPaletteSlice.actions.coloursReplaced({hexes: new Array<string>(0)})
+    coloursReset(state) {
+      replaceColours(state, new Array<string>(0))
     },
 
     paletteReplaced(
@@ -116,20 +124,11 @@ export const colourPaletteSlice = createSlice({
         colourHexes: string[]
       }>
     ) {
-      state.name = action.payload.name || ''
-      state.type = action.payload.type || defaultColourPaletteType
-      state.hasChanges = true
-      colourPaletteSlice.actions.coloursReplaced({
-        hexes: action.payload.colourHexes,
-      })
+      replacePalette(state, action.payload.name, action.payload.type, action.payload.colourHexes)
     },
 
-    paletteReset() {
-      colourPaletteSlice.actions.paletteReplaced({
-        name: '',
-        type: defaultColourPaletteType,
-        colourHexes: new Array<string>(0),
-      })
+    paletteReset(state) {
+      replacePalette(state, '', defaultColourPaletteType, new Array<string>(0))
     },
   },
 })
@@ -146,15 +145,10 @@ export const {
   paletteReset,
 } = colourPaletteSlice.actions
 
-export const selectColourPaletteName = (state: RootState) =>
-  state.colourPalette.name
-export const selectColourPaletteType = (state: RootState) =>
-  state.colourPalette.type
-export const selectColourPaletteColours = (state: RootState) =>
-  state.colourPalette.colours
-export const selectColourPaletteHasChanges = (state: RootState) =>
-  state.colourPalette.hasChanges
-export const selectColourPaletteIsOpen = (state: RootState) =>
-  state.colourPalette.isOpen
+export const selectColourPaletteName = (state: RootState) => state.colourPalette.name
+export const selectColourPaletteType = (state: RootState) => state.colourPalette.type
+export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
+export const selectColourPaletteHasChanges = (state: RootState) => state.colourPalette.hasChanges
+export const selectColourPaletteIsOpen = (state: RootState) => state.colourPalette.isOpen
 
 export default colourPaletteSlice.reducer

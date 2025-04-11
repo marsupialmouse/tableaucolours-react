@@ -1,33 +1,35 @@
-import {
-  usePalette,
-  usePaletteDispatch,
-} from 'src/stores/ColourPalettes/PaletteContext'
 import classes from './ColourPaletteColourList.module.less'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem'
 import {Colour} from 'src/types/Colour'
-import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
 import {useEffect, KeyboardEvent} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {
+  colourMoved,
+  colourRemoved,
+  colourSelected,
+  selectColourPaletteColours,
+} from 'src/stores/colourpalette/colourPaletteSlice'
 
 export default function ColourPaletteColourList() {
-  const state = usePalette()
-  const dispatch = usePaletteDispatch()
+  const dispatch = useDispatch()
+  const colourPaletteColours = useSelector(selectColourPaletteColours)
+  const canRemoveColours = colourPaletteColours.length > 1
 
   useEffect(() => {
     window.addEventListener('keyup', keyUp, false)
-
     return () => window.removeEventListener('keyup', keyUp)
-  }, [state])
+  }, [colourPaletteColours])
 
   function getColour(index: number) {
-    if (index < 0 || index >= state.colours.length) {
+    if (index < 0 || index >= colourPaletteColours.length) {
       return null
     }
-    return state.colours[index]
+    return colourPaletteColours[index]
   }
 
   function getValidColumnIndex(currentIndex: number, increment: number) {
     const newIndex = currentIndex + increment
-    if (newIndex < 0 || newIndex >= state.colours.length) {
+    if (newIndex < 0 || newIndex >= colourPaletteColours.length) {
       return -1
     }
     const currentColumn = Math.floor(currentIndex / 5)
@@ -38,7 +40,7 @@ export default function ColourPaletteColourList() {
 
   function getValidRowIndex(currentIndex: number, increment: number) {
     const newIndex = currentIndex + increment
-    if (newIndex < 0 || newIndex >= state.colours.length) {
+    if (newIndex < 0 || newIndex >= colourPaletteColours.length) {
       return -1
     }
     const currentRow = Math.floor(currentIndex % 5)
@@ -49,7 +51,7 @@ export default function ColourPaletteColourList() {
 
   function select(colour: Colour) {
     if (colour) {
-      dispatch({type: PaletteActionTypes.SelectColour, payload: colour})
+      dispatch(colourSelected({colour}))
     }
   }
 
@@ -58,30 +60,37 @@ export default function ColourPaletteColourList() {
   }
 
   function move(colour: Colour, newIndex: number) {
-    dispatch({type: PaletteActionTypes.MoveColour, payload: {colour, newIndex}})
+    dispatch(colourMoved({colour, newIndex}))
   }
 
   function moveSelectedColourToIndex(index: number) {
     if (index < 0) {
       return
     }
-    move(state.colours[getSelectedColourIndex()], index)
+    move(colourPaletteColours[getSelectedColourIndex()], index)
   }
 
   function getSelectedColourIndex() {
-    return state.colours.findIndex((x) => x.isSelected === true)
+    return colourPaletteColours.findIndex((x) => x.isSelected === true)
   }
 
   function keyUp(e: Event) {
     // This cast and use of Event is a hack so that addEventListender will allow this handler to be added
     const event = e as any as KeyboardEvent
-    if ((event.target as Element).tagName.toLowerCase() !== 'body') {
+    if (
+      !canRemoveColours ||
+      (event.target as Element).tagName.toLowerCase() !== 'body' ||
+      event.altKey ||
+      event.ctrlKey ||
+      event.metaKey
+    ) {
       return
     }
     const selectedColourIndex = getSelectedColourIndex()
-    const action = event.getModifierState('Shift')
-      ? moveSelectedColourToIndex
-      : selectByIndex
+
+    if (selectedColourIndex < 0) return
+
+    const action = event.shiftKey ? moveSelectedColourToIndex : selectByIndex
     switch (event.key) {
       case 'Down':
       case 'ArrowDown':
@@ -101,13 +110,18 @@ export default function ColourPaletteColourList() {
       case 'Right':
       case 'ArrowRight':
         action(getValidRowIndex(selectedColourIndex, 5))
+        return
+
+      case 'Backspace':
+      case 'Delete':
+        dispatch(colourRemoved({colour: getColour(selectedColourIndex)!}))
     }
   }
 
   return (
     <ul className={classes.colourlist}>
-      {state.colours.map((c, i) => (
-        <ColourPaletteColourListItem colour={c} index={i} key={c.id} />
+      {colourPaletteColours.map((c, i) => (
+        <ColourPaletteColourListItem colour={c} canRemove={canRemoveColours} index={i} key={c.id} />
       ))}
     </ul>
   )
