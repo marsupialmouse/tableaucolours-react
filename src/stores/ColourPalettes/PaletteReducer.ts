@@ -1,17 +1,14 @@
 import {PaletteActions, PaletteActionTypes} from './PaletteActions'
 import {ColourPaletteTypes} from '../../types/ColourPaletteTypes'
-import {Colour} from '../../types/Colour'
 import {ColourPalette} from '../../types/ColourPalette'
+import {Colour} from '../colourpalette/colourPaletteSlice'
 
 let nextColourId = 1
 
 const defaultType = ColourPaletteTypes.regular
 const maximumColours = 20
 
-export function createColours(
-  colours?: string[],
-  selectFirstColour?: boolean
-): Colour[] {
+export function createColours(colours?: string[], selectFirstColour?: boolean): Colour[] {
   colours = colours || ['#FFFFFF']
   return colours.map((c, i) => createColour(c, selectFirstColour && i === 0))
 }
@@ -42,9 +39,7 @@ export function paletteReducer(draft: ColourPalette, action: PaletteActions) {
 
   function replaceColours(palette: ColourPalette, colours?: string[]) {
     palette.colours = createColours(
-      colours && colours.length > maximumColours
-        ? colours.slice(0, maximumColours)
-        : colours,
+      colours && colours.length > maximumColours ? colours.slice(0, maximumColours) : colours,
       true
     )
     palette.hasChanges = true
@@ -61,8 +56,7 @@ export function paletteReducer(draft: ColourPalette, action: PaletteActions) {
       break
 
     case PaletteActionTypes.ChangeColour:
-      draft.colours.find((x) => x.id === action.payload.colour.id)!.hex =
-        action.payload.hex
+      draft.colours.find((x) => x.id === action.payload.colour.id)!.hex = action.payload.hex
       draft.hasChanges = true
       break
 

@@ -1,5 +1,5 @@
-import {Colour} from '../../types/Colour'
 import {ColourPaletteType} from '../../types/ColourPaletteTypes'
+import {Colour} from '../colourpalette/colourPaletteSlice'
 
 export enum PaletteActionTypes {
   AddColour = 'AddColour',

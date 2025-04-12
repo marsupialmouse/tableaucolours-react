@@ -1,9 +1,9 @@
 import classes from './ColourPaletteColourList.module.less'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem'
-import {Colour} from 'src/types/Colour'
 import {useEffect, KeyboardEvent} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {
+  Colour,
   colourMoved,
   colourRemoved,
   colourSelected,
