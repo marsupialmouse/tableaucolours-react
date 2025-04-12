@@ -3,21 +3,22 @@ import classes from './ColourPaletteImport.module.less'
 import {default as TestIds} from './ColourPaletteImportTestIds'
 import clsx from 'clsx'
 import {parseColourPalette, ParsedPalette} from 'src/utils/TpsParser'
-import {usePaletteDispatch} from 'src/stores/ColourPalettes/PaletteContext'
-import {PaletteActionTypes} from 'src/stores/ColourPalettes/PaletteActions'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
+import {useDispatch} from 'react-redux'
+import {
+  defaultColourPaletteType,
+  paletteReplaced,
+} from 'src/stores/colourpalette/colourPaletteSlice'
 
 export interface ColourPaletteImportProps {
   onDone?: () => void
 }
 
-export default function ColourPaletteImport({
-  onDone,
-}: ColourPaletteImportProps) {
+export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) {
   const [xml, setXml] = useState('')
   const [palette, setPalette] = useState<ParsedPalette | null>(null)
   const [validationMessage, setValidationMessage] = useState('')
-  const dispatch = usePaletteDispatch()
+  const dispatch = useDispatch()
   const isValid = !validationMessage.length
   const canImport = isValid && xml.length
 
@@ -29,14 +30,13 @@ export default function ColourPaletteImport({
   }
 
   function handleImport(): void {
-    dispatch({
-      type: PaletteActionTypes.ReplacePalette,
-      payload: {
-        name: palette?.name,
-        type: ColourPaletteTypes.find(palette?.type),
-        colours: palette?.colours,
-      },
-    })
+    dispatch(
+      paletteReplaced({
+        name: palette!.name,
+        type: ColourPaletteTypes.find(palette!.type) ?? defaultColourPaletteType,
+        colourHexes: palette!.colours,
+      })
+    )
     onDone?.()
   }
 
@@ -67,10 +67,7 @@ export default function ColourPaletteImport({
         )}
       </div>
       <button
-        className={clsx(
-          classes['importcode-button'],
-          classes['importcode-button--import']
-        )}
+        className={clsx(classes['importcode-button'], classes['importcode-button--import'])}
         disabled={!canImport}
         onClick={handleImport}
         data-testid={TestIds.ImportButton}
@@ -78,10 +75,7 @@ export default function ColourPaletteImport({
         Import
       </button>
       <button
-        className={clsx(
-          classes['importcode-button'],
-          classes['importcode-button--cancel']
-        )}
+        className={clsx(classes['importcode-button'], classes['importcode-button--cancel'])}
         onClick={() => onDone?.()}
         data-testid={TestIds.CancelButton}
       >

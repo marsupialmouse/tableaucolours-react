@@ -1,18 +1,13 @@
-import {
-  createColours,
-  initialPaletteState,
-} from 'src/stores/ColourPalettes/PaletteReducer'
-import {renderWithContext, userEvent} from 'src/testing/test-utils'
+import {createColours, initialPaletteState} from 'src/stores/ColourPalettes/PaletteReducer'
+import {renderWithProviders, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it, vi} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteImport from './ColourPaletteImport'
 import classes from './ColourPaletteImport.module.less'
-import {
-  ColourPaletteType,
-  ColourPaletteTypes,
-} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteImportTestIds'
-import {usePalette} from 'src/stores/ColourPalettes/PaletteContext'
+import {useSelector} from 'react-redux'
+import {selectColourPalette} from 'src/stores/colourpalette/colourPaletteSlice'
 
 interface RenderProps {
   name?: string
@@ -28,25 +23,27 @@ function render(props?: RenderProps) {
   if (props?.type) palette.type = props.type
   if (props?.colours) palette.colours = createColours(props.colours)
 
-  renderWithContext({
-    initialPaletteContext: palette,
-    children: (
-      <div>
-        <ColourPaletteImport onDone={props?.onDone} />
-        <TestComponent />
-      </div>
-    ),
-  })
+  renderWithProviders(
+    <div>
+      <ColourPaletteImport onDone={props?.onDone} />
+      <TestComponent />
+    </div>,
+    {
+      preloadedState: {
+        colourPalette: palette,
+      },
+    }
+  )
 }
 
 const TestComponent = function () {
-  const state = usePalette()
+  const palette = useSelector(selectColourPalette)
   return (
     <div>
-      <span data-testid="contextpalette-name">{state.name}</span>
-      <span data-testid="contextpalette-type">{state.type.id}</span>
+      <span data-testid="contextpalette-name">{palette.name}</span>
+      <span data-testid="contextpalette-type">{palette.type.id}</span>
       <span data-testid="contextpalette-colours">
-        {state.colours.map((x) => x.hex).join(' ')}
+        {palette.colours.map((x) => x.hex).join(' ')}
       </span>
     </div>
   )
@@ -68,18 +65,14 @@ describe('Colour Palette Import component', () => {
   it('does not show validation errors when code is empty', () => {
     render()
 
-    expect(
-      screen.queryByTestId(TestIds.ValidationMessage)
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId(TestIds.ValidationMessage)).not.toBeInTheDocument()
   })
 
   it('has validation error and disabled import button when xml is invalid', async () => {
     render()
 
     await userEvent.click(screen.getByTestId(TestIds.Code))
-    await userEvent.paste(
-      '<color-palette name="Hello!" type="regular"></color-palette>'
-    )
+    await userEvent.paste('<color-palette name="Hello!" type="regular"></color-palette>')
 
     expect(screen.getByTestId(TestIds.ImportButton)).toBeDisabled()
     expect(screen.getByTestId(TestIds.ValidationMessage)).toHaveTextContent(
@@ -91,28 +84,20 @@ describe('Colour Palette Import component', () => {
     render()
 
     await userEvent.click(screen.getByTestId(TestIds.Code))
-    await userEvent.paste(
-      '<color-palette name="Hello!" type="regular"></color-palette>'
-    )
+    await userEvent.paste('<color-palette name="Hello!" type="regular"></color-palette>')
 
-    expect(screen.getByTestId(TestIds.Code)).toHaveClass(
-      classes['importcode-code--invalid']
-    )
+    expect(screen.getByTestId(TestIds.Code)).toHaveClass(classes['importcode-code--invalid'])
   })
 
   it('does not show validation errors when invalid code is cleared', async () => {
     render()
 
     await userEvent.click(screen.getByTestId(TestIds.Code))
-    await userEvent.paste(
-      '<color-palette name="Hello!" type="regular"></color-palette>'
-    )
+    await userEvent.paste('<color-palette name="Hello!" type="regular"></color-palette>')
     await userEvent.clear(screen.getByTestId(TestIds.Code))
 
     expect(screen.getByTestId(TestIds.ImportButton)).toBeDisabled()
-    expect(
-      screen.queryByTestId(TestIds.ValidationMessage)
-    ).not.toBeInTheDocument()
+    expect(screen.queryByTestId(TestIds.ValidationMessage)).not.toBeInTheDocument()
   })
 
   it('has enabled import button when code is valid', async () => {
@@ -140,9 +125,7 @@ describe('Colour Palette Import component', () => {
 
     expect(screen.getByTestId('contextpalette-name')).toHaveTextContent(name)
     expect(screen.getByTestId('contextpalette-type')).toHaveTextContent(type.id)
-    expect(screen.getByTestId('contextpalette-colours')).toHaveTextContent(
-      colours.join(' ')
-    )
+    expect(screen.getByTestId('contextpalette-colours')).toHaveTextContent(colours.join(' '))
   })
 
   it('imports with default type when type in code unrecogonised', async () => {
@@ -211,8 +194,6 @@ describe('Colour Palette Import component', () => {
 
     expect(screen.getByTestId('contextpalette-name')).toHaveTextContent(name)
     expect(screen.getByTestId('contextpalette-type')).toHaveTextContent(type.id)
-    expect(screen.getByTestId('contextpalette-colours')).toHaveTextContent(
-      colours.join(' ')
-    )
+    expect(screen.getByTestId('contextpalette-colours')).toHaveTextContent(colours.join(' '))
   })
 })

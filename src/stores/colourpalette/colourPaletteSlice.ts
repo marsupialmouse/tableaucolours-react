@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit/react'
 import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {RootState} from '../store'
 
-const defaultColourPaletteType = ColourPaletteTypes.regular
+export const defaultColourPaletteType = ColourPaletteTypes.regular
 const maximumColours = 20
 let lastColourId = 1
 
