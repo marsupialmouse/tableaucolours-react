@@ -17,7 +17,7 @@ function renderListWithColours({
     preloadedState: {
       colourPalette: {
         name: '',
-        type: ColourPaletteTypes.regular,
+        type: ColourPaletteTypes.regular.id,
         colours: createColours(colours, selectedIndex),
         isOpen: true,
         hasChanges: false,

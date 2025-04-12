@@ -1,5 +1,4 @@
-import {createColours} from 'src/stores/ColourPalettes/PaletteReducer'
-import {renderWithProviders, userEvent} from 'src/testing/test-utils'
+import {createColours, renderWithProviders, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteGetCode from './ColourPaletteGetCode'
@@ -19,7 +18,7 @@ function render(props?: RenderProps) {
     ? {
         ...initialColourPaletteState,
         name: props.name,
-        type: props.type,
+        type: props.type.id,
         colours: createColours(props.colours),
       }
     : initialColourPaletteState

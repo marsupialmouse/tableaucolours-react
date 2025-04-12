@@ -14,7 +14,7 @@ export interface Colour {
 
 export interface ColourPalette {
   name: string
-  type: ColourPaletteType
+  type: string
   colours: Colour[]
 }
 
@@ -25,7 +25,7 @@ export interface ColourPaletteState extends ColourPalette {
 
 export const initialColourPaletteState: ColourPaletteState = {
   name: '',
-  type: defaultColourPaletteType,
+  type: defaultColourPaletteType.id,
   colours: createColours(),
   isOpen: false,
   hasChanges: false,
@@ -59,7 +59,7 @@ const replacePalette = (
   colourHexes: string[]
 ) => {
   state.name = name || ''
-  state.type = type || defaultColourPaletteType
+  state.type = (type || defaultColourPaletteType).id
   state.hasChanges = true
   replaceColours(state, colourHexes)
 }
@@ -150,7 +150,8 @@ export const {
 
 export const selectColourPalette = (state: RootState): ColourPalette => state.colourPalette
 export const selectColourPaletteName = (state: RootState) => state.colourPalette.name
-export const selectColourPaletteType = (state: RootState) => state.colourPalette.type
+export const selectColourPaletteType = (state: RootState) =>
+  ColourPaletteTypes.get(state.colourPalette.type)
 export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
 export const selectColourPaletteHasChanges = (state: RootState) => state.colourPalette.hasChanges
 export const selectColourPaletteIsOpen = (state: RootState) => state.colourPalette.isOpen

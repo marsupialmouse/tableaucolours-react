@@ -1,6 +1,6 @@
-import {Colour} from 'src/types/Colour'
 import {ColourPaletteType} from 'src/types/ColourPaletteTypes'
 import he from 'he'
+import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
 
 export interface TpsColourPalette {
   name: string
@@ -11,10 +11,7 @@ export interface TpsColourPalette {
 const xmlParser = new DOMParser()
 const xmlSerializer = new XMLSerializer()
 
-function replacePalettesInTpsXml(
-  xml: string,
-  palettes: Array<TpsColourPalette>
-) {
+function replacePalettesInTpsXml(xml: string, palettes: Array<TpsColourPalette>) {
   const doc = xmlParser.parseFromString(xml, 'application/xml')
   const preferences = doc.getElementsByTagName('preferences')[0]
   const paletteElements = [...preferences.getElementsByTagName('color-palette')]
@@ -23,8 +20,7 @@ function replacePalettesInTpsXml(
 
   const paletteXml = palettes.map((x) => colourPaletteXml(x)).join('\n')
 
-  preferences.innerHTML =
-    preferences.innerHTML.trim() + '\n' + paletteXml + '\n'
+  preferences.innerHTML = preferences.innerHTML.trim() + '\n' + paletteXml + '\n'
 
   return xmlSerializer.serializeToString(doc)
 }
@@ -34,9 +30,7 @@ function colourPaletteXml({name, type, colours}: TpsColourPalette) {
     useNamedReferences: true,
   })}" type="${type instanceof ColourPaletteType ? type.id : type}">\n`
 
-  colours.forEach(
-    (c) => (x += `    <color>${typeof c == 'string' ? c : c.hex}</color>\n`)
-  )
+  colours.forEach((c) => (x += `    <color>${typeof c == 'string' ? c : c.hex}</color>\n`))
 
   return x + '</color-palette>'
 }

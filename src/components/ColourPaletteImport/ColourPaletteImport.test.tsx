@@ -1,5 +1,4 @@
-import {createColours, initialPaletteState} from 'src/stores/ColourPalettes/PaletteReducer'
-import {renderWithProviders, userEvent} from 'src/testing/test-utils'
+import {createColours, renderWithProviders, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it, vi} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteImport from './ColourPaletteImport'
@@ -7,7 +6,10 @@ import classes from './ColourPaletteImport.module.less'
 import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteImportTestIds'
 import {useSelector} from 'react-redux'
-import {selectColourPalette} from 'src/stores/colourpalette/colourPaletteSlice'
+import {
+  initialColourPaletteState,
+  selectColourPalette,
+} from 'src/stores/colourpalette/colourPaletteSlice'
 
 interface RenderProps {
   name?: string
@@ -17,10 +19,10 @@ interface RenderProps {
 }
 
 function render(props?: RenderProps) {
-  const palette = {...initialPaletteState}
+  const palette = {...initialColourPaletteState}
 
   if (props?.name) palette.name = props.name
-  if (props?.type) palette.type = props.type
+  if (props?.type) palette.type = props.type.id
   if (props?.colours) palette.colours = createColours(props.colours)
 
   renderWithProviders(
@@ -41,7 +43,7 @@ const TestComponent = function () {
   return (
     <div>
       <span data-testid="contextpalette-name">{palette.name}</span>
-      <span data-testid="contextpalette-type">{palette.type.id}</span>
+      <span data-testid="contextpalette-type">{palette.type}</span>
       <span data-testid="contextpalette-colours">
         {palette.colours.map((x) => x.hex).join(' ')}
       </span>

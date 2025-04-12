@@ -1,8 +1,5 @@
 import * as testingLibraryUserEvent from '@testing-library/user-event'
-import {initialPaletteState} from '../stores/ColourPalettes/PaletteReducer'
-import {ColourPalette} from '../types/ColourPalette'
-import {PaletteContextProvider} from '../stores/ColourPalettes/PaletteContext'
-import {JSX, PropsWithChildren, ReactNode} from 'react'
+import {JSX, PropsWithChildren} from 'react'
 import {render, RenderOptions} from '@testing-library/react'
 import {AppStore, RootState, setupStore} from 'src/stores/store'
 import {Provider} from 'react-redux'
@@ -26,24 +23,6 @@ export const createColours = (
       isSelected: i === selected,
     }
   })
-}
-
-type RenderParams = {
-  initialPaletteContext?: ColourPalette
-  children: ReactNode
-}
-
-export function renderWithContext({
-  initialPaletteContext,
-  children,
-}: RenderParams) {
-  render(
-    <PaletteContextProvider
-      initialState={initialPaletteContext ?? initialPaletteState}
-    >
-      {children}
-    </PaletteContextProvider>
-  )
 }
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {

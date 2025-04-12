@@ -3,7 +3,7 @@ import {screen, render} from '@testing-library/react'
 import ColourPalettePreview from './ColourPalettePreview'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
-import {Colour} from 'src/types/Colour'
+import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
 
 let id = 0
 
@@ -13,12 +13,7 @@ function colour(hex: string): Colour {
 
 describe('Colour palette type selector', () => {
   it('renders as as a div', () => {
-    render(
-      <ColourPalettePreview
-        type={ColourPaletteTypes.regular}
-        colours={[colour('#fff')]}
-      />
-    )
+    render(<ColourPalettePreview type={ColourPaletteTypes.regular} colours={[colour('#fff')]} />)
 
     expect(screen.getByTestId(TestIds.Self)).toBeInstanceOf(HTMLDivElement)
   })
