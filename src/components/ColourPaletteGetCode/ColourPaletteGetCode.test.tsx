@@ -1,17 +1,12 @@
-import {
-  createColours,
-  initialPaletteState,
-} from 'src/stores/ColourPalettes/PaletteReducer'
-import {renderWithContext, userEvent} from 'src/testing/test-utils'
+import {createColours} from 'src/stores/ColourPalettes/PaletteReducer'
+import {renderWithProviders, userEvent} from 'src/testing/test-utils'
 import {describe, expect, it} from 'vitest'
 import {screen} from '@testing-library/react'
 import ColourPaletteGetCode from './ColourPaletteGetCode'
-import {
-  ColourPaletteType,
-  ColourPaletteTypes,
-} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteGetCodeTestIds'
 import {colourPaletteXml} from 'src/utils/TpsWriter'
+import {initialColourPaletteState} from 'src/stores/colourpalette/colourPaletteSlice'
 
 interface RenderProps {
   name: string
@@ -22,16 +17,17 @@ interface RenderProps {
 function render(props?: RenderProps) {
   const palette = props
     ? {
-        ...initialPaletteState,
+        ...initialColourPaletteState,
         name: props.name,
         type: props.type,
         colours: createColours(props.colours),
       }
-    : initialPaletteState
+    : initialColourPaletteState
 
-  renderWithContext({
-    initialPaletteContext: palette,
-    children: <ColourPaletteGetCode />,
+  renderWithProviders(<ColourPaletteGetCode />, {
+    preloadedState: {
+      colourPalette: palette,
+    },
   })
 }
 
@@ -45,19 +41,17 @@ describe('Colour palette get code', () => {
 
     render(palette)
 
-    expect(screen.getByTestId(TestIds.Code)).toHaveTextContent(
-      colourPaletteXml(palette),
-      {normalizeWhitespace: false}
-    )
+    expect(screen.getByTestId(TestIds.Code)).toHaveTextContent(colourPaletteXml(palette), {
+      normalizeWhitespace: false,
+    })
   })
 
   it('has text "Copy to clipboard" on button', () => {
     render()
 
-    expect(screen.getByTestId(TestIds.Button)).toHaveTextContent(
-      'Copy to clipboard',
-      {normalizeWhitespace: false}
-    )
+    expect(screen.getByTestId(TestIds.Button)).toHaveTextContent('Copy to clipboard', {
+      normalizeWhitespace: false,
+    })
   })
 
   it('has text "Copied" on button after copying', async () => {

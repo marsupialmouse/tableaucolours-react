@@ -6,21 +6,24 @@ const defaultColourPaletteType = ColourPaletteTypes.regular
 const maximumColours = 20
 let lastColourId = 1
 
-export interface ColourPaletteState {
-  name: string
-  type: ColourPaletteType
-  colours: Colour[]
-  isOpen: boolean
-  hasChanges: boolean
-}
-
 export interface Colour {
   id: number
   hex: string
   isSelected: boolean
 }
 
-const initialState: ColourPaletteState = {
+export interface ColourPalette {
+  name: string
+  type: ColourPaletteType
+  colours: Colour[]
+}
+
+export interface ColourPaletteState extends ColourPalette {
+  isOpen: boolean
+  hasChanges: boolean
+}
+
+export const initialColourPaletteState: ColourPaletteState = {
   name: '',
   type: defaultColourPaletteType,
   colours: createColours(),
@@ -66,7 +69,7 @@ const selectColour = (state: ColourPaletteState, colour: Colour) =>
 
 export const colourPaletteSlice = createSlice({
   name: 'colourPalette',
-  initialState,
+  initialState: initialColourPaletteState,
   reducers: {
     colourAdded(state, action: PayloadAction<{hex?: string}>) {
       if (state.colours.length >= maximumColours) return
@@ -145,6 +148,7 @@ export const {
   paletteReset,
 } = colourPaletteSlice.actions
 
+export const selectColourPalette = (state: RootState): ColourPalette => state.colourPalette
 export const selectColourPaletteName = (state: RootState) => state.colourPalette.name
 export const selectColourPaletteType = (state: RootState) => state.colourPalette.type
 export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
