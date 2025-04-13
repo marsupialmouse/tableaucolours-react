@@ -27,7 +27,11 @@ function render(props?: RenderProps) {
 
   renderWithProviders(
     <div>
-      <ColourPaletteImport onDone={props?.onDone} />
+      <ColourPaletteImport
+        onDone={() => {
+          props?.onDone?.()
+        }}
+      />
       <TestComponent />
     </div>,
     {

@@ -41,8 +41,10 @@ const getItemColour = (index: number): string => {
   return colours[index]
 }
 
-const getItemColours = (): string[] =>
-  screen.queryAllByRole('listitem').map((x) => x.title.match(/#[0-9a-z]+/i)?.[0] ?? '')
+const getItemColours = (): string[] => {
+  const colourRegx = /#[0-9a-z]+/i
+  return screen.queryAllByRole('listitem').map((x) => colourRegx.exec(x.title)?.[0] ?? '')
+}
 
 const isSelected = (item: HTMLElement) => item.className.includes(classes['colour--selected'])
 

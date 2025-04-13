@@ -1,8 +1,5 @@
 import {KeyboardEvent, useEffect, useRef, useState} from 'react'
-import {
-  ColourPaletteType,
-  ColourPaletteTypes,
-} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPaletteTypeSelector.module.less'
 import {default as TestIds} from './ColourPaletteTypeSelectorTestIds'
 import {clsx} from 'clsx'
@@ -36,14 +33,15 @@ export default function ColourPaletteTypeSelector({
 
   useEffect(() => {
     if (isSelectorOpen) {
+      const closeSelector = () => {
+        setIsSelectorOpen(false)
+      }
       window.addEventListener('click', closeSelector, false)
-      return () => window.removeEventListener('click', closeSelector)
+      return () => {
+        window.removeEventListener('click', closeSelector)
+      }
     }
   }, [isSelectorOpen])
-
-  function closeSelector() {
-    setIsSelectorOpen(false)
-  }
 
   function toggleSelector() {
     setIsSelectorOpen(!isSelectorOpen)
@@ -87,7 +85,7 @@ export default function ColourPaletteTypeSelector({
   function handleTypeClick(type: ColourPaletteType) {
     onTypeSelected?.(type)
     selectedElement.current?.focus()
-    closeSelector()
+    setIsSelectorOpen(false)
   }
 
   return (
@@ -123,7 +121,9 @@ export default function ColourPaletteTypeSelector({
             <li
               key={type.id}
               className={itemClasses}
-              onClick={() => handleTypeClick(type)}
+              onClick={() => {
+                handleTypeClick(type)
+              }}
             >
               <ColourPaletteTypeSelectorItem type={type} />
             </li>

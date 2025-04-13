@@ -1,30 +1,16 @@
 import './App.less'
-import {PaletteContextProvider} from './stores/ColourPalettes/PaletteContext'
 import ColourPaletteColourList from './components/ColourPaletteColourList/ColourPaletteColourList'
-import {
-  createColours,
-  initialPaletteState,
-} from './stores/ColourPalettes/PaletteReducer'
 import {ColourPaletteType, ColourPaletteTypes} from './types/ColourPaletteTypes'
 import ColourPaletteTypeSelector from './components/ColourPaletteTypeSelector/ColourPaletteTypeSelector'
 import {useState} from 'react'
 import ColourPalettePreview from './components/ColourPalettePreview/ColourPalettePreview'
+import {useSelector} from 'react-redux'
+import {selectColourPaletteColours} from './stores/colourpalette/colourPaletteSlice'
 
 function App() {
-  const [selectedType, setSelectedType] = useState(
-    ColourPaletteTypes.sequential
-  )
-  const palette = {
-    ...initialPaletteState,
-    colours: createColours([
-      '#FF0000',
-      '#00FF00',
-      '#0000FF',
-      '#000',
-      '#FFF',
-      '#CCC',
-    ]),
-  }
+  const [selectedType, setSelectedType] = useState(ColourPaletteTypes.sequential)
+
+  const colours = useSelector(selectColourPaletteColours)
 
   function handleTypeSelected(type: ColourPaletteType): void {
     setSelectedType(type)
@@ -33,15 +19,13 @@ function App() {
   return (
     <>
       <div style={{width: '20rem'}}>
-        <PaletteContextProvider initialState={palette}>
-          <ColourPaletteTypeSelector
-            selectedType={selectedType}
-            onTypeSelected={handleTypeSelected}
-            tabIndex={1}
-          />
-          <ColourPaletteColourList />
-          <ColourPalettePreview type={selectedType} colours={palette.colours} />
-        </PaletteContextProvider>
+        <ColourPaletteTypeSelector
+          selectedType={selectedType}
+          onTypeSelected={handleTypeSelected}
+          tabIndex={1}
+        />
+        <ColourPaletteColourList />
+        <ColourPalettePreview type={selectedType} colours={colours} />
       </div>
     </>
   )

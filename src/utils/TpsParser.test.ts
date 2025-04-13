@@ -21,9 +21,7 @@ describe('Parsing a TPS file', () => {
     )
 
     expect(result.isValid).toBeFalsy()
-    expect((result as InvalidTpsFileResult).errors[0].message).toBe(
-      'Unable to parse XML'
-    )
+    expect((result as InvalidTpsFileResult).errors[0].message).toBe('Unable to parse XML')
   })
 
   it('returns invalid result when root element is not <workbook>', () => {
@@ -158,9 +156,7 @@ describe('Parsing a colour palette element', () => {
     )
 
     expect(result.isValid).toBeFalsy()
-    expect((result as InvalidPaletteResult).error).toBe(
-      'Expected one or more <color> elements'
-    )
+    expect((result as InvalidPaletteResult).error).toBe('Expected one or more <color> elements')
   })
 
   it('returns invalid result when any <color> elements is empty', () => {
@@ -190,9 +186,7 @@ describe('Parsing a colour palette element', () => {
     )
 
     expect(result.isValid).toBeFalsy()
-    expect((result as InvalidPaletteResult).error).toBe(
-      `'${colour}' is not a valid colour`
-    )
+    expect((result as InvalidPaletteResult).error).toBe(`'${colour}' is not a valid colour`)
   })
 
   it('return valid palette', () => {

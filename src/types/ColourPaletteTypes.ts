@@ -8,6 +8,7 @@ export class ColourPaletteType {
   }
 }
 
+/* eslint '@typescript-eslint/no-extraneous-class': 'off' */
 export class ColourPaletteTypes {
   static #types: Record<string, ColourPaletteType> = {}
 
@@ -18,10 +19,7 @@ export class ColourPaletteTypes {
   }
 
   static regular = ColourPaletteTypes.#add('regular', 'Regular')
-  static sequential = ColourPaletteTypes.#add(
-    'ordered-sequential',
-    'Sequential'
-  )
+  static sequential = ColourPaletteTypes.#add('ordered-sequential', 'Sequential')
   static diverging = ColourPaletteTypes.#add('ordered-diverging', 'Diverging')
 
   static find(id: string | undefined): ColourPaletteType | undefined {

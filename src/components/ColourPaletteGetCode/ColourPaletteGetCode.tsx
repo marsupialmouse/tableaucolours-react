@@ -12,11 +12,11 @@ export default function ColourPaletteGetCode() {
 
   const xml = colourPaletteXml(palette)
 
-  function handleButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
+  async function handleButtonClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     e.stopPropagation()
 
-    navigator.clipboard.writeText(xml)
+    await navigator.clipboard.writeText(xml)
 
     setIsXmlCopied(true)
   }
@@ -29,7 +29,9 @@ export default function ColourPaletteGetCode() {
       {!isXmlCopied && (
         <button
           className={classes['button getcode-copy']}
-          onClick={handleButtonClick}
+          onClick={(e) => {
+            void handleButtonClick(e)
+          }}
           data-testid={TestIds.Button}
         >
           Copy to clipboard

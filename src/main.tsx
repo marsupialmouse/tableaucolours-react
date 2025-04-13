@@ -5,7 +5,10 @@ import './index.less'
 import {Provider} from 'react-redux'
 import {setupStore} from './stores/store.ts'
 
-createRoot(document.getElementById('root')!).render(
+const container = document.getElementById('root')
+if (!container) throw new Error('Failed to init the app. The Root is missing from the page')
+
+createRoot(container).render(
   <StrictMode>
     <Provider store={setupStore()}>
       <App />

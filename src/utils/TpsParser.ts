@@ -45,14 +45,10 @@ function parseTpsFile(xml: string): ValidTpsFileResult | InvalidTpsFileResult {
   }
 
   if (root.tagName !== 'workbook') {
-    return invalidFile(
-      `Expected a root element of <workbook>, found <${root.tagName}>`
-    )
+    return invalidFile(`Expected a root element of <workbook>, found <${root.tagName}>`)
   }
 
-  const preferences = [...root.children].find(
-    (x) => x.tagName === 'preferences'
-  )
+  const preferences = [...root.children].find((x) => x.tagName === 'preferences')
 
   if (!preferences) {
     return invalidFile('Expected a <preferences> element inside <workbook>')
@@ -80,10 +76,7 @@ function parseTpsFile(xml: string): ValidTpsFileResult | InvalidTpsFileResult {
 function invalidFile(messages: string | TpsFileError[]): InvalidTpsFileResult {
   return {
     isValid: false,
-    errors:
-      typeof messages === 'string'
-        ? [{message: messages, paletteName: ''}]
-        : messages,
+    errors: typeof messages === 'string' ? [{message: messages, paletteName: ''}] : messages,
   }
 }
 
@@ -119,10 +112,7 @@ function parsePaletteElement(
   }
 
   if (colours.filter((x) => !x).length > 0) {
-    return invalidPalette(
-      'All <color> elements must contain a valid colour',
-      element
-    )
+    return invalidPalette('All <color> elements must contain a valid colour', element)
   }
 
   const invalidColour = colours.find((x) => !colourPattern.test(x))
@@ -143,10 +133,7 @@ function parsePaletteElement(
   }
 }
 
-function invalidPalette(
-  message: string,
-  element?: Element
-): InvalidPaletteResult {
+function invalidPalette(message: string, element?: Element): InvalidPaletteResult {
   return {
     isValid: false,
     error: message,

@@ -4,10 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "postinstall": "husky",
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
     "preview": "vite preview",
+    "lint": "tsc --noEmit && eslint . --color",
+    "lint:fix": "tsc --noEmit && eslint . --color --fix",
+    "lint-staged": "lint-staged",
     "format": "prettier --write ./src",
     "test": "vitest"
   },
@@ -40,13 +43,22 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
     "jsdom": "^26.0.0",
     "less": "^4.2.0",
+    "lint-staged": "^15.5.1",
+    "pinst": "^3.0.0",
     "postcss": "^8.4.47",
     "prettier": "^3.3.3",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
+  },
+  "lint-staged": {
+    "**/*": [
+      "yarn lint",
+      "yarn format"
+    ]
   }
 }

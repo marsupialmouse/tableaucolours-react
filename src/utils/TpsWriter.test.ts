@@ -24,8 +24,7 @@ describe('Generates TPS XML colour palette', () => {
       colours: ['#fff'],
     })
 
-    expect(xml)
-      .toBe(`<color-palette name="&lt;xml &quot;name&quot;&gt;" type="regular">
+    expect(xml).toBe(`<color-palette name="&lt;xml &quot;name&quot;&gt;" type="regular">
     <color>#fff</color>
 </color-palette>`)
   })
@@ -72,7 +71,7 @@ describe('Replaces colour palettes in TPS XML', () => {
 </workbook>`
 
     const newXml = replacePalettesInTpsXml(originalXml, palettes)
-    console.info(newXml)
+
     expect(newXml).toBe(`<workbook>
 	<preferences>
 <color-palette name="Max" type="regular">
@@ -86,9 +85,7 @@ describe('Replaces colour palettes in TPS XML', () => {
   })
 
   it('does not replace other preferences', () => {
-    const palettes = [
-      {name: 'Brakes', type: ColourPaletteTypes.regular, colours: ['#f0f']},
-    ]
+    const palettes = [{name: 'Brakes', type: ColourPaletteTypes.regular, colours: ['#f0f']}]
     const originalXml = `<workbook>
 	<preferences>
         <brakes>Delta Brakes</brakes>
@@ -99,7 +96,7 @@ describe('Replaces colour palettes in TPS XML', () => {
 </workbook>`
 
     const newXml = replacePalettesInTpsXml(originalXml, palettes)
-    console.info(newXml)
+
     expect(newXml).toBe(`<workbook>
 	<preferences><brakes>Delta Brakes</brakes>
 <color-palette name="Brakes" type="regular">

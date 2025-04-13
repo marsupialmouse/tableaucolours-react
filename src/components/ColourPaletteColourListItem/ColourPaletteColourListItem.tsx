@@ -47,7 +47,9 @@ export default function ColourPaletteColourListItem({
       <div
         className={classes['colour-swatch']}
         style={{backgroundColor: colour.hex}}
-        onDoubleClick={() => setIsPickerOpen(true)}
+        onDoubleClick={() => {
+          setIsPickerOpen(true)
+        }}
         data-testid={TestIds.Swatch}
       ></div>
       {canRemove && (
@@ -68,8 +70,12 @@ export default function ColourPaletteColourListItem({
         <div className={classes['colour-picker']} data-testid={TestIds.ColourPicker}>
           <ColourPicker
             hex={colour.hex}
-            onChange={(hex) => dispatch(colourChanged({colour, hex}))}
-            onDone={() => setIsPickerOpen(false)}
+            onChange={(hex) => {
+              dispatch(colourChanged({colour, hex}))
+            }}
+            onDone={() => {
+              setIsPickerOpen(false)
+            }}
           />
         </div>
       )}

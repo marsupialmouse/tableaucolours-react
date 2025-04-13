@@ -5,18 +5,20 @@ import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
 export interface TpsColourPalette {
   name: string
   type: ColourPaletteType | string
-  colours: Array<Colour> | Array<string>
+  colours: Colour[] | string[]
 }
 
 const xmlParser = new DOMParser()
 const xmlSerializer = new XMLSerializer()
 
-function replacePalettesInTpsXml(xml: string, palettes: Array<TpsColourPalette>) {
+function replacePalettesInTpsXml(xml: string, palettes: TpsColourPalette[]) {
   const doc = xmlParser.parseFromString(xml, 'application/xml')
   const preferences = doc.getElementsByTagName('preferences')[0]
   const paletteElements = [...preferences.getElementsByTagName('color-palette')]
 
-  paletteElements.forEach((e) => e.remove())
+  paletteElements.forEach((e) => {
+    e.remove()
+  })
 
   const paletteXml = palettes.map((x) => colourPaletteXml(x)).join('\n')
 

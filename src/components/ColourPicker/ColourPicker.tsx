@@ -3,21 +3,19 @@ import {Sketch} from '@uiw/react-color'
 import classes from './ColourPicker.module.less'
 import {default as TestIds} from './ColourPickerTestIds'
 
-export type ColourPickerProps = {
+export interface ColourPickerProps {
   hex: string
   onChange?: (hex: string) => void
   onDone?: () => void
 }
 
-export default function ColourPicker({
-  hex,
-  onChange,
-  onDone,
-}: ColourPickerProps) {
+export default function ColourPicker({hex, onChange, onDone}: ColourPickerProps) {
   useEffect(() => {
     if (onDone) {
       window.addEventListener('click', onDone, false)
-      return () => window.removeEventListener('click', onDone)
+      return () => {
+        window.removeEventListener('click', onDone)
+      }
     }
   }, [onDone])
 

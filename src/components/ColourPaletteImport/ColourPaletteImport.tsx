@@ -32,9 +32,9 @@ export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) 
   function handleImport(): void {
     dispatch(
       paletteReplaced({
-        name: palette!.name,
-        type: ColourPaletteTypes.find(palette!.type) ?? defaultColourPaletteType,
-        colourHexes: palette!.colours,
+        name: palette?.name ?? '',
+        type: ColourPaletteTypes.find(palette?.type) ?? defaultColourPaletteType,
+        colourHexes: palette?.colours ?? [],
       })
     )
     onDone?.()
@@ -45,7 +45,9 @@ export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) 
       <div className={classes['importcode-codecontainer']}>
         <textarea
           value={xml}
-          onChange={(e) => handleCodeChange(e.target.value)}
+          onChange={(e) => {
+            handleCodeChange(e.target.value)
+          }}
           autoFocus
           className={clsx(
             classes['importcode-code'],

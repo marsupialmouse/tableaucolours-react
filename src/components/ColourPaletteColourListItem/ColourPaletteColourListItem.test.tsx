@@ -168,7 +168,7 @@ describe('Colour palette colour list item', () => {
       const picker = await screen.findByTestId(TestIds.ColourPicker)
       const pickerInput = picker.querySelector('.w-color-editable-input input')
       await userEvent.type(
-        pickerInput!,
+        pickerInput ?? document.body,
         '{backspace}{backspace}{backspace}{backspace}{backspace}{backspace}' + newHex
       )
 

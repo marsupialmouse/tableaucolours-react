@@ -34,13 +34,13 @@ export const initialColourPaletteState: ColourPaletteState = {
 function createColour(hex?: string, isSelected?: boolean): Colour {
   return {
     id: lastColourId++,
-    hex: (hex ? hex : '#FFFFFF').toUpperCase(),
+    hex: (hex ?? '#FFFFFF').toUpperCase(),
     isSelected: isSelected === true,
   }
 }
 
 function createColours(colours?: string[], selectFirstColour?: boolean): Colour[] {
-  colours = colours || ['#FFFFFF']
+  colours = colours ?? ['#FFFFFF']
   return colours.map((c, i) => createColour(c, selectFirstColour && i === 0))
 }
 
@@ -59,13 +59,16 @@ const replacePalette = (
   colourHexes: string[]
 ) => {
   state.name = name || ''
-  state.type = (type || defaultColourPaletteType).id
+  state.type = type.id
   state.hasChanges = true
   replaceColours(state, colourHexes)
 }
 
-const selectColour = (state: ColourPaletteState, colour: Colour) =>
-  state.colours.forEach((x) => (x.isSelected = x.id === colour.id))
+const selectColour = (state: ColourPaletteState, colour: Colour) => {
+  state.colours.forEach((x) => {
+    x.isSelected = x.id === colour.id
+  })
+}
 
 export const colourPaletteSlice = createSlice({
   name: 'colourPalette',
@@ -80,7 +83,9 @@ export const colourPaletteSlice = createSlice({
     },
 
     colourChanged(state, action: PayloadAction<{colour: Colour; hex: string}>) {
-      state.colours.find((x) => x.id === action.payload.colour.id)!.hex = action.payload.hex
+      const c = state.colours.find((x) => x.id === action.payload.colour.id)
+      if (!c) return
+      c.hex = action.payload.hex
       state.hasChanges = true
     },
 
@@ -101,7 +106,7 @@ export const colourPaletteSlice = createSlice({
         newIndex: number
       }>
     ) {
-      let c = state.colours
+      const c = state.colours
       const oldIndex = c.findIndex((x) => x.id === action.payload.colour.id)
       c.splice(action.payload.newIndex, 0, c.splice(oldIndex, 1)[0])
       state.hasChanges = true
@@ -112,7 +117,7 @@ export const colourPaletteSlice = createSlice({
     },
 
     coloursReplaced(state, action: PayloadAction<{hexes: string[]}>) {
-      replaceColours(state, action?.payload.hexes || [])
+      replaceColours(state, action.payload.hexes)
     },
 
     coloursReset(state) {

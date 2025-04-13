@@ -1,20 +1,14 @@
-import {Colour} from 'src/types/Colour'
-import {
-  ColourPaletteType,
-  ColourPaletteTypes,
-} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPalettePreview.module.less'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
+import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
 
 export interface ColourPalettePreviewProps {
   type: ColourPaletteType
   colours: Colour[]
 }
 
-export default function ColourPalettePreview({
-  type,
-  colours,
-}: ColourPalettePreviewProps) {
+export default function ColourPalettePreview({type, colours}: ColourPalettePreviewProps) {
   function getBackgroundStyle() {
     switch (type) {
       case ColourPaletteTypes.regular:
@@ -35,7 +29,7 @@ export default function ColourPalettePreview({
     return {
       background: `linear-gradient(to right, ${colours
         .map((c) => c.hex)
-        .map((x) => `${x} ${position}%, ${x} ${(position += width)}%`)
+        .map((x) => `${x} ${position.toString()}%, ${x} ${(position += width).toString()}%`)
         .join(', ')})`,
     }
   }
@@ -47,11 +41,7 @@ export default function ColourPalettePreview({
   }
 
   return (
-    <div
-      className={classes.palettepreview}
-      style={getBackgroundStyle()}
-      data-testid={TestIds.Self}
-    >
+    <div className={classes.palettepreview} style={getBackgroundStyle()} data-testid={TestIds.Self}>
       &nbsp;
     </div>
   )
