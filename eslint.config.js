@@ -42,7 +42,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}'],
+    files: ['**/*.test.{ts,tsx}', '**/test-utils.tsx'],
     rules: {
       '@typescript-eslint/restrict-template-expressions': 'off',
     },

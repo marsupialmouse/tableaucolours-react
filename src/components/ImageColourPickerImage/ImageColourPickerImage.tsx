@@ -7,7 +7,7 @@ export interface ImageColourPickerImageProps {
   image: HTMLImageElement
   scale: number
   canPickColour: boolean
-  colourPicked?: (colour: string) => void
+  onColourPicked?: (colour: string) => void
 }
 
 const defaultMousePosition = {x: 0, y: 0}
@@ -16,7 +16,7 @@ export default function ImageColourPickerImage({
   image,
   scale,
   canPickColour,
-  colourPicked,
+  onColourPicked,
 }: ImageColourPickerImageProps) {
   const canvas = useRef<HTMLCanvasElement | null>(null)
 
@@ -30,8 +30,6 @@ export default function ImageColourPickerImage({
 
   useEffect(() => {
     resetMousePositionAndColour()
-    // This check is to stop tests from breaking: real code should wait for the image to load before setting it as a prop
-    if (!image.complete) return
     const drawingContext = canvas.current?.getContext('2d')
     if (!canvas.current || !drawingContext) return
     drawingContext.scale(scale, scale)
@@ -45,7 +43,7 @@ export default function ImageColourPickerImage({
 
     const colour = getCurrentMouseColour(event)
 
-    if (colour) colourPicked?.(colour)
+    if (colour) onColourPicked?.(colour)
   }
 
   function setMousePositionAndColour(event: React.MouseEvent): void {
