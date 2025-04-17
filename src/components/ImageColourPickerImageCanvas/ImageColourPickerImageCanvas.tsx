@@ -3,6 +3,7 @@ import {default as TestIds} from './ImageColourPickerImageCanvasTestIds'
 import classes from './ImageColourPickerImageCanvas.module.less'
 import {useEffect, useRef, useState} from 'react'
 import clsx from 'clsx'
+import {eventBus} from 'src/utils/EventBus'
 
 export interface ImageColourPickerImageCanvasProps {
   canPickColour: boolean
@@ -49,8 +50,9 @@ export default function ImageColourPickerImageCanvas({
 
   function handleOpenFile(event: React.MouseEvent): void {
     event.stopPropagation()
-    // TODO:
-    throw new Error('Function not implemented.')
+    event.preventDefault()
+
+    eventBus.emit('openImageFile')
   }
 
   function handleDragEnter(event: React.DragEvent): void {
@@ -115,7 +117,7 @@ export default function ImageColourPickerImageCanvas({
           <div className={classes['canvashint-container']}>
             {hintType === 'image' && (
               <div className={classes['canvashint-text']}>
-                <a href="#" onClick={handleOpenFile}>
+                <a href="#" onClick={handleOpenFile} data-testid={TestIds.OpenFile}>
                   Open
                 </a>
                 , paste or drop an image to get started

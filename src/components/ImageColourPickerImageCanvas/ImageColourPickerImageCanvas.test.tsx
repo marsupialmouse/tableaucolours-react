@@ -4,7 +4,8 @@ import {default as ImageTestIds} from '../ImageColourPickerImage/ImageColourPick
 import classes from './ImageColourPickerImageCanvas.module.less'
 import ImageColourPickerImageCanvas from './ImageColourPickerImageCanvas'
 import {screen, render, fireEvent} from '@testing-library/react'
-import {testImage} from 'src/testing/test-utils'
+import {testImage, userEvent} from 'src/testing/test-utils'
+import {eventBus} from 'src/utils/EventBus'
 
 describe('Image colour picker image canvas', () => {
   interface RenderProps {
@@ -286,4 +287,16 @@ describe('Image colour picker image canvas', () => {
       expect(scaleTriggered).toBeFalsy()
     }
   )
+
+  it('publishes event to bus when open file link clicked', async () => {
+    let eventPublished = false
+    renderCanvas({})
+    eventBus.on('openImageFile', () => {
+      eventPublished = true
+    })
+
+    await userEvent.click(screen.getByTestId(TestIds.OpenFile))
+
+    expect(eventPublished).toBeTruthy()
+  })
 })
