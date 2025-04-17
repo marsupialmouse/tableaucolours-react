@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit/react'
-import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {RootState} from '../store'
 
 export const defaultColourPaletteType = ColourPaletteTypes.regular
@@ -55,11 +55,15 @@ const replaceColours = (state: ColourPaletteState, hexes: string[]) => {
 const replacePalette = (
   state: ColourPaletteState,
   name: string,
-  type: ColourPaletteType,
+  type: string,
   colourHexes: string[]
 ) => {
+  if (!ColourPaletteTypes.find(type)) {
+    console.debug(`'$type' is not a valid ColourPaletteType`)
+    type = defaultColourPaletteType.id
+  }
   state.name = name || ''
-  state.type = type.id
+  state.type = type
   state.hasChanges = true
   replaceColours(state, colourHexes)
 }
@@ -128,7 +132,7 @@ export const colourPaletteSlice = createSlice({
       state,
       action: PayloadAction<{
         name: string
-        type: ColourPaletteType
+        type: string
         colourHexes: string[]
       }>
     ) {
@@ -136,7 +140,7 @@ export const colourPaletteSlice = createSlice({
     },
 
     paletteReset(state) {
-      replacePalette(state, '', defaultColourPaletteType, new Array<string>(0))
+      replacePalette(state, '', defaultColourPaletteType.id, new Array<string>(0))
     },
   },
 })

@@ -33,7 +33,7 @@ export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) 
     dispatch(
       paletteReplaced({
         name: palette?.name ?? '',
-        type: ColourPaletteTypes.find(palette?.type) ?? defaultColourPaletteType,
+        type: (ColourPaletteTypes.find(palette?.type) ?? defaultColourPaletteType).id,
         colourHexes: palette?.colours ?? [],
       })
     )
