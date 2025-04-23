@@ -6,7 +6,7 @@ import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import ColourPickerTestIds from '../ColourPicker/ColourPickerTestIds'
 import classes from './ColourPaletteColourListItem.module.less'
 import {useSelector} from 'react-redux'
-import {selectColourPaletteColours} from 'src/stores/colourpalette/colourPaletteSlice.ts'
+import {selectColourPaletteColours} from 'src/stores/colourPaletteSlice.ts'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes.ts'
 
 interface WrapperProps {
@@ -27,7 +27,7 @@ function render({colour, canRemove, index, isSelected, isDragging}: RenderProps)
       preloadedState: {
         colourPalette: {
           name: '',
-          type: ColourPaletteTypes.regular,
+          type: ColourPaletteTypes.regular.id,
           colours: createColours(colour, isSelected),
           isOpen: true,
           hasChanges: false,
@@ -54,6 +54,7 @@ function StateWrapper({canRemove, index, isDragging}: WrapperProps) {
     </>
   )
 }
+
 describe('Colour palette colour list item', () => {
   describe('renders correctly', () => {
     it('is list item', () => {

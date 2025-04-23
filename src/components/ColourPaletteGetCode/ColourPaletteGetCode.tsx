@@ -4,7 +4,7 @@ import {colourPaletteXml} from 'src/utils/TpsWriter'
 import {useState} from 'react'
 import clsx from 'clsx'
 import {useSelector} from 'react-redux'
-import {selectColourPalette} from 'src/stores/colourpalette/colourPaletteSlice'
+import {selectColourPalette} from 'src/stores/colourPaletteSlice'
 
 export default function ColourPaletteGetCode() {
   const palette = useSelector(selectColourPalette)

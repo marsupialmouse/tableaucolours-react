@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit/react'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
-import {RootState} from '../store'
+import {RootState} from './store'
 
 export const defaultColourPaletteType = ColourPaletteTypes.regular
 const maximumColours = 20
@@ -164,5 +164,9 @@ export const selectColourPaletteType = (state: RootState) =>
 export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
 export const selectColourPaletteHasChanges = (state: RootState) => state.colourPalette.hasChanges
 export const selectColourPaletteIsOpen = (state: RootState) => state.colourPalette.isOpen
+export const selectSelectedColour = (state: RootState) =>
+  state.colourPalette.colours.find((x) => x.isSelected)
+export const selectCanPickColour = (state: RootState) =>
+  state.colourPalette.isOpen && !!selectSelectedColour(state)
 
 export default colourPaletteSlice.reducer

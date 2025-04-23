@@ -6,10 +6,7 @@ import classes from './ColourPaletteImport.module.less'
 import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteImportTestIds'
 import {useSelector} from 'react-redux'
-import {
-  initialColourPaletteState,
-  selectColourPalette,
-} from 'src/stores/colourpalette/colourPaletteSlice'
+import {initialColourPaletteState, selectColourPalette} from 'src/stores/colourPaletteSlice'
 
 interface RenderProps {
   name?: string

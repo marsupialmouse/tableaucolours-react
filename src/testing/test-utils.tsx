@@ -3,7 +3,7 @@ import {JSX, PropsWithChildren} from 'react'
 import {render, RenderOptions} from '@testing-library/react'
 import {AppStore, RootState, setupStore} from 'src/stores/store'
 import {Provider} from 'react-redux'
-import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
+import {Colour} from 'src/stores/colourPaletteSlice'
 import {vi} from 'vitest'
 
 export const userEvent = testingLibraryUserEvent.default.setup({delay: null})

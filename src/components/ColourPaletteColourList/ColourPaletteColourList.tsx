@@ -8,7 +8,7 @@ import {
   colourRemoved,
   colourSelected,
   selectColourPaletteColours,
-} from 'src/stores/colourpalette/colourPaletteSlice'
+} from 'src/stores/colourPaletteSlice'
 
 export default function ColourPaletteColourList() {
   const dispatch = useDispatch()

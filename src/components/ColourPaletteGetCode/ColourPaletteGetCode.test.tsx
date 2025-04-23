@@ -5,7 +5,7 @@ import ColourPaletteGetCode from './ColourPaletteGetCode'
 import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {default as TestIds} from './ColourPaletteGetCodeTestIds'
 import {colourPaletteXml} from 'src/utils/TpsWriter'
-import {initialColourPaletteState} from 'src/stores/colourpalette/colourPaletteSlice'
+import {initialColourPaletteState} from 'src/stores/colourPaletteSlice'
 
 interface RenderProps {
   name: string

@@ -1,7 +1,7 @@
 import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPalettePreview.module.less'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
-import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
+import {Colour} from 'src/stores/colourPaletteSlice'
 
 export interface ColourPalettePreviewProps {
   type: ColourPaletteType

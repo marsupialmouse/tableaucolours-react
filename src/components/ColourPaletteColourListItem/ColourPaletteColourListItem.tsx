@@ -3,12 +3,7 @@ import ColourPicker from '../ColourPicker/ColourPicker'
 import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
 import {clsx} from 'clsx'
-import {
-  Colour,
-  colourChanged,
-  colourRemoved,
-  colourSelected,
-} from 'src/stores/colourpalette/colourPaletteSlice'
+import {Colour, colourChanged, colourRemoved, colourSelected} from 'src/stores/colourPaletteSlice'
 import {useDispatch} from 'react-redux'
 
 export interface ColourPaletteColourListItemProps {

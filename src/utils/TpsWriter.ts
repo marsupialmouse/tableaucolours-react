@@ -1,6 +1,6 @@
 import {ColourPaletteType} from 'src/types/ColourPaletteTypes'
 import he from 'he'
-import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
+import {Colour} from 'src/stores/colourPaletteSlice'
 
 export interface TpsColourPalette {
   name: string

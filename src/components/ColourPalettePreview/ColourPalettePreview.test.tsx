@@ -3,7 +3,7 @@ import {screen, render} from '@testing-library/react'
 import ColourPalettePreview from './ColourPalettePreview'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
-import {Colour} from 'src/stores/colourpalette/colourPaletteSlice'
+import {Colour} from 'src/stores/colourPaletteSlice'
 
 let id = 0
 

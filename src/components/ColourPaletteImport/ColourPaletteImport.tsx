@@ -5,10 +5,7 @@ import clsx from 'clsx'
 import {parseColourPalette, ParsedPalette} from 'src/utils/TpsParser'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {useDispatch} from 'react-redux'
-import {
-  defaultColourPaletteType,
-  paletteReplaced,
-} from 'src/stores/colourpalette/colourPaletteSlice'
+import {defaultColourPaletteType, paletteReplaced} from 'src/stores/colourPaletteSlice'
 
 export interface ColourPaletteImportProps {
   onDone?: () => void

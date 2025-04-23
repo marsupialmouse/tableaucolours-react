@@ -5,7 +5,7 @@ import ColourPaletteTypeSelector from './components/ColourPaletteTypeSelector/Co
 import {useState} from 'react'
 import ColourPalettePreview from './components/ColourPalettePreview/ColourPalettePreview'
 import {useSelector} from 'react-redux'
-import {selectColourPaletteColours} from './stores/colourpalette/colourPaletteSlice'
+import {selectColourPaletteColours} from './stores/colourPaletteSlice'
 
 function App() {
   const [selectedType, setSelectedType] = useState(ColourPaletteTypes.sequential)

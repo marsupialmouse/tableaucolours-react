@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
-import colourPaletteReducer from './colourpalette/colourPaletteSlice'
+import colourPaletteReducer from './colourPaletteSlice'
 
 const rootReducer = combineReducers({
   colourPalette: colourPaletteReducer,
