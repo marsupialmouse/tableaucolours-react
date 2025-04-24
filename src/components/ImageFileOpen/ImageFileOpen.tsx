@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import {eventBus} from 'src/utils/EventBus'
 
 export interface ImageFileOpenProps {
-  onFileSelected?: (files: FileList) => void
+  onFileSelected?: (files: File[]) => void
 }
 
 export default function ImageFileOpen({onFileSelected}: ImageFileOpenProps) {
@@ -29,7 +29,7 @@ export default function ImageFileOpen({onFileSelected}: ImageFileOpenProps) {
   }
 
   function handleFileChanged(event: React.ChangeEvent<HTMLInputElement>): void {
-    if (event.target.files?.length) onFileSelected?.(event.target.files)
+    if (event.target.files?.length) onFileSelected?.([...event.target.files])
   }
 
   return (

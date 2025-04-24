@@ -19,7 +19,7 @@ describe('Image file open', () => {
     render(
       <ImageFileOpen
         onFileSelected={(f) => {
-          eventFiles = [...f]
+          eventFiles = f
         }}
       />
     )
