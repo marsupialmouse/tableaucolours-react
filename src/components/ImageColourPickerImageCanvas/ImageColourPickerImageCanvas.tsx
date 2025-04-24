@@ -10,7 +10,7 @@ export interface ImageColourPickerImageCanvasProps {
   image?: HTMLImageElement
   scale: number
   onColourPicked?: (colour: string) => void
-  onFileDropped?: (files: FileList) => void
+  onFileDropped?: (files: File[]) => void
   onScaleChanged?: (scale: number) => void
 }
 export default function ImageColourPickerImageCanvas({
@@ -77,7 +77,7 @@ export default function ImageColourPickerImageCanvas({
 
     setIsDragActive(false)
 
-    if (event.dataTransfer.files.length) onFileDropped?.(event.dataTransfer.files)
+    if (event.dataTransfer.files.length) onFileDropped?.([...event.dataTransfer.files])
   }
 
   function handleWheel(event: React.WheelEvent): void {

@@ -13,7 +13,7 @@ describe('Image colour picker image canvas', () => {
     hasImage?: boolean
     scale?: number
     onColourPicked?: (colour: string) => void
-    onFileDropped?: (files: FileList) => void
+    onFileDropped?: (files: File[]) => void
     onScaleChanged?: (scale: number) => void
   }
 
@@ -169,7 +169,7 @@ describe('Image colour picker image canvas', () => {
       ]
       renderCanvas({
         onFileDropped: (f) => {
-          eventFiles = [...f]
+          eventFiles = f
         },
       })
 
