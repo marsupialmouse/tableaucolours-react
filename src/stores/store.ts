@@ -1,8 +1,10 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import colourPaletteReducer from './colourPaletteSlice'
+import imageReducer from './imageSlice'
 
 const rootReducer = combineReducers({
   colourPalette: colourPaletteReducer,
+  image: imageReducer,
 })
 
 export function setupStore(preloadedState?: Partial<RootState>) {
