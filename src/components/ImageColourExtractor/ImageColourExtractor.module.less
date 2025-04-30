@@ -1,0 +1,164 @@
+@import 'src/variables.less';
+
+.extractcolours {
+  color: lighten(#000, 10%);
+
+  &:after {
+    content: ' ';
+    display: block;
+    clear: both;
+    width: 0;
+    height: 0;
+  }
+
+  &-fields {
+    font-size: 1.5rem;
+    margin-bottom: 1.3rem;
+  }
+
+  &-field {
+    margin-bottom: 1.5rem;
+  }
+
+  &-field--disabled {
+    color: @tool-colour-disabled;
+  }
+
+  &-numberlabel {
+    margin-right: 1rem;
+  }
+
+  &-numbercontrol {
+    display: inline-block;
+
+    &--focus {
+      box-shadow: @box-shadow-active;
+    }
+  }
+
+  &-numberstep {
+    border: @border;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+    line-height: 2.8rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  &-numberinput {
+    outline: none;
+    display: inline-block;
+    border: 0;
+    border-top: @border;
+    border-bottom: @border;
+    box-sizing: border-box;
+    height: 3rem;
+    width: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+    overflow: hidden;
+    vertical-align: middle;
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+  }
+
+  &-action {
+    margin-bottom: 0.8rem;
+  }
+
+  &-actioninput {
+    position: absolute;
+    opacity: 0;
+  }
+
+  &-actionlabel {
+    position: relative;
+    display: inline-block;
+    line-height: 1.8rem;
+    vertical-align: middle;
+  }
+
+  &-radio {
+    &:before {
+      position: relative;
+      display: inline-block;
+      border: @border;
+      border-radius: 50%;
+      width: 1.8rem;
+      height: 1.8rem;
+      box-sizing: border-box;
+      margin-right: 0.7rem;
+      content: '';
+      vertical-align: middle;
+      top: -0.2rem;
+    }
+
+    &:hover:before {
+      border-color: @tool-colour-active;
+    }
+  }
+
+  &-actioninput:checked + &-actionlabel &-radio:before {
+    background-color: @tool-colour-active;
+    border-color: @tool-colour-active;
+  }
+
+  &-actioninput:focus + &-actionlabel &-radio:before {
+    box-shadow: @box-shadow-active;
+  }
+
+  &-actioninput:checked + &-actionlabel &-radio:after {
+    position: absolute;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 50%;
+    width: 0.8rem;
+    height: 0.8rem;
+    box-sizing: border-box;
+    content: '';
+    vertical-align: middle;
+    top: 0.4rem;
+    left: 0.5rem;
+  }
+
+  &-field--disabled &-radio {
+    &:before {
+      border-color: @border-colour;
+    }
+
+    &:hover:before {
+      border-color: @border-colour;
+    }
+  }
+
+  &-button {
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: #fff;
+    background-color: @button-colour;
+    text-align: center;
+    width: 15rem;
+    float: right;
+    margin-top: 1rem;
+    margin-left: 1rem;
+
+    &:hover {
+      background-color: @button-colour-hover;
+    }
+
+    &:disabled {
+      background-color: @button-colour-disabled;
+    }
+  }
+}

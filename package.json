@@ -18,6 +18,8 @@
     "@reduxjs/toolkit": "^2.6.1",
     "@uiw/react-color": "^2.3.2",
     "clsx": "^2.1.1",
+    "colorthief": "^2.6.0",
+    "culori": "^4.0.1",
     "he": "^1.2.0",
     "immer": "^10.1.1",
     "mitt": "^3.0.1",
@@ -32,6 +34,7 @@
     "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
+    "@types/culori": "^2.1.1",
     "@types/he": "^1.2.3",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.2",
@@ -56,7 +59,8 @@
     "typescript-eslint": "^8.0.1",
     "vite": "^6.2.6",
     "vitest": "^3.1.1",
-    "vitest-canvas-mock": "^0.3.3"
+    "vitest-canvas-mock": "^0.3.3",
+    "vitest-mock-extended": "^3.1.0"
   },
   "lint-staged": {
     "**/*": [

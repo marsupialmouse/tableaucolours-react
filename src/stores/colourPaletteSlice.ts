@@ -3,7 +3,7 @@ import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {RootState} from './store'
 
 export const defaultColourPaletteType = ColourPaletteTypes.regular
-const maximumColours = 20
+export const maximumPaletteColours = 20
 let lastColourId = 1
 
 export interface Colour {
@@ -46,7 +46,7 @@ function createColours(colours?: string[], selectFirstColour?: boolean): Colour[
 
 const replaceColours = (state: ColourPaletteState, hexes: string[]) => {
   state.colours = createColours(
-    hexes.length > maximumColours ? hexes.slice(0, maximumColours) : hexes,
+    hexes.length > maximumPaletteColours ? hexes.slice(0, maximumPaletteColours) : hexes,
     true
   )
   state.hasChanges = true
@@ -79,11 +79,23 @@ export const colourPaletteSlice = createSlice({
   initialState: initialColourPaletteState,
   reducers: {
     colourAdded(state, action: PayloadAction<{hex?: string}>) {
-      if (state.colours.length >= maximumColours) return
+      if (state.colours.length >= maximumPaletteColours) return
       const colour = createColour(action.payload.hex ?? '#FFFFFF')
       state.colours.push(colour)
       state.hasChanges = true
       selectColour(state, colour)
+    },
+
+    coloursAdded(state, action: PayloadAction<{hexes: string[]}>) {
+      const colourCapacity = maximumPaletteColours - state.colours.length
+      let hexes = [...action.payload.hexes]
+      if (hexes.length > colourCapacity) {
+        hexes = hexes.slice(0, colourCapacity)
+      }
+      if (!hexes.length) return
+
+      hexes.forEach((x) => state.colours.push(createColour(x)))
+      state.hasChanges = true
     },
 
     colourChanged(state, action: PayloadAction<{colour: Colour; hex: string}>) {
@@ -151,6 +163,7 @@ export const {
   colourMoved,
   colourRemoved,
   colourSelected,
+  coloursAdded,
   coloursReplaced,
   coloursReset,
   paletteReplaced,
@@ -166,6 +179,8 @@ export const selectColourPaletteHasChanges = (state: RootState) => state.colourP
 export const selectColourPaletteIsOpen = (state: RootState) => state.colourPalette.isOpen
 export const selectSelectedColour = (state: RootState) =>
   state.colourPalette.colours.find((x) => x.isSelected)
+export const selectCanAddColour = (state: RootState) =>
+  state.colourPalette.colours.length < maximumPaletteColours
 export const selectCanPickColour = (state: RootState) =>
   state.colourPalette.isOpen && !!selectSelectedColour(state)
 

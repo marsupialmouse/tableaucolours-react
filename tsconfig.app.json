@@ -24,7 +24,9 @@
     "paths": {
       "src/*": ["./src/*"],
       "components/*": ["./src/components/*"]
-    }
+    },
+
+    "typeRoots": ["types", "node_modules/@types"]
   },
-  "include": ["src"]
+  "include": ["src", "__mocks__", "types/**/*.d.ts"]
 }
