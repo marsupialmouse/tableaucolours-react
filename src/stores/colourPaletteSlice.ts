@@ -140,6 +140,11 @@ export const colourPaletteSlice = createSlice({
       replaceColours(state, new Array<string>(0))
     },
 
+    paletteNameChanged(state, action: PayloadAction<{name: string}>) {
+      state.name = action.payload.name
+      state.hasChanges = true
+    },
+
     paletteReplaced(
       state,
       action: PayloadAction<{
@@ -154,6 +159,16 @@ export const colourPaletteSlice = createSlice({
     paletteReset(state) {
       replacePalette(state, '', defaultColourPaletteType.id, new Array<string>(0))
     },
+
+    paletteTypeChanged(state, action: PayloadAction<{type: string}>) {
+      let type = action.payload.type
+      if (!ColourPaletteTypes.find(type)) {
+        console.debug(`'${type}' is not a valid ColourPaletteType`)
+        type = defaultColourPaletteType.id
+      }
+      state.type = type
+      state.hasChanges = true
+    },
   },
 })
 
@@ -166,8 +181,10 @@ export const {
   coloursAdded,
   coloursReplaced,
   coloursReset,
+  paletteNameChanged,
   paletteReplaced,
   paletteReset,
+  paletteTypeChanged,
 } = colourPaletteSlice.actions
 
 export const selectColourPalette = (state: RootState): ColourPalette => state.colourPalette
