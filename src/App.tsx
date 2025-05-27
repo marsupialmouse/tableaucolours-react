@@ -1,4 +1,3 @@
-import './index.less'
 import './App.less'
 import ColourPaletteEditor from './components/ColourPaletteEditor/ColourPaletteEditor'
 
