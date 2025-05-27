@@ -28,7 +28,7 @@ export default function ColourPaletteGetCode() {
       </div>
       {!isXmlCopied && (
         <button
-          className={classes['button getcode-copy']}
+          className={clsx('button', classes['getcode-copy'])}
           onClick={(e) => {
             void handleButtonClick(e)
           }}
@@ -39,10 +39,10 @@ export default function ColourPaletteGetCode() {
       )}
       {isXmlCopied && (
         <button
-          className={clsx(classes['button getcode-copy'], classes['getcode-copy--copied'])}
+          className={clsx('button', classes['getcode-copy'], classes['getcode-copy--copied'])}
           data-testid={TestIds.Button}
         >
-          Copied
+          Copied&nbsp;
           <span className="fas fa-check"></span>
         </button>
       )}

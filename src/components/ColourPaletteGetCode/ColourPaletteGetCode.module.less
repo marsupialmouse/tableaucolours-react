@@ -26,21 +26,21 @@
     margin: 0;
     overflow: auto;
   }
-  &-copy {
-    width: 20rem;
-    float: right;
-    margin-top: 1rem;
+}
+button.getcode-copy {
+  width: 20rem;
+  float: right;
+  margin-top: 1rem;
+
+  &:hover {
+    background-color: @button-colour-hover;
+  }
+
+  &--copied {
+    background-color: @button-special-colour;
 
     &:hover {
-      background-color: @button-colour-hover;
-    }
-
-    &--copied {
-      background-color: @button-special-colour;
-
-      &:hover {
-        background-color: @button-special-colour-hover;
-      }
+      background-color: @button-special-colour-hover;
     }
   }
 }
