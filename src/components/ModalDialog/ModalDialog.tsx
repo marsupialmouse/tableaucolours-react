@@ -51,7 +51,7 @@ export default function ModalDialog({isOpen, onClose, width, children}: ModalDia
         <dialog ref={dialog} onClick={handleCloseClick} data-testid={TestIds.Self}>
           <div
             className={classes['modal-container']}
-            style={width ? {} : {width}}
+            style={width ? {width} : {}}
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
