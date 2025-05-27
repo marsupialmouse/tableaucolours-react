@@ -8,11 +8,11 @@ export interface ColourPaletteTypeSelectorItemProps {
 
 export default function ColourPaletteTypeSelectorItem({type}: ColourPaletteTypeSelectorItemProps) {
   return (
-    <div className="palettetype" data-testid={TestIds.Self}>
+    <div className={classes.palettetype} data-testid={TestIds.Self}>
       <div className={classes['palettetype-example--' + type.id]} data-testid={TestIds.Example}>
         &nbsp;
       </div>
-      <label className="palettetype-label" data-testid={TestIds.Name}>
+      <label className={classes['palettetype-label']} data-testid={TestIds.Name}>
         {type.name}
       </label>
     </div>
