@@ -100,11 +100,12 @@ export default function ImageColourExtractor({onClose}: ImageColourExtractorProp
   const maximumColoursToExtract = calculateMaximumColoursToExtract(action, colours)
   const imageSrc = useSelector(selectImageSrc)
 
-  function handleNumberChange(event: ChangeEvent<HTMLInputElement>): void {
+  function handleNumberChange(event: ChangeEvent<HTMLInputElement>) {
     setValidNumberToExtract(action, event.currentTarget.valueAsNumber)
   }
 
-  function handleActionChange(newAction: ActionType) {
+  function handleActionChange(event: ChangeEvent<HTMLInputElement>) {
+    const newAction = event.target.value as ActionType
     setAction(newAction)
     setValidNumberToExtract(newAction, numberOfColoursToExtract)
   }
@@ -208,27 +209,26 @@ export default function ImageColourExtractor({onClose}: ImageColourExtractorProp
             ></button>
           </div>
         </div>
-        <div className="extractcolours-field extractcolours-action">
+        <div className={clsx(classes['extractcolours-field'], classes['extractcolours-action'])}>
           <input
             id="replacecolours"
             type="radio"
             name="action"
             value="replaceColours"
             checked={action === 'replaceColours'}
-            onChange={(e) => {
-              if (e.target.checked) handleActionChange('replaceColours')
-            }}
+            onChange={handleActionChange}
             className={classes['extractcolours-actioninput']}
             tabIndex={101}
             data-testid={TestIds.ReplaceColours}
           />
           <label htmlFor="replacecolours" className={classes['extractcolours-actionlabel']}>
-            <span className="extractcolours-radio"></span>Replace existing colours
+            <span className={classes['extractcolours-radio']}></span>Replace existing colours
           </label>
         </div>
         <div
           className={clsx(
-            classes['extractcolours-field extractcolours-action'],
+            classes['extractcolours-field'],
+            classes['extractcolours-action'],
             !canAddColour && classes['extractcolours-field--disabled']
           )}
         >
@@ -239,11 +239,9 @@ export default function ImageColourExtractor({onClose}: ImageColourExtractorProp
             value="addColours"
             checked={action === 'addColours'}
             disabled={!canAddColour}
-            onChange={(e) => {
-              if (e.target.checked) handleActionChange('addColours')
-            }}
+            onChange={handleActionChange}
             className={classes['extractcolours-actioninput']}
-            tabIndex={102}
+            tabIndex={101}
             data-testid={TestIds.AddColours}
           />
           <label
