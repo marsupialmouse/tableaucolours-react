@@ -30,12 +30,12 @@ export default function ImageColourPickerImage({
 
   useEffect(() => {
     resetMousePositionAndColour()
-    const drawingContext = canvas.current?.getContext('2d')
+    const drawingContext = canvas.current?.getContext('2d', {willReadFrequently: true})
     if (!canvas.current || !drawingContext) return
-    drawingContext.scale(scale, scale)
-    drawingContext.drawImage(image, 0, 0)
     canvas.current.width = image.width * scale
     canvas.current.height = image.height * scale
+    drawingContext.scale(scale, scale)
+    drawingContext.drawImage(image, 0, 0)
   }, [canvas, image, scale, resetMousePositionAndColour])
 
   function handleClick(event: React.MouseEvent) {
@@ -53,7 +53,7 @@ export default function ImageColourPickerImage({
 
   function getCurrentMouseColour(event: React.MouseEvent) {
     const colour = canvas.current
-      ?.getContext('2d')
+      ?.getContext('2d', {willReadFrequently: true})
       ?.getImageData(event.nativeEvent.offsetX, event.nativeEvent.offsetY, 1, 1).data
 
     if (!colour || colour[3] === 0) return ''

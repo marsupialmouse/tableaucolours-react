@@ -83,7 +83,6 @@ export default function ImageColourPickerImageCanvas({
   function handleWheel(event: React.WheelEvent): void {
     if (!event.deltaY || !event.shiftKey || event.altKey || event.ctrlKey || event.metaKey) return
 
-    event.preventDefault()
     event.stopPropagation()
 
     onScaleChanged?.(scale * (event.deltaY > 0 ? 0.9 : 1.1))

@@ -27,7 +27,7 @@ export const initialColourPaletteState: ColourPaletteState = {
   name: '',
   type: defaultColourPaletteType.id,
   colours: createColours(),
-  isOpen: false,
+  isOpen: true, // Should be false when we add TPS support
   hasChanges: false,
 }
 
