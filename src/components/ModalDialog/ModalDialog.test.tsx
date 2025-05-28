@@ -31,7 +31,7 @@ describe('Modal dialog component', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('calls onClose when the close button is clicked', () => {
+  it('calls onClose when the close button is clicked', async () => {
     const onClose = vi.fn()
     render(
       <ModalDialog isOpen={true} onClose={onClose} width="400px">
@@ -39,7 +39,7 @@ describe('Modal dialog component', () => {
       </ModalDialog>
     )
 
-    fireEvent.click(screen.getByTestId(TestIds.CloseButton))
+    await userEvent.click(screen.getByTestId(TestIds.CloseButton))
 
     expect(onClose).toHaveBeenCalled()
   })
@@ -83,7 +83,7 @@ describe('Modal dialog component', () => {
     expect(onClose).not.toHaveBeenCalled()
   })
 
-  it('calls onClose when clicking outside the modal', () => {
+  it('calls onClose when clicking outside the modal', async () => {
     const onClose = vi.fn()
     render(
       <ModalDialog isOpen={true} onClose={onClose} width="400px">
@@ -91,12 +91,12 @@ describe('Modal dialog component', () => {
       </ModalDialog>
     )
 
-    fireEvent.click(screen.getByRole('dialog', {hidden: true}))
+    await userEvent.click(screen.getByRole('dialog', {hidden: true}))
 
     expect(onClose).toHaveBeenCalled()
   })
 
-  it('does not call onClose when clicking inside modal', () => {
+  it('does not call onClose when clicking inside modal', async () => {
     const onClose = vi.fn()
     render(
       <ModalDialog isOpen={true} onClose={onClose} width="400px">
@@ -104,7 +104,7 @@ describe('Modal dialog component', () => {
       </ModalDialog>
     )
 
-    fireEvent.click(screen.getByTestId('button'))
+    await userEvent.click(screen.getByTestId('button'))
 
     expect(onClose).not.toHaveBeenCalled()
   })

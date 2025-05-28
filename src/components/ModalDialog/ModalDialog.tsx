@@ -45,18 +45,18 @@ export default function ModalDialog({isOpen, onClose, width, children}: ModalDia
     onClose()
   }
 
+  function handleMouseDown(e: React.MouseEvent): void {
+    if (e.target === e.currentTarget) {
+      dialog.current?.close()
+      onClose()
+    }
+  }
+
   return (
     <>
       {isOpen && (
-        <dialog ref={dialog} onClick={handleCloseClick} data-testid={TestIds.Self}>
-          <div
-            className={classes['modal-container']}
-            style={width ? {width} : {}}
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-            }}
-          >
+        <dialog ref={dialog} onMouseDown={handleMouseDown} data-testid={TestIds.Self}>
+          <div className={classes['modal-container']} style={width ? {width} : {}}>
             <button
               className={clsx(classes['modal-close'], 'iconbutton', 'fas', 'fa-times')}
               onClick={handleCloseClick}
