@@ -1,14 +1,13 @@
-import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
+import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import classes from './ColourPalettePreview.module.less'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
-import {Colour} from 'src/stores/colourPaletteSlice'
+import {selectColourPaletteColours, selectColourPaletteType} from 'src/stores/colourPaletteSlice'
+import {useSelector} from 'react-redux'
 
-export interface ColourPalettePreviewProps {
-  type: ColourPaletteType
-  colours: Colour[]
-}
+export default function ColourPalettePreview() {
+  const colours = useSelector(selectColourPaletteColours)
+  const type = useSelector(selectColourPaletteType)
 
-export default function ColourPalettePreview({type, colours}: ColourPalettePreviewProps) {
   function getBackgroundStyle() {
     switch (type) {
       case ColourPaletteTypes.regular:

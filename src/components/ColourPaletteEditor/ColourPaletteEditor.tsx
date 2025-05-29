@@ -7,7 +7,6 @@ import clsx from 'clsx'
 import {
   paletteNameChanged,
   paletteTypeChanged,
-  selectColourPaletteColours,
   selectColourPaletteIsOpen,
   selectColourPaletteName,
   selectColourPaletteType,
@@ -19,7 +18,6 @@ import ColourPaletteActions from '../ColourPaletteActions/ColourPaletteActions'
 
 export default function ColourPaletteEditor() {
   const dispatch = useAppDispatch()
-  const colours = useSelector(selectColourPaletteColours)
   const paletteName = useSelector(selectColourPaletteName)
   const paletteType = useSelector(selectColourPaletteType)
   const paletteIsOpen = useSelector(selectColourPaletteIsOpen)
@@ -70,7 +68,7 @@ export default function ColourPaletteEditor() {
               <ColourPaletteColourList />
             </div>
             <div className={classes['colourpalette-preview']}>
-              <ColourPalettePreview type={paletteType} colours={colours} />
+              <ColourPalettePreview />
             </div>
             <div className={classes['colourpalette-actions']}>
               <ColourPaletteActions />
