@@ -33,7 +33,7 @@ function render(props?: RenderProps) {
   })
 }
 
-describe('Colour palette editor', () => {
+describe('Colour palette actions', () => {
   beforeAll(() => {
     window.confirm = vi.fn(() => true)
 

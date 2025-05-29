@@ -1,71 +1,55 @@
-import {screen, fireEvent} from '@testing-library/react'
-import {beforeAll, describe, expect, it, vi} from 'vitest'
+import {screen} from '@testing-library/react'
+import {describe, expect, it} from 'vitest'
 import ColourPaletteEditor from './ColourPaletteEditor'
-import {createColours, renderWithProviders, testImage, userEvent} from 'src/testing/test-utils'
-import {default as TypeSelectorTestIds} from '../ColourPaletteTypeSelector/ColourPaletteTypeSelectorTestIds'
-import {ColourPaletteType, ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
-import {defaultColourPaletteType, initialColourPaletteState} from 'src/stores/colourPaletteSlice'
-import {initialImageState} from 'src/stores/imageSlice'
+import {renderWithProviders} from 'src/testing/test-utils'
+import {default as TestIds} from './ColourPaletteEditorTestIds'
+import {initialColourPaletteState} from 'src/stores/colourPaletteSlice'
 
 interface RenderProps {
-  name?: string
-  type?: ColourPaletteType
-  numberOfColours?: number
-  hasImage?: boolean
+  isPaletteOpen?: boolean
 }
 
 function render(props?: RenderProps) {
-  const colours = Array.from(Array(props?.numberOfColours ?? 0).keys()).map(
-    (x) => '#0000' + (10 + x).toString()
-  )
   const palette = props
     ? {
         ...initialColourPaletteState,
-        name: props.name ?? '',
-        type: props.type?.id ?? defaultColourPaletteType.id,
-        colours: createColours(colours),
+        isOpen: props.isPaletteOpen ?? true,
       }
     : initialColourPaletteState
 
   return renderWithProviders(<ColourPaletteEditor />, {
     preloadedState: {
       colourPalette: palette,
-      image: {...initialImageState, imageSrc: props?.hasImage ? testImage.src : undefined},
     },
   })
 }
 
 describe('Colour palette editor', () => {
-  beforeAll(() => {
-    window.confirm = vi.fn(() => true)
+  // This should really be when TPS file is not open
+  it('does not render back button when palette is open', () => {
+    render({isPaletteOpen: true})
 
-    HTMLDialogElement.prototype.show = vi.fn()
-    HTMLDialogElement.prototype.showModal = vi.fn()
-    HTMLDialogElement.prototype.close = vi.fn()
+    expect(screen.queryByTestId(TestIds.TpsBack)).not.toBeInTheDocument()
   })
 
-  it('renders the palette name input with the correct placeholder', () => {
-    render()
-    const input = screen.getByPlaceholderText('Enter a palette name')
+  // This should really be when TPS file is open
+  it('renders back button when palette is not open', () => {
+    render({isPaletteOpen: false})
 
-    expect(input).toBeInTheDocument()
+    expect(screen.getByTestId(TestIds.TpsBack)).toBeInTheDocument()
   })
 
-  it('updates the palette name in state when input changes', () => {
-    const {store} = render()
-    const input = screen.getByPlaceholderText('Enter a palette name')
+  // This should really be when TPS file is not open
+  it('does not render done/cancel buttons when palette is open', () => {
+    render({isPaletteOpen: true})
 
-    fireEvent.change(input, {target: {value: 'Quail 2.0'}})
-
-    expect(store.getState().colourPalette.name).toBe('Quail 2.0')
+    expect(screen.queryByTestId(TestIds.TpsButtons)).not.toBeInTheDocument()
   })
 
-  it('updates the palette type in state when type is changed', async () => {
-    const {store} = render({type: ColourPaletteTypes.sequential})
+  // This should really be when TPS file is open
+  it('renders done/cancel buttons when palette is not open', () => {
+    render({isPaletteOpen: false})
 
-    await userEvent.click(screen.getByTestId(TypeSelectorTestIds.Selected))
-    await userEvent.click(screen.getByText(ColourPaletteTypes.diverging.name))
-
-    expect(store.getState().colourPalette.type).toBe(ColourPaletteTypes.diverging.id)
+    expect(screen.getByTestId(TestIds.TpsButtons)).toBeInTheDocument()
   })
 })

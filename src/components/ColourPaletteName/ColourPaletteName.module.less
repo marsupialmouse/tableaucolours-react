@@ -1,0 +1,22 @@
+@import 'src/variables.less';
+
+input.colourpalettename {
+  width: 100%;
+  border: @border;
+  background-color: #fff;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 0.2rem;
+  box-sizing: border-box;
+  outline: none;
+  box-shadow: @box-shadow;
+
+  &:hover {
+    border: @border;
+    border-color: @border-colour-hover;
+    box-shadow: @box-shadow-hover;
+  }
+  &:focus {
+    box-shadow: @box-shadow-active;
+  }
+}
