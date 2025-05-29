@@ -1,0 +1,39 @@
+@import 'src/variables.less';
+
+.colourpaletteactions {
+  display: block;
+  clear: both;
+  list-style: none;
+  margin: auto;
+  width: 22.5rem;
+  padding: 0;
+  box-sizing: border-box;
+
+  > li {
+    display: inline-block;
+    height: 4rem;
+    width: 4.5rem;
+    border-left: @border;
+    border-top: @border;
+    border-bottom: @border;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+
+    &:last-of-type {
+      border-right: @border;
+    }
+    :global(.iconbutton) {
+      font-size: 1.7rem;
+      line-height: 3.8rem;
+    }
+
+    &.add {
+      padding-top: 0rem;
+      :global(.iconbutton) {
+        font-size: 2rem;
+      }
+    }
+  }
+}

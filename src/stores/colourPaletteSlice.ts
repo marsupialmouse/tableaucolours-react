@@ -192,6 +192,8 @@ export const selectColourPaletteName = (state: RootState) => state.colourPalette
 export const selectColourPaletteType = (state: RootState) =>
   ColourPaletteTypes.get(state.colourPalette.type)
 export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
+export const selectColourPaletteHasColours = (state: RootState) =>
+  state.colourPalette.colours.length > 0
 export const selectColourPaletteHasChanges = (state: RootState) => state.colourPalette.hasChanges
 export const selectColourPaletteIsOpen = (state: RootState) => state.colourPalette.isOpen
 export const selectSelectedColour = (state: RootState) =>
