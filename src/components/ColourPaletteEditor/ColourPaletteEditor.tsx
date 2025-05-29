@@ -1,4 +1,3 @@
-import ColourPaletteTypeSelector from '../ColourPaletteTypeSelector/ColourPaletteTypeSelector'
 import ColourPaletteColourList from '../ColourPaletteColourList/ColourPaletteColourList'
 import ImageColourPicker from '../ImageColourPicker/ImageColourPicker'
 import ColourPalettePreview from '../ColourPalettePreview/ColourPalettePreview'
@@ -6,28 +5,21 @@ import classes from './ColourPaletteEditor.module.less'
 import clsx from 'clsx'
 import {
   paletteNameChanged,
-  paletteTypeChanged,
   selectColourPaletteIsOpen,
   selectColourPaletteName,
-  selectColourPaletteType,
 } from 'src/stores/colourPaletteSlice'
 import {useSelector} from 'react-redux'
 import {useAppDispatch} from 'src/stores/hooks'
-import {ColourPaletteType} from 'src/types/ColourPaletteTypes'
 import ColourPaletteActions from '../ColourPaletteActions/ColourPaletteActions'
+import ColourPaletteType from '../ColourPaletteType/ColourPaletteType'
 
 export default function ColourPaletteEditor() {
   const dispatch = useAppDispatch()
   const paletteName = useSelector(selectColourPaletteName)
-  const paletteType = useSelector(selectColourPaletteType)
   const paletteIsOpen = useSelector(selectColourPaletteIsOpen)
 
   function handleNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     dispatch(paletteNameChanged({name: event.target.value}))
-  }
-
-  function handleTypeChange(type: ColourPaletteType) {
-    dispatch(paletteTypeChanged({type: type.id}))
   }
 
   return (
@@ -58,11 +50,7 @@ export default function ColourPaletteEditor() {
               />
             </div>
             <div className={classes['colourpalette-type']}>
-              <ColourPaletteTypeSelector
-                selectedType={paletteType}
-                tabIndex={2}
-                onTypeSelected={handleTypeChange}
-              />
+              <ColourPaletteType />
             </div>
             <div className={classes['colourpalette-colours']}>
               <ColourPaletteColourList />
