@@ -1,9 +1,9 @@
 enum ImageColourPickerImageCanvasTestIds {
   Self = 'ImageColourPickerImageCanvas Component',
   DropTarget = 'ImageColourPickerImageCanvas Drop Target',
-  Hint = 'ImageColourPickerImage Hint',
-  Image = 'ImageColourPickerImage Image',
-  OpenFile = 'ImageColourPickerImage OPen File',
+  Hint = 'ImageColourPickerImageCanvas Hint',
+  Image = 'ImageColourPickerImageCanvas Image',
+  OpenFile = 'ImageColourPickerImageCanvas Open File',
 }
 
 export default ImageColourPickerImageCanvasTestIds

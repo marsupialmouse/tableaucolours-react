@@ -21,7 +21,7 @@ export default function ImageColourPickerImageCanvas({
   onFileDropped,
   onScaleChanged,
 }: ImageColourPickerImageCanvasProps) {
-  const hasImage = image?.width && image.height
+  const hasImage = !!(image?.width && image.height)
   const hintType = getHintType()
   const hasHint = !!hintType
   const [isDragActive, setIsDragActive] = useState(false)
