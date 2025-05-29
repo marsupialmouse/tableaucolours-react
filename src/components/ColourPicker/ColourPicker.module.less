@@ -1,13 +1,13 @@
 @import 'src/variables.less';
 
 .colourpicker {
-  background-color: @background-colour;
+  background-color: #fff;
 
-  &Buttons {
+  &-buttons {
     margin: 0.5rem 1rem 1rem 1rem;
   }
 
-  &Done {
+  &-done {
     display: block;
     border: none;
     outline: none;
@@ -22,75 +22,57 @@
     &:hover {
       background-color: @button-colour-hover;
     }
-
-    &--copied {
-      background-color: @button-special-colour;
-
-      &:hover {
-        background-color: @button-special-colour-hover;
-      }
-    }
   }
 }
 
-.vc-sketch,
-.vc-sketch.vc-sketch__disable-alpha {
+/* Colour picker padding wrapper */
+:global(.w-color-sketch) > div:first-child {
   padding: 0 !important;
-  box-sizing: border-box !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  width: 100% !important;
 }
 
-.vc-sketch-sliders {
-  padding: 0.5rem 1rem !important;
+/* Slider container */
+div:has(> div > div:global(.w-color-hue)) {
+  margin: 0.5rem 1rem !important;
 }
 
-.vc-sketch-hue-wrap {
+/* Slider */
+:global(.w-color-hue) {
   height: 0.6rem !important;
   margin-top: 0.3rem;
 }
 
-.vc-sketch-presets,
-.vc-sketch-color-wrap {
-  display: none;
-}
-
-.vc-sketch-field {
-  padding: 0.5rem 1rem !important;
-}
-
-.vc-hue {
-  border-radius: 0.2rem !important;
-
-  &-container {
-    margin: 0 0.2rem !important;
-  }
-
-  &-picker {
-    width: 1.5rem !important;
-    height: 1.5rem !important;
-    border-radius: 50% !important;
-    transform: translate(-0.75rem, -0.45rem) !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.6) !important;
-  }
-}
-
-.vc-input__label {
-  color: @tool-colour !important;
-  padding: 0.3rem 0 0 0 !important;
-  font-size: 1.1rem !important;
-}
-
-.vc-input__input {
-  padding: 0.4rem !important;
-  border: @border !important;
-  border-radius: 0.2rem !important;
-  box-shadow: none !important;
-  font-size: 1rem !important;
+/* Slider toggle */
+:global(.w-color-hue) > :global(.w-color-interactive) > div {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  border-radius: 50% !important;
+  transform: translate(-0.75rem, -0.45rem) !important;
+  margin: 0 !important;
   box-sizing: border-box !important;
-  width: 100% !important;
-  text-align: center !important;
+  box-shadow: 0 0 0.2rem rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Input fields wrapper */
+:global(.w-color-sketch) > div:last-child {
+  padding: 0.5rem 1rem !important;
+  margin: 0 !important;
+}
+
+/* Input fields and labels */
+:global(.w-color-editable-input) {
+  & > input {
+    padding: 0.4rem !important;
+    border: @border !important;
+    border-radius: 0.2rem !important;
+    box-shadow: none !important;
+    font-size: 1rem !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+  & > span {
+    color: @tool-colour !important;
+    padding: 0.3rem 0 0 0 !important;
+    font-size: 1.1rem !important;
+  }
 }

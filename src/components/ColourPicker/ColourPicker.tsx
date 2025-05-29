@@ -30,17 +30,20 @@ export default function ColourPicker({hex, onChange, onDone}: ColourPickerProps)
         e.stopPropagation()
       }}
       data-testid={TestIds.Self}
+      tabIndex={300}
     >
       <Sketch
         color={hex}
         disableAlpha={true}
         presetColors={[]}
+        width={200}
         onChange={(colour) => onChange?.(colour.hex)}
         data-testid={TestIds.Picker}
+        style={{border: 0, borderRadius: 0, boxShadow: 'none'}}
       />
-      <div className={classes.colourpickerButtons}>
+      <div className={classes['colourpicker-buttons']}>
         <button
-          className={classes.colourpickerDone}
+          className={classes['colourpicker-done']}
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
