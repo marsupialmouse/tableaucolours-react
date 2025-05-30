@@ -3,12 +3,13 @@ import ColourPaletteTypeSelector from '../ColourPaletteTypeSelector/ColourPalett
 import {useSelector} from 'react-redux'
 import {paletteTypeChanged, selectColourPaletteType} from 'src/stores/colourPaletteSlice'
 import {ColourPaletteType as PaletteType} from 'src/types/ColourPaletteTypes'
+import {memo} from 'react'
 
 export interface ColourPaletteTypeProps {
   tabIndex?: number
 }
 
-export default function ColourPaletteType({tabIndex}: ColourPaletteTypeProps) {
+const ColourPaletteType = memo(function ColourPaletteType({tabIndex}: ColourPaletteTypeProps) {
   const dispatch = useAppDispatch()
   const paletteType = useSelector(selectColourPaletteType)
 
@@ -23,4 +24,6 @@ export default function ColourPaletteType({tabIndex}: ColourPaletteTypeProps) {
       onTypeSelected={handleTypeChange}
     />
   )
-}
+})
+
+export default ColourPaletteType

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {memo, useState} from 'react'
 import ColourPicker from '../ColourPicker/ColourPicker'
 import classes from './ColourPaletteColourListItem.module.less'
 import {default as TestIds} from './ColourPaletteColourListItemTestIds'
@@ -13,7 +13,7 @@ export interface ColourPaletteColourListItemProps {
   isDragging?: boolean
 }
 
-export default function ColourPaletteColourListItem({
+const ColourPaletteColourListItem = memo(function ColourPaletteColourListItem({
   colour,
   canRemove,
   index = 0,
@@ -76,4 +76,6 @@ export default function ColourPaletteColourListItem({
       )}
     </li>
   )
-}
+})
+
+export default ColourPaletteColourListItem

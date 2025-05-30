@@ -43,13 +43,15 @@ describe('Colour palette editor', () => {
   it('does not render done/cancel buttons when palette is open', () => {
     render({isPaletteOpen: true})
 
-    expect(screen.queryByTestId(TestIds.TpsButtons)).not.toBeInTheDocument()
+    expect(screen.queryByTestId(TestIds.TpsDone)).not.toBeInTheDocument()
+    expect(screen.queryByTestId(TestIds.TpsCancel)).not.toBeInTheDocument()
   })
 
   // This should really be when TPS file is open
   it('renders done/cancel buttons when palette is not open', () => {
     render({isPaletteOpen: false})
 
-    expect(screen.getByTestId(TestIds.TpsButtons)).toBeInTheDocument()
+    expect(screen.getByTestId(TestIds.TpsDone)).toBeInTheDocument()
+    expect(screen.getByTestId(TestIds.TpsCancel)).toBeInTheDocument()
   })
 })

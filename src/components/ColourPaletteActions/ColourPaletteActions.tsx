@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {memo, useCallback, useEffect, useState} from 'react'
 import classes from './ColourPaletteActions.module.less'
 import {useSelector} from 'react-redux'
 import {
@@ -14,7 +14,7 @@ import ColourPaletteGetCode from '../ColourPaletteGetCode/ColourPaletteGetCode'
 import ColourPaletteImport from '../ColourPaletteImport/ColourPaletteImport'
 import ImageColourExtractor from '../ImageColourExtractor/ImageColourExtractor'
 
-export default function ColourPaletteActions() {
+const ColourPaletteActions = memo(function ColourPaletteActions() {
   const [codeModalOpen, setCodeModalOpen] = useState(false)
   const [importModalOpen, setImportModalOpen] = useState(false)
   const [extractModalOpen, setExtractModalOpen] = useState(false)
@@ -41,6 +41,18 @@ export default function ColourPaletteActions() {
       window.removeEventListener('keyup', keyUp)
     }
   }, [dispatch])
+
+  const handleCodeModalClose = useCallback(() => {
+    setCodeModalOpen(false)
+  }, [setCodeModalOpen])
+
+  const handleExtractModalClose = useCallback(() => {
+    setExtractModalOpen(false)
+  }, [setExtractModalOpen])
+
+  const handleImportModalClose = useCallback(() => {
+    setImportModalOpen(false)
+  }, [setImportModalOpen])
 
   function handleExtractClick(event: React.MouseEvent) {
     event.preventDefault()
@@ -116,41 +128,17 @@ export default function ColourPaletteActions() {
           ></button>
         </li>
       </ul>
-      <ModalDialog
-        width="54rem"
-        isOpen={codeModalOpen}
-        onClose={() => {
-          setCodeModalOpen(false)
-        }}
-      >
+      <ModalDialog width="54rem" isOpen={codeModalOpen} onClose={handleCodeModalClose}>
         <ColourPaletteGetCode />
       </ModalDialog>
-      <ModalDialog
-        width="54rem"
-        isOpen={importModalOpen}
-        onClose={() => {
-          setImportModalOpen(false)
-        }}
-      >
-        <ColourPaletteImport
-          onDone={() => {
-            setImportModalOpen(false)
-          }}
-        />
+      <ModalDialog width="54rem" isOpen={importModalOpen} onClose={handleImportModalClose}>
+        <ColourPaletteImport onDone={handleImportModalClose} />
       </ModalDialog>
-      <ModalDialog
-        width="54rem"
-        isOpen={extractModalOpen}
-        onClose={() => {
-          setExtractModalOpen(false)
-        }}
-      >
-        <ImageColourExtractor
-          onClose={() => {
-            setExtractModalOpen(false)
-          }}
-        />
+      <ModalDialog width="54rem" isOpen={extractModalOpen} onClose={handleExtractModalClose}>
+        <ImageColourExtractor onClose={handleExtractModalClose} />
       </ModalDialog>
     </>
   )
-}
+})
+
+export default ColourPaletteActions

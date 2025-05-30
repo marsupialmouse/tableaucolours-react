@@ -3,8 +3,9 @@ import classes from './ColourPalettePreview.module.less'
 import {default as TestIds} from './ColourPalettePreviewTestIds'
 import {selectColourPaletteColours, selectColourPaletteType} from 'src/stores/colourPaletteSlice'
 import {useSelector} from 'react-redux'
+import {memo} from 'react'
 
-export default function ColourPalettePreview() {
+const ColourPalettePreview = memo(function ColourPalettePreview() {
   const colours = useSelector(selectColourPaletteColours)
   const type = useSelector(selectColourPaletteType)
 
@@ -44,4 +45,6 @@ export default function ColourPalettePreview() {
       &nbsp;
     </div>
   )
-}
+})
+
+export default ColourPalettePreview

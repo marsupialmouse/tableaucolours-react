@@ -14,11 +14,11 @@ import {
   selectCanPickColour,
   selectSelectedColour,
 } from 'src/stores/colourPaletteSlice'
-import {useCallback, useEffect, useRef, useState} from 'react'
+import {memo, useCallback, useEffect, useRef, useState} from 'react'
 import classes from './ImageColourPicker.module.less'
 import {default as TestIds} from './ImageColourPickerTestIds'
 
-export default function ImageColourPicker() {
+const ImageColourPicker = memo(function ImageColourPicker() {
   const [image, setImage] = useState<HTMLImageElement>(new Image())
   const imageSrc = useSelector(selectImageSrc)
   const imageScale = useSelector(selectImageScale)
@@ -135,4 +135,6 @@ export default function ImageColourPicker() {
       </div>
     </div>
   )
-}
+})
+
+export default ImageColourPicker

@@ -1,7 +1,8 @@
 enum ColourPaletteEditorTestIds {
   Self = 'ColourPaletteEditor Component',
   TpsBack = 'ColourPaletteEditor Back',
-  TpsButtons = 'ColourPaletteGetCode Buttons',
+  TpsDone = 'ColourPaletteGetCode Done',
+  TpsCancel = 'ColourPaletteGetCode Cancel',
 }
 
 export default ColourPaletteEditorTestIds

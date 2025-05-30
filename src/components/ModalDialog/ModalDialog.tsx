@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react'
+import {memo, useEffect, useRef} from 'react'
 import classes from './ModalDialog.module.less'
 import clsx from 'clsx'
 import {default as TestIds} from './ModalDialogTestIds'
@@ -10,7 +10,12 @@ export interface ModalDialogProps {
   children: React.ReactNode
 }
 
-export default function ModalDialog({isOpen, onClose, width, children}: ModalDialogProps) {
+const ModalDialog = memo(function ModalDialog({
+  isOpen,
+  onClose,
+  width,
+  children,
+}: ModalDialogProps) {
   const dialog = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -68,4 +73,6 @@ export default function ModalDialog({isOpen, onClose, width, children}: ModalDia
       )}
     </>
   )
-}
+})
+
+export default ModalDialog

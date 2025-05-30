@@ -1,6 +1,6 @@
 import classes from './ColourPaletteColourList.module.less'
 import ColourPaletteColourListItem from '../ColourPaletteColourListItem/ColourPaletteColourListItem'
-import {useEffect} from 'react'
+import {memo, useEffect} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {
   Colour,
@@ -10,7 +10,7 @@ import {
   selectColourPaletteColours,
 } from 'src/stores/colourPaletteSlice'
 
-export default function ColourPaletteColourList() {
+const ColourPaletteColourList = memo(function ColourPaletteColourList() {
   const dispatch = useDispatch()
   const colourPaletteColours = useSelector(selectColourPaletteColours)
   const canRemoveColours = colourPaletteColours.length > 1
@@ -126,4 +126,6 @@ export default function ColourPaletteColourList() {
       ))}
     </ul>
   )
-}
+})
+
+export default ColourPaletteColourList

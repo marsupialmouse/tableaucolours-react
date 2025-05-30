@@ -88,14 +88,16 @@ export default function ColourPaletteTypeSelector({
     setIsSelectorOpen(false)
   }
 
+  function stopPropagation(event: React.MouseEvent) {
+    event.stopPropagation()
+  }
+
   return (
     <div
       className={classes.palettetypes}
       data-testid={TestIds.Self}
       onKeyUp={handleKeyUp}
-      onClick={(e) => {
-        e.stopPropagation()
-      }}
+      onClick={stopPropagation}
     >
       <div
         ref={selectedElement}

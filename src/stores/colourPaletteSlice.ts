@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit/react'
+import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit/react'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {RootState} from './store'
 
@@ -187,10 +187,13 @@ export const {
   paletteTypeChanged,
 } = colourPaletteSlice.actions
 
+const typeSelector = (state: RootState) => state.colourPalette.type
+
 export const selectColourPalette = (state: RootState): ColourPalette => state.colourPalette
 export const selectColourPaletteName = (state: RootState) => state.colourPalette.name
-export const selectColourPaletteType = (state: RootState) =>
-  ColourPaletteTypes.get(state.colourPalette.type)
+export const selectColourPaletteType = createSelector(typeSelector, (type) =>
+  ColourPaletteTypes.get(type)
+)
 export const selectColourPaletteColours = (state: RootState) => state.colourPalette.colours
 export const selectColourPaletteHasColours = (state: RootState) =>
   state.colourPalette.colours.length > 0

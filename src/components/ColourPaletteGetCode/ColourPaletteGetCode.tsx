@@ -1,12 +1,12 @@
 import classes from './ColourPaletteGetCode.module.less'
 import {default as TestIds} from './ColourPaletteGetCodeTestIds'
 import {colourPaletteXml} from 'src/utils/TpsWriter'
-import {useState} from 'react'
+import {memo, useState} from 'react'
 import clsx from 'clsx'
 import {useSelector} from 'react-redux'
 import {selectColourPalette} from 'src/stores/colourPaletteSlice'
 
-export default function ColourPaletteGetCode() {
+const ColourPaletteGetCode = memo(function ColourPaletteGetCode() {
   const palette = useSelector(selectColourPalette)
   const [isXmlCopied, setIsXmlCopied] = useState(false)
 
@@ -48,4 +48,6 @@ export default function ColourPaletteGetCode() {
       )}
     </div>
   )
-}
+})
+
+export default ColourPaletteGetCode

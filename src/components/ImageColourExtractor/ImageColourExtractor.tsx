@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import classes from './ImageColourExtractor.module.less'
 import {default as TestIds} from './ImageColourExtractorTestIds'
-import {ChangeEvent, useState} from 'react'
+import {ChangeEvent, memo, useState} from 'react'
 import {
   Colour,
   coloursAdded,
@@ -88,7 +88,9 @@ function getSavedNumberOfColoursToExtract() {
 
 type ActionType = 'addColours' | 'replaceColours'
 
-export default function ImageColourExtractor({onClose}: ImageColourExtractorProps) {
+const ImageColourExtractor = memo(function ImageColourExtractor({
+  onClose,
+}: ImageColourExtractorProps) {
   const [action, setAction] = useState<ActionType>('replaceColours')
   const [numberControlHasFocus, setNumberControlHasFocus] = useState(true)
   const [numberOfColoursToExtract, setNumberOfColoursToExtract] = useState(
@@ -274,4 +276,6 @@ export default function ImageColourExtractor({onClose}: ImageColourExtractorProp
       </button>
     </div>
   )
-}
+})
+
+export default ImageColourExtractor

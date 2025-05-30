@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {memo, useState} from 'react'
 import classes from './ColourPaletteImport.module.less'
 import {default as TestIds} from './ColourPaletteImportTestIds'
 import clsx from 'clsx'
@@ -11,7 +11,7 @@ export interface ColourPaletteImportProps {
   onDone?: () => void
 }
 
-export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) {
+const ColourPaletteImport = memo(function ColourPaletteImport({onDone}: ColourPaletteImportProps) {
   const [xml, setXml] = useState('')
   const [palette, setPalette] = useState<ParsedPalette | null>(null)
   const [validationMessage, setValidationMessage] = useState('')
@@ -82,4 +82,6 @@ export default function ColourPaletteImport({onDone}: ColourPaletteImportProps) 
       </button>
     </div>
   )
-}
+})
+
+export default ColourPaletteImport
