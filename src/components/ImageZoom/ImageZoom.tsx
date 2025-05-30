@@ -1,6 +1,7 @@
 import {default as TestIds} from './ImageZoomTestIds'
 import classes from './ImageZoom.module.less'
 import clsx from 'clsx'
+import {memo} from 'react'
 
 export interface ImageZoomProps {
   scale: number
@@ -9,7 +10,7 @@ export interface ImageZoomProps {
   onScaleChanged?: (scale: number) => void
 }
 
-export default function ImageZoom({scale, range, enabled, onScaleChanged}: ImageZoomProps) {
+const ImageZoom = memo(function ImageZoom({scale, range, enabled, onScaleChanged}: ImageZoomProps) {
   const percentage = Math.round(100 * scale)
   const sliderValue = Math.round(
     scale < 1
@@ -72,4 +73,6 @@ export default function ImageZoom({scale, range, enabled, onScaleChanged}: Image
       </div>
     </div>
   )
-}
+})
+
+export default ImageZoom

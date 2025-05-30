@@ -9,11 +9,7 @@ import {
   selectImageScale,
   selectImageSrc,
 } from 'src/stores/imageSlice'
-import {
-  colourChanged,
-  selectCanPickColour,
-  selectSelectedColour,
-} from 'src/stores/colourPaletteSlice'
+import {selectCanPickColour, selectedColourChanged} from 'src/stores/colourPaletteSlice'
 import {memo, useCallback, useEffect, useRef, useState} from 'react'
 import classes from './ImageColourPicker.module.less'
 import {default as TestIds} from './ImageColourPickerTestIds'
@@ -23,7 +19,6 @@ const ImageColourPicker = memo(function ImageColourPicker() {
   const imageSrc = useSelector(selectImageSrc)
   const imageScale = useSelector(selectImageScale)
   const canPickColour = useSelector(selectCanPickColour)
-  const selectedColour = useSelector(selectSelectedColour)
   const hasImage = image.width > 0 && image.height > 0
   const canvas = useRef<HTMLDivElement | null>(null)
   const dispatch = useDispatch()
@@ -98,13 +93,19 @@ const ImageColourPicker = memo(function ImageColourPicker() {
     }
   }, [displayFirstImage])
 
-  function handleScaleChanged(scale: number): void {
-    dispatch(imageScaleChanged({scale}))
-  }
+  const handleScaleChanged = useCallback(
+    (scale: number) => {
+      dispatch(imageScaleChanged({scale}))
+    },
+    [dispatch]
+  )
 
-  function handleColourPicked(colour: string): void {
-    if (selectedColour) dispatch(colourChanged({colour: selectedColour, hex: colour}))
-  }
+  const handleColourPicked = useCallback(
+    (colour: string) => {
+      dispatch(selectedColourChanged({hex: colour}))
+    },
+    [dispatch]
+  )
 
   return (
     <div className={classes.imagecolourpicker} data-testid={TestIds.Self}>

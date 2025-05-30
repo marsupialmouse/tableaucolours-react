@@ -1,7 +1,7 @@
 import ImageColourPickerImage from '../ImageColourPickerImage/ImageColourPickerImage'
 import {default as TestIds} from './ImageColourPickerImageCanvasTestIds'
 import classes from './ImageColourPickerImageCanvas.module.less'
-import {useEffect, useRef, useState} from 'react'
+import {memo, useEffect, useRef, useState} from 'react'
 import clsx from 'clsx'
 import {eventBus} from 'src/utils/EventBus'
 
@@ -13,7 +13,7 @@ export interface ImageColourPickerImageCanvasProps {
   onFileDropped?: (files: File[]) => void
   onScaleChanged?: (scale: number) => void
 }
-export default function ImageColourPickerImageCanvas({
+const ImageColourPickerImageCanvas = memo(function ImageColourPickerImageCanvas({
   image,
   scale,
   canPickColour,
@@ -141,4 +141,6 @@ export default function ImageColourPickerImageCanvas({
       </div>
     </div>
   )
-}
+})
+
+export default ImageColourPickerImageCanvas

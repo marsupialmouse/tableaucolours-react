@@ -1,4 +1,4 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {createSelector, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from './store'
 
 export interface ImageState {
@@ -38,8 +38,8 @@ export const imageSlice = createSlice({
 
 export const {imageSelected, imageScaleChanged} = imageSlice.actions
 
-export const selectHasImage = (state: RootState) => !!state.image.imageSrc
 export const selectImageSrc = (state: RootState) => state.image.imageSrc
 export const selectImageScale = (state: RootState) => state.image.scale
+export const selectHasImage = createSelector(selectImageSrc, (src) => !!src)
 
 export default imageSlice.reducer

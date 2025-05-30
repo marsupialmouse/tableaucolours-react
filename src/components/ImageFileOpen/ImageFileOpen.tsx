@@ -1,4 +1,4 @@
-import {useEffect, useRef} from 'react'
+import {memo, useEffect, useRef} from 'react'
 import classes from './ImageFileOpen.module.less'
 import {default as TestIds} from './ImageFileOpenTestIds'
 import clsx from 'clsx'
@@ -8,7 +8,7 @@ export interface ImageFileOpenProps {
   onFileSelected?: (files: File[]) => void
 }
 
-export default function ImageFileOpen({onFileSelected}: ImageFileOpenProps) {
+const ImageFileOpen = memo(function ImageFileOpen({onFileSelected}: ImageFileOpenProps) {
   const label = useRef<HTMLLabelElement | null>(null)
 
   useEffect(() => {
@@ -51,4 +51,6 @@ export default function ImageFileOpen({onFileSelected}: ImageFileOpenProps) {
       </label>
     </div>
   )
-}
+})
+
+export default ImageFileOpen
