@@ -7,3 +7,4 @@ default.conf.template
 .husky
 yarn.lock
 .prettierignore
+*.sh
