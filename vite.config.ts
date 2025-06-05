@@ -29,7 +29,11 @@ const testConfig = defineTestConfig({
       '@uiw/react-color-name': '@uiw/react-color-name/esm/index.js',
     },
     deps: {
-      inline: ['vitest-canvas-mock'],
+      optimizer: {
+        web: {
+          include: ['vitest-canvas-mock'],
+        },
+      },
     },
     environmentOptions: {
       jsdom: {
