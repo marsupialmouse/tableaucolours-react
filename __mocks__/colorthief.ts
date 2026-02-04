@@ -4,7 +4,9 @@ import {vi} from 'vitest'
 import {mockDeep} from 'vitest-mock-extended'
 
 const colorThiefInstanceMock = mockDeep<import('colorthief').default>()
-const ColorThiefMock = vi.fn(() => colorThiefInstanceMock)
+const ColorThiefMock = vi.fn(function () {
+  return colorThiefInstanceMock
+})
 
 ;(ColorThiefMock as any).instanceMock = colorThiefInstanceMock
 

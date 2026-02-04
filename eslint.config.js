@@ -42,7 +42,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.test.{ts,tsx}', '**/test-utils.tsx'],
+    files: ['**/*.test.{ts,tsx}', '**/test-utils.tsx', '__mocks__/**/*.ts', 'src/testing/**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.test.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
       '@typescript-eslint/restrict-template-expressions': 'off',
     },

@@ -28,5 +28,6 @@
 
     "typeRoots": ["types", "node_modules/@types"]
   },
-  "include": ["src", "__mocks__", "types/**/*.d.ts"]
+  "include": ["src", "types/**/*.d.ts"],
+  "exclude": ["src/testing/**/*", "src/**/*.test.tsx", "src/**/*.test.ts"]
 }
