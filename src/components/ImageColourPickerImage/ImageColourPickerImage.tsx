@@ -1,6 +1,6 @@
 import {default as TestIds} from './ImageColourPickerImageTestIds'
 import classes from './ImageColourPickerImage.module.less'
-import {useCallback, useEffect, useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import clsx from 'clsx'
 
 export interface ImageColourPickerImageProps {
@@ -20,23 +20,25 @@ export default function ImageColourPickerImage({
 }: ImageColourPickerImageProps) {
   const canvas = useRef<HTMLCanvasElement | null>(null)
 
+  const [previousImage, setPreviousImage] = useState(image)
+  const [previousScale, setPreviousScale] = useState(scale)
   const [mousePosition, setMousePosition] = useState(defaultMousePosition)
   const [mouseColour, setMouseColour] = useState('')
 
-  const resetMousePositionAndColour = useCallback(() => {
-    setMousePosition(defaultMousePosition)
-    setMouseColour('')
-  }, [])
-
   useEffect(() => {
-    resetMousePositionAndColour()
     const drawingContext = canvas.current?.getContext('2d', {willReadFrequently: true})
     if (!canvas.current || !drawingContext) return
     canvas.current.width = image.width * scale
     canvas.current.height = image.height * scale
     drawingContext.scale(scale, scale)
     drawingContext.drawImage(image, 0, 0)
-  }, [canvas, image, scale, resetMousePositionAndColour])
+  }, [canvas, image, scale])
+
+  if (image !== previousImage || scale !== previousScale) {
+    setPreviousImage(image)
+    setPreviousScale(scale)
+    resetMousePositionAndColour()
+  }
 
   function handleClick(event: React.MouseEvent) {
     if (!canPickColour) return
@@ -44,6 +46,11 @@ export default function ImageColourPickerImage({
     const colour = getCurrentMouseColour(event)
 
     if (colour) onColourPicked?.(colour)
+  }
+
+  function resetMousePositionAndColour(): void {
+    setMousePosition(defaultMousePosition)
+    setMouseColour('')
   }
 
   function setMousePositionAndColour(event: React.MouseEvent): void {
