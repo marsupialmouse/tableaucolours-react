@@ -4,7 +4,7 @@ import App from './App.tsx'
 import {Provider} from 'react-redux'
 import {setupStore} from './stores/store.ts'
 
-const container = document.getElementById('root')
+const container = document.getElementById('app')
 if (!container) throw new Error('Failed to init the app. The Root is missing from the page')
 
 createRoot(container).render(

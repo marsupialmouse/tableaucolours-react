@@ -1,4 +1,5 @@
 import {memo, useEffect, useRef} from 'react'
+import {createPortal} from 'react-dom'
 import classes from './ModalDialog.module.less'
 import clsx from 'clsx'
 import {default as TestIds} from './ModalDialogTestIds'
@@ -17,6 +18,7 @@ const ModalDialog = memo(function ModalDialog({
   children,
 }: ModalDialogProps) {
   const dialog = useRef<HTMLDialogElement>(null)
+  const modalRoot = document.getElementById('modals')
 
   useEffect(() => {
     function handleKeyPress(event: KeyboardEvent) {
@@ -59,18 +61,20 @@ const ModalDialog = memo(function ModalDialog({
 
   return (
     <>
-      {isOpen && (
-        <dialog ref={dialog} onMouseDown={handleMouseDown} data-testid={TestIds.Self}>
-          <div className={classes['modal-container']} style={width ? {width} : {}}>
-            <button
-              className={clsx(classes['modal-close'], 'iconbutton', 'fas', 'fa-times')}
-              onClick={handleCloseClick}
-              data-testid={TestIds.CloseButton}
-            ></button>
-            {children}
-          </div>
-        </dialog>
-      )}
+      {isOpen &&
+        createPortal(
+          <dialog ref={dialog} onMouseDown={handleMouseDown} data-testid={TestIds.Self}>
+            <div className={classes['modal-container']} style={width ? {width} : {}}>
+              <button
+                className={clsx(classes['modal-close'], 'iconbutton', 'fas', 'fa-times')}
+                onClick={handleCloseClick}
+                data-testid={TestIds.CloseButton}
+              ></button>
+              {children}
+            </div>
+          </dialog>,
+          modalRoot ?? document.body
+        )}
     </>
   )
 })

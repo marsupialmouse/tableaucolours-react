@@ -3,13 +3,16 @@ import ColourPaletteEditor from './components/ColourPaletteEditor/ColourPaletteE
 
 function App() {
   return (
-    <div id="app">
-      <section id="palettesection" className="overlay">
-        <div>
-          <ColourPaletteEditor />
-        </div>
-      </section>
-    </div>
+    <>
+      <div id="modals"></div>
+      <main>
+        <section id="palettesection" className="overlay">
+          <div>
+            <ColourPaletteEditor />
+          </div>
+        </section>
+      </main>
+    </>
   )
 }
 
