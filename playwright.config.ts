@@ -15,31 +15,23 @@ export default defineConfig({
     baseURL: 'http://localhost:4173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    headless: true, // Force headless mode for all browsers
   },
 
   projects: [
     {
       name: 'chromium',
-      use: {
-        ...devices['Desktop Chrome'],
-        headless: true,
-      },
+      use: {...devices['Desktop Chrome']},
     },
 
     {
       name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        headless: true,
-      },
+      use: {...devices['Desktop Firefox']},
     },
 
     {
       name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        headless: true,
-      },
+      use: {...devices['Desktop Safari']},
     },
   ],
 
