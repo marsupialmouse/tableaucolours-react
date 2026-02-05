@@ -12,7 +12,8 @@
     "lint:fix": "tsc --noEmit && eslint . --color --fix",
     "lint-staged": "lint-staged",
     "format": "prettier --write ./src",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",

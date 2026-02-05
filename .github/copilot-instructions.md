@@ -41,9 +41,9 @@ Always follow this sequence when validating changes:
 
 4. **Run tests**:
    ```
-   yarn test --run
+   yarn test
    ```
-   Executes the full test suite in non-watch mode. All tests must pass. (Note: `yarn test` without `--run` enters watch mode; use Ctrl+C to exit.)
+   Executes the full test suite in non-watch mode. All tests must pass.
 
 **These steps are defined in**:
 
@@ -134,8 +134,8 @@ Prefer `import { Component } from 'components/...'` over `import { Component } f
 | `yarn lint`                                                | Type-check and lint code                               |
 | `yarn lint:fix`                                            | Auto-fix lint/format issues                            |
 | `yarn build`                                               | Create production build                                |
-| `yarn test --run`                                          | Run full test suite once                               |
-| `yarn test`                                                | Run tests in watch mode (Ctrl+C to exit)               |
+| `yarn test`                                                | Run full test suite once                               |
+| `yarn test:watch`                                          | Run tests in watch mode (Ctrl+C to exit)               |
 | `yarn dev`                                                 | Start dev server                                       |
 | `yarn preview`                                             | Preview production build locally                       |
 
@@ -156,7 +156,7 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) is the source of truth 
 
 - **Always run `yarn install` first** when you modify dependencies
 - **Run `yarn lint:fix`** to auto-correct formatting before testing
-- **Run `yarn test --run`** to verify all tests pass before committing
+- **Run `yarn test`** to verify all tests pass before committing
 - **Keep type safety high**: Never use `any` unless unavoidable; TypeScript errors are intentional barriers
 - **Update tests** when modifying components or utilities
 - **Follow existing patterns**: Look at similar components/utilities in the codebase for style and structure
