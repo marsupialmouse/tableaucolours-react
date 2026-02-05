@@ -97,7 +97,7 @@ The E2E test suite includes 27 tests covering:
 
 - ✅ Chromium: 27/27 tests passing
 - ✅ Firefox: 27/27 tests passing
-- ⚠️ WebKit: 18/27 tests passing (9 modal tests fail due to known Playwright limitation with `<dialog>` element visibility detection)
+- ✅ WebKit: 27/27 tests passing
 
 #### Writing E2E Tests
 
@@ -132,12 +132,6 @@ E2E tests follow these conventions:
 
 - Run specific browser with `--project=chromium` flag
 - Use `test:e2e:ui` mode to debug specific tests
-
-**WebKit modal failures:**
-
-- This is a known Playwright limitation with native `<dialog>` elements
-- Chromium and Firefox provide full test coverage
-- WebKit tests are kept for when Playwright addresses this issue
 
 **Installation issues:**
 

@@ -121,7 +121,6 @@ Prefer `import { Component } from 'components/...'` over `import { Component } f
 - Run on 3 browsers: Chromium, Firefox, WebKit (headless by default)
 - Page object models in `e2e/pages/` for reusable interactions
 - Test fixtures in `e2e/fixtures/` for setup/teardown
-- Known issue: 9 WebKit tests fail due to `<dialog>` element visibility detection (Playwright limitation)
 
 ## Language & Framework Standards
 

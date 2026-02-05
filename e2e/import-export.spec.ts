@@ -8,9 +8,9 @@ test.describe('Palette Export', () => {
 
     await palettePage.clickExport()
 
-    // Wait for content inside the dialog to be visible (more reliable than dialog itself)
+    // Wait for content inside the dialog to be visible
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
-    await expect(codeContainer).toBeVisible({timeout: 15000})
+    await expect(codeContainer).toBeVisible()
   })
 
   test('should display XML code in export modal', async ({page}) => {
@@ -21,7 +21,7 @@ test.describe('Palette Export', () => {
 
     // Check that code is displayed
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
-    await expect(codeContainer).toBeVisible({timeout: 10000})
+    await expect(codeContainer).toBeVisible()
 
     const codeText = await codeContainer.textContent()
     expect(codeText).toContain('<color-palette')
@@ -35,7 +35,7 @@ test.describe('Palette Export', () => {
     await palettePage.clickExport()
 
     const modal = page.locator('[data-testid="ColourPaletteGetCode Component"]')
-    await expect(modal).toBeVisible({timeout: 10000})
+    await expect(modal).toBeVisible()
 
     // Press Escape to close the modal
     await page.keyboard.press('Escape')
@@ -52,7 +52,7 @@ test.describe('Palette Import', () => {
     await palettePage.clickImport()
 
     const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
-    await expect(modal).toBeVisible({timeout: 10000})
+    await expect(modal).toBeVisible()
   })
 
   test('should have import text area', async ({page}) => {
@@ -62,7 +62,7 @@ test.describe('Palette Import', () => {
     await palettePage.clickImport()
 
     const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
-    await expect(textarea).toBeVisible({timeout: 10000})
+    await expect(textarea).toBeVisible()
   })
 
   test('should import valid XML palette', async ({page}) => {
@@ -114,7 +114,7 @@ test.describe('Palette Import', () => {
 
     // Should show validation message
     const validation = page.locator('[data-testid="ColourPaletteImport Validation Message"]')
-    await expect(validation).toBeVisible({timeout: 10000})
+    await expect(validation).toBeVisible()
   })
 
   test('should cancel import', async ({page}) => {
@@ -124,7 +124,7 @@ test.describe('Palette Import', () => {
     await palettePage.clickImport()
 
     const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
-    await expect(modal).toBeVisible({timeout: 10000})
+    await expect(modal).toBeVisible()
 
     await page.getByRole('button', {name: 'Cancel'}).click()
 
