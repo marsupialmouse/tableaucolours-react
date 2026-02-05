@@ -8,7 +8,7 @@ export class ColourPalettePage {
   }
 
   getPaletteNameInput() {
-    return this.page.getByRole('textbox', { name: /palette name/i });
+    return this.page.locator('input#name');
   }
 
   async setPaletteName(name: string) {
@@ -23,37 +23,39 @@ export class ColourPalettePage {
   }
 
   async getColourItems() {
-    return this.page.locator('[data-testid*="colour-list-item"]').all();
+    return this.page.locator('[data-testid="ColourPaletteColourListItem Component"]').all();
   }
 
   async getColourCount() {
-    return this.page.locator('[data-testid*="colour-list-item"]').count();
+    return this.page.locator('[data-testid="ColourPaletteColourListItem Component"]').count();
   }
 
   async clickAddColour() {
-    await this.page.getByRole('button', { name: /add colour/i }).click();
+    await this.page.locator('button[title="Add colour (+)"]').click();
   }
 
   async clickRemoveColour(index: number) {
     const items = await this.getColourItems();
     if (items[index]) {
-      await items[index].getByRole('button', { name: /remove/i }).click();
+      // Hover to make remove button visible
+      await items[index].hover();
+      await items[index].locator('[data-testid="ColourPaletteColourListItem Remove Button"]').click();
     }
   }
 
   async selectPaletteType(type: string) {
-    await this.page.getByRole('button', { name: new RegExp(type, 'i') }).click();
+    await this.page.locator(`button[title*="${type}"]`).click();
   }
 
   async clickImport() {
-    await this.page.getByRole('button', { name: /import/i }).click();
+    await this.page.locator('button[title="Import XML"]').click();
   }
 
   async clickExport() {
-    await this.page.getByRole('button', { name: /get code/i }).click();
+    await this.page.locator('button[title="Get XML"]').click();
   }
 
   async isVisible() {
-    return this.page.locator('[data-testid="colour-palette-editor"]').isVisible();
+    return this.page.locator('[data-testid="ColourPaletteEditor Component"]').isVisible();
   }
 }
