@@ -7,7 +7,7 @@
 - **Type**: React web application
 - **Language**: TypeScript (strict mode enabled)
 - **Build System**: Vite
-- **Test Framework**: Vitest
+- **Test Frameworks**: Vitest (unit tests), Playwright (E2E tests)
 - **Package Manager**: Yarn
 - **Node.js Version**: 22.x (defined in CI/CD)
 
@@ -40,10 +40,18 @@ Always follow this sequence when validating changes:
    Produces optimized production bundle in the `dist/` directory. Must complete without errors.
 
 4. **Run tests**:
+
    ```
    yarn test
    ```
-   Executes the full test suite in non-watch mode. All tests must pass.
+
+   Executes the full unit test suite in non-watch mode. All tests must pass.
+
+5. **Run E2E tests** (optional, slower):
+   ```
+   yarn test:e2e
+   ```
+   Executes end-to-end tests with Playwright across Chromium, Firefox, and WebKit browsers. Run these when testing full user workflows or before major releases.
 
 **These steps are defined in**:
 
@@ -78,6 +86,12 @@ src/
 ├── App.tsx           # Root component
 ├── main.tsx          # Application entry point
 └── *.less            # Stylesheet files
+
+e2e/
+├── fixtures/         # Playwright test fixtures
+├── pages/            # Page object models for E2E tests
+├── utils/            # E2E test utilities
+└── *.spec.ts         # E2E test files
 ```
 
 **Use path aliases when importing from src/**:  
@@ -86,16 +100,28 @@ Prefer `import { Component } from 'components/...'` over `import { Component } f
 ### Configuration Files
 
 - `vite.config.ts` — Vite build config and Vitest test config
+- `playwright.config.ts` — Playwright E2E test configuration
 - `eslint.config.js` — ESLint rules (strict TypeScript, React/Hooks rules, Prettier integration)
 - `.prettierrc` — Code formatting rules (integrated with ESLint)
 - `.github/workflows/ci.yml` — CI validation steps
 
 ### Testing Organization
 
+**Unit Tests (Vitest):**
+
 - Test files are co-located with source files: `ComponentName.tsx` has `ComponentName.test.tsx`
 - All tests use Vitest configured in `vite.config.ts`
 - Test environment is jsdom (browser-like environment)
 - Setup file: `src/testing/test-setup.ts` runs before all tests
+
+**E2E Tests (Playwright):**
+
+- Test files are in `e2e/` directory with `*.spec.ts` naming convention
+- Configured in `playwright.config.ts`
+- Run on 3 browsers: Chromium, Firefox, WebKit (headless by default)
+- Page object models in `e2e/pages/` for reusable interactions
+- Test fixtures in `e2e/fixtures/` for setup/teardown
+- Known issue: 9 WebKit tests fail due to `<dialog>` element visibility detection (Playwright limitation)
 
 ## Language & Framework Standards
 
@@ -134,8 +160,13 @@ Prefer `import { Component } from 'components/...'` over `import { Component } f
 | `yarn lint`                                                | Type-check and lint code                               |
 | `yarn lint:fix`                                            | Auto-fix lint/format issues                            |
 | `yarn build`                                               | Create production build                                |
-| `yarn test`                                                | Run full test suite once                               |
-| `yarn test:watch`                                          | Run tests in watch mode (Ctrl+C to exit)               |
+| `yarn test`                                                | Run unit tests once                                    |
+| `yarn test:watch`                                          | Run unit tests in watch mode                           |
+| `yarn test:e2e`                                            | Run E2E tests (headless, all browsers)                 |
+| `yarn test:e2e:headed`                                     | Run E2E tests with visible browsers (debugging)        |
+| `yarn test:e2e:ui`                                         | Open Playwright UI mode for interactive test running   |
+| `yarn test:e2e:debug`                                      | Run E2E tests in debug mode with inspector             |
+| `yarn test:e2e:report`                                     | Open HTML test report from last E2E run                |
 | `yarn dev`                                                 | Start dev server                                       |
 | `yarn preview`                                             | Preview production build locally                       |
 
@@ -156,11 +187,38 @@ The GitHub Actions workflow (`.github/workflows/ci.yml`) is the source of truth 
 
 - **Always run `yarn install` first** when you modify dependencies
 - **Run `yarn lint:fix`** to auto-correct formatting before testing
-- **Run `yarn test`** to verify all tests pass before committing
+- **Run `yarn test`** to verify unit tests pass before committing
+- **Run `yarn test:e2e`** before major releases or when changing critical user flows
 - **Keep type safety high**: Never use `any` unless unavoidable; TypeScript errors are intentional barriers
 - **Update tests** when modifying components or utilities
 - **Follow existing patterns**: Look at similar components/utilities in the codebase for style and structure
 - **No console.log in production code**: Use logging utilities if needed
+
+### Testing Strategy
+
+**When to write unit tests (Vitest):**
+
+- Component rendering logic
+- User interactions (clicks, inputs, form submissions)
+- State management and Redux slices
+- Utility functions and helpers
+- Edge cases and error handling
+
+**When to write E2E tests (Playwright):**
+
+- Complete user workflows (create palette → add colours → export)
+- Multi-step processes
+- Integration between multiple components
+- Browser-specific behavior
+- Visual regression testing needs
+
+**E2E Test Conventions:**
+
+- Use page object models for reusable component interactions
+- Name tests descriptively: "should [action] when [condition]"
+- Tests run headless by default (no browser windows)
+- Use `--headed` flag to see browsers during development
+- E2E tests are slower—keep the suite focused on critical paths
 
 ---
 
