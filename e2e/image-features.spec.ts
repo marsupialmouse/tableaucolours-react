@@ -26,12 +26,9 @@ test.describe('Image File Operations', () => {
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
 
-    // Wait a bit for image to load
-    await page.waitForTimeout(1000)
-
     // Check if image canvas is visible
     const imageCanvas = page.locator('[data-testid="ImageColourPickerImageCanvas Component"]')
-    await expect(imageCanvas).toBeVisible({timeout: 10000})
+    await expect(imageCanvas).toBeVisible()
   })
 
   test('should enable extract colours button when image is loaded', async ({page}) => {
@@ -46,11 +43,8 @@ test.describe('Image File Operations', () => {
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
 
-    // Wait for image to load
-    await page.waitForTimeout(1000)
-
     // Extract button should now be enabled
-    await expect(extractButton).toBeEnabled({timeout: 10000})
+    await expect(extractButton).toBeEnabled()
   })
 })
 
@@ -64,7 +58,6 @@ test.describe('Image Colour Extraction', () => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
-    await page.waitForTimeout(1000)
 
     // Click extract button
     const extractButton = page.locator('button[title="Extract colours from image (magic!)"]')
@@ -72,7 +65,7 @@ test.describe('Image Colour Extraction', () => {
 
     // Modal should open
     const extractModal = page.locator('[data-testid="ImageColourExtractor Component"]')
-    await expect(extractModal).toBeVisible({timeout: 10000})
+    await expect(extractModal).toBeVisible()
   })
 
   test('should extract colours from image', async ({page}) => {
@@ -85,7 +78,6 @@ test.describe('Image Colour Extraction', () => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
-    await page.waitForTimeout(1000)
 
     // Click extract button
     const extractButton = page.locator('button[title="Extract colours from image (magic!)"]')
@@ -99,11 +91,12 @@ test.describe('Image Colour Extraction', () => {
     await modalExtractButton.click()
 
     // Wait for extraction to complete and modal to close
-    await page.waitForTimeout(2000)
-
     // Should have more colours than before
-    const newCount = await palettePage.getColourCount()
-    expect(newCount).toBeGreaterThan(initialCount)
+    // We poll the colour count because extraction takes time
+    await expect(async () => {
+      const newCount = await palettePage.getColourCount()
+      expect(newCount).toBeGreaterThan(initialCount)
+    }).toPass()
   })
 
   test('should close extraction modal with cancel', async ({page}) => {
@@ -113,7 +106,6 @@ test.describe('Image Colour Extraction', () => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
-    await page.waitForTimeout(1000)
 
     // Click extract button
     const extractButton = page.locator('button[title="Extract colours from image (magic!)"]')
@@ -141,11 +133,10 @@ test.describe('Image Zoom', () => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
-    await page.waitForTimeout(1000)
 
     // Zoom component should be visible
     const zoomComponent = page.locator('[data-testid="ImageZoom Component"]')
-    await expect(zoomComponent).toBeVisible({timeout: 10000})
+    await expect(zoomComponent).toBeVisible()
   })
 
   test('should have zoom slider', async ({page}) => {
@@ -155,10 +146,9 @@ test.describe('Image Zoom', () => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
-    await page.waitForTimeout(1000)
 
     // Zoom slider should exist
     const zoomSlider = page.locator('[data-testid="ImageZoom Slider"]')
-    await expect(zoomSlider).toBeVisible({timeout: 10000})
+    await expect(zoomSlider).toBeVisible()
   })
 })
