@@ -26,5 +26,5 @@
 
     "typeRoots": ["types", "node_modules/@types"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "playwright.config.ts"]
 }
