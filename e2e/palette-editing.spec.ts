@@ -44,8 +44,11 @@ test.describe('Colour Palette Editing', () => {
     // Set the first colour to red to differentiate from white
     await colourPalettePage.setColour(0, '#FF0000')
 
-    // Wait a bit for the colour to be set
-    await colourPalettePage.page.waitForTimeout(500)
+    // Wait for the colour to be set by verifying the background color
+    await expect(async () => {
+      const colours = await colourPalettePage.getColours()
+      expect(colours[0]).toBe('#FF0000')
+    }).toPass()
 
     // Get the colours before removal
     const coloursBeforeRemove = await colourPalettePage.getColours()

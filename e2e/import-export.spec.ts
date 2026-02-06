@@ -22,12 +22,14 @@ test.describe('Palette Export', () => {
     await colourPalettePage.setColour(1, '#00FF00')
     await colourPalettePage.setColour(2, '#0000FF')
 
-    // Wait for colours to be set
-    await colourPalettePage.page.waitForTimeout(500)
+    // Wait for colours to be set by verifying them
+    await expect(async () => {
+      const colours = await colourPalettePage.getColours()
+      expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
+    }).toPass()
 
     // Get the colours to verify
     const colours = await colourPalettePage.getColours()
-    expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
 
     await colourPalettePage.clickExport()
 
