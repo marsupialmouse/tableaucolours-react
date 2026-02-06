@@ -157,7 +157,6 @@ tableaucolours-react/
 ├── e2e/                    # Playwright E2E tests
 │   ├── fixtures/          # Test fixtures and setup
 │   ├── pages/             # Page object models
-│   ├── utils/             # E2E test utilities
 │   └── *.spec.ts          # Test files
 ├── src/
 │   ├── components/        # React components (with .test.tsx)
