@@ -52,24 +52,5 @@ export default tseslint.config(
     rules: {
       '@typescript-eslint/restrict-template-expressions': 'off',
     },
-  },
-  {
-    files: ['e2e/**/*.ts'],
-    languageOptions: {
-      parserOptions: {
-        project: './tsconfig.e2e.json',
-        tsconfigRootDir: import.meta.dirname,
-      },
-    },
-    rules: {
-      'react-hooks/rules-of-hooks': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-        },
-      ],
-    },
   }
 )

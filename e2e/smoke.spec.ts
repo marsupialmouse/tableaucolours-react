@@ -1,7 +1,7 @@
 import {test, expect} from './fixtures/base'
 
 test.describe('Smoke Tests', () => {
-  test('should load the application', async ({page, colourPalettePage: _colourPalettePage}) => {
+  test('should load the application', async ({page}) => {
     await expect(page).toHaveTitle('Colours')
     await expect(page.locator('body')).toBeVisible()
   })
