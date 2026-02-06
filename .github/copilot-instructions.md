@@ -90,7 +90,6 @@ src/
 e2e/
 ├── fixtures/         # Playwright test fixtures
 ├── pages/            # Page object models for E2E tests
-├── utils/            # E2E test utilities
 └── *.spec.ts         # E2E test files
 ```
 
