@@ -1,13 +1,19 @@
 import {test, expect} from './fixtures/base'
 
 test.describe('Palette Type Switching', () => {
-  test('should show current palette type', async ({page}) => {
+  test('should show current palette type', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Default type should be visible
     const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
     await expect(typeSelector).toBeVisible()
   })
 
-  test('should display available palette types when clicked', async ({page}) => {
+  test('should display available palette types when clicked', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Click to open type selector
     const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
     await typeSelector.click()

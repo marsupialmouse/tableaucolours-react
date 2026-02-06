@@ -8,13 +8,16 @@ const __dirname = dirname(__filename)
 test.describe('Image File Operations', () => {
   const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
 
-  test('should open file picker for image', async ({page}) => {
+  test('should open file picker for image', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Find the file input (usually hidden)
     const fileInput = page.locator('input[type="file"]')
     await expect(fileInput).toBeAttached()
   })
 
-  test('should load an image file', async ({page}) => {
+  test('should load an image file', async ({page, colourPalettePage: _colourPalettePage}) => {
     // Upload the image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
@@ -24,7 +27,10 @@ test.describe('Image File Operations', () => {
     await expect(imageCanvas).toBeVisible()
   })
 
-  test('should enable extract colours button when image is loaded', async ({page}) => {
+  test('should enable extract colours button when image is loaded', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Initially, extract button should be disabled
     const extractButton = page.locator('button[title="Extract colours from image (magic!)"]')
     await expect(extractButton).toBeDisabled()
@@ -41,7 +47,10 @@ test.describe('Image File Operations', () => {
 test.describe('Image Colour Extraction', () => {
   const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
 
-  test('should open colour extraction modal', async ({page}) => {
+  test('should open colour extraction modal', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
@@ -83,7 +92,10 @@ test.describe('Image Colour Extraction', () => {
     }).toPass()
   })
 
-  test('should close extraction modal with cancel', async ({page}) => {
+  test('should close extraction modal with cancel', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
@@ -107,7 +119,10 @@ test.describe('Image Colour Extraction', () => {
 test.describe('Image Zoom', () => {
   const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
 
-  test('should show zoom slider when image is loaded', async ({page}) => {
+  test('should show zoom slider when image is loaded', async ({
+    page,
+    colourPalettePage: _colourPalettePage,
+  }) => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
@@ -117,7 +132,7 @@ test.describe('Image Zoom', () => {
     await expect(zoomComponent).toBeVisible()
   })
 
-  test('should have zoom slider', async ({page}) => {
+  test('should have zoom slider', async ({page, colourPalettePage: _colourPalettePage}) => {
     // Upload image
     const fileInput = page.locator('input[type="file"]')
     await fileInput.setInputFiles(testImagePath)
