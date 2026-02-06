@@ -4,8 +4,8 @@ test.describe('Smoke Tests', () => {
   test('should load the application', async ({page, colourPalettePage}) => {
     await expect(page).toHaveTitle('Colours')
     await expect(page.locator('body')).toBeVisible()
-    // Verify palette editor is visible using the page object
-    await expect(colourPalettePage.isVisible()).resolves.toBe(true)
+    // Verify palette editor is loaded by checking palette name input
+    await expect(colourPalettePage.getPaletteNameInput()).toBeVisible()
   })
 
   test('should display palette editor', async ({page, colourPalettePage}) => {
