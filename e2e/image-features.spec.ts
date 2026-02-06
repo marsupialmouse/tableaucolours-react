@@ -8,16 +8,21 @@ const __dirname = dirname(__filename)
 test.describe('Image File Operations', () => {
   const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
 
-  test('should open file picker for image', async ({colourPalettePage}) => {
-    // Find the file input (usually hidden)
-    await expect(colourPalettePage.fileInput).toBeAttached()
+  test('should open file chooser when Open Image button is clicked', async ({
+    colourPalettePage,
+  }) => {
+    // Click the button and verify file chooser opens
+    const fileChooser = await colourPalettePage.clickOpenImageButton()
+
+    // Verify file chooser was opened
+    expect(fileChooser).toBeTruthy()
   })
 
-  test('should load an image file', async ({colourPalettePage}) => {
+  test('should load an image file and display it', async ({colourPalettePage}) => {
     // Upload the image
     await colourPalettePage.uploadImage(testImagePath)
 
-    // Check if image canvas is visible
+    // Check if image canvas is visible (verifies image is displayed)
     await expect(colourPalettePage.imageCanvas).toBeVisible()
   })
 
@@ -36,7 +41,7 @@ test.describe('Image File Operations', () => {
 test.describe('Image Colour Extraction', () => {
   const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
 
-  test('should open colour extraction modal', async ({page, colourPalettePage}) => {
+  test('should open colour extraction modal', async ({colourPalettePage}) => {
     // Upload image
     await colourPalettePage.uploadImage(testImagePath)
 
@@ -44,13 +49,15 @@ test.describe('Image Colour Extraction', () => {
     await colourPalettePage.extractButton.click()
 
     // Modal should open
-    const extractModal = page.locator('[data-testid="ImageColourExtractor Component"]')
-    await expect(extractModal).toBeVisible()
+    await expect(colourPalettePage.imageExtractorModal.modal).toBeVisible()
   })
 
-  test('should extract colours from image', async ({page, colourPalettePage}) => {
-    // Get initial colour count
+  test('should replace colours when extracting from image', async ({colourPalettePage}) => {
+    // Add some initial colours to be replaced
+    await colourPalettePage.clickAddColour()
+    await colourPalettePage.clickAddColour()
     const initialCount = await colourPalettePage.getColourCount()
+    expect(initialCount).toBeGreaterThan(1)
 
     // Upload image
     await colourPalettePage.uploadImage(testImagePath)
@@ -59,22 +66,33 @@ test.describe('Image Colour Extraction', () => {
     await colourPalettePage.extractButton.click()
 
     // Wait for modal
-    await page.waitForSelector('[data-testid="ImageColourExtractor Component"]')
+    await expect(colourPalettePage.imageExtractorModal.modal).toBeVisible()
 
-    // Click extract button in modal
-    const modalExtractButton = page.getByRole('button', {name: 'Extract'})
-    await modalExtractButton.click()
+    // Get the number of colours to extract from the modal
+    const numberOfColoursToExtract =
+      await colourPalettePage.imageExtractorModal.getNumberOfColoursToExtract()
+
+    // Click extract button in modal (default should replace colours)
+    await colourPalettePage.imageExtractorModal.clickExtract()
 
     // Wait for extraction to complete and modal to close
-    // Should have more colours than before
-    // We poll the colour count because extraction takes time
+    await expect(colourPalettePage.imageExtractorModal.modal).not.toBeVisible()
+
+    // Should have exactly the number of colours that were requested
     await expect(async () => {
       const newCount = await colourPalettePage.getColourCount()
-      expect(newCount).toBeGreaterThan(initialCount)
+      expect(newCount).toBe(numberOfColoursToExtract)
     }).toPass()
   })
 
-  test('should close extraction modal with cancel', async ({page, colourPalettePage}) => {
+  test('should add colours when extracting from image with add option', async ({
+    page,
+    colourPalettePage,
+  }) => {
+    // Start with known initial state
+    const initialCount = await colourPalettePage.getColourCount()
+    expect(initialCount).toBe(1)
+
     // Upload image
     await colourPalettePage.uploadImage(testImagePath)
 
@@ -82,14 +100,44 @@ test.describe('Image Colour Extraction', () => {
     await colourPalettePage.extractButton.click()
 
     // Wait for modal
-    const extractModal = page.locator('[data-testid="ImageColourExtractor Component"]')
-    await expect(extractModal).toBeVisible()
+    await expect(colourPalettePage.imageExtractorModal.modal).toBeVisible()
+
+    // Select "Add to existing colours" option
+    const addRadio = page.getByLabel('Add to existing colours')
+    await addRadio.check()
+
+    // Get the number of colours to extract from the modal
+    const numberOfColoursToExtract =
+      await colourPalettePage.imageExtractorModal.getNumberOfColoursToExtract()
+
+    // Click extract button in modal
+    await colourPalettePage.imageExtractorModal.clickExtract()
+
+    // Wait for extraction to complete and modal to close
+    await expect(colourPalettePage.imageExtractorModal.modal).not.toBeVisible()
+
+    // Should have initial colours + extracted colours
+    await expect(async () => {
+      const newCount = await colourPalettePage.getColourCount()
+      expect(newCount).toBe(initialCount + numberOfColoursToExtract)
+    }).toPass()
+  })
+
+  test('should close extraction modal with cancel', async ({colourPalettePage}) => {
+    // Upload image
+    await colourPalettePage.uploadImage(testImagePath)
+
+    // Click extract button
+    await colourPalettePage.extractButton.click()
+
+    // Wait for modal
+    await expect(colourPalettePage.imageExtractorModal.modal).toBeVisible()
 
     // Click cancel
-    await page.getByRole('button', {name: 'Cancel'}).click()
+    await colourPalettePage.imageExtractorModal.clickCancel()
 
     // Modal should close
-    await expect(extractModal).not.toBeVisible()
+    await expect(colourPalettePage.imageExtractorModal.modal).not.toBeVisible()
   })
 })
 
