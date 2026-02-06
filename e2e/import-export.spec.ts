@@ -46,7 +46,7 @@ test.describe('Palette Export', () => {
 </color-palette>`
 
     // Compare actual XML to expected XML
-    expect(codeText.trim()).toBe(expectedXML)
+    expect(codeText?.trim()).toBe(expectedXML)
   })
 
   test('should close export modal', async ({colourPalettePage}) => {
