@@ -1,38 +1,25 @@
 import {test, expect} from './fixtures/base'
-import {ColourPalettePage} from './pages/ColourPalettePage'
 
 test.describe('Palette Type Switching', () => {
-  test('should show current palette type', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
+  test('should show current palette type', async ({colourPalettePage}) => {
     // Default type should be visible
-    const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
-    await expect(typeSelector).toBeVisible()
+    await expect(colourPalettePage.typeSelector).toBeVisible()
   })
 
-  test('should display available palette types when clicked', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
+  test('should display available palette types when clicked', async ({colourPalettePage}) => {
     // Click to open type selector
-    const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
-    await typeSelector.click()
+    await colourPalettePage.typeSelector.click()
 
     // Should show type options in the selector list
-    const selectorList = page.locator('[data-testid="ColourPaletteTypeSelector Selector"]')
-    await expect(selectorList).toBeVisible()
+    await expect(colourPalettePage.typeSelectorList).toBeVisible()
 
     // Check types are in the list
-    await expect(selectorList.getByText('Regular')).toBeVisible()
-    await expect(selectorList.getByText('Sequential')).toBeVisible()
-    await expect(selectorList.getByText('Diverging')).toBeVisible()
+    await expect(colourPalettePage.typeSelectorList.getByText('Regular')).toBeVisible()
+    await expect(colourPalettePage.typeSelectorList.getByText('Sequential')).toBeVisible()
+    await expect(colourPalettePage.typeSelectorList.getByText('Diverging')).toBeVisible()
   })
 
-  test('should switch to Sequential palette type', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
+  test('should switch to Sequential palette type', async ({page, colourPalettePage}) => {
     // Open type selector
     const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
     await typeSelector.click()
@@ -42,16 +29,13 @@ test.describe('Palette Type Switching', () => {
     await selectorList.getByText('Sequential').click()
 
     // Verify by checking export contains sequential type
-    await palettePage.clickExport()
+    await colourPalettePage.clickExport()
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
     const codeText = await codeContainer.textContent()
     expect(codeText).toContain('type="ordered-sequential"')
   })
 
-  test('should switch to Diverging palette type', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
+  test('should switch to Diverging palette type', async ({page, colourPalettePage}) => {
     // Open type selector
     const typeSelector = page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
     await typeSelector.click()
@@ -60,7 +44,7 @@ test.describe('Palette Type Switching', () => {
     await page.getByText('Diverging').click()
 
     // Verify by checking export contains diverging type
-    await palettePage.clickExport()
+    await colourPalettePage.clickExport()
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
     const codeText = await codeContainer.textContent()
     expect(codeText).toContain('type="ordered-diverging"')

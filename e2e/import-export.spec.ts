@@ -1,23 +1,16 @@
 import {test, expect} from './fixtures/base'
-import {ColourPalettePage} from './pages/ColourPalettePage'
 
 test.describe('Palette Export', () => {
-  test('should open export modal', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickExport()
+  test('should open export modal', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickExport()
 
     // Wait for content inside the dialog to be visible
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
     await expect(codeContainer).toBeVisible()
   })
 
-  test('should display XML code in export modal', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickExport()
+  test('should display XML code in export modal', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickExport()
 
     // Check that code is displayed
     const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
@@ -28,11 +21,8 @@ test.describe('Palette Export', () => {
     expect(codeText).toContain('</color-palette>')
   })
 
-  test('should close export modal', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickExport()
+  test('should close export modal', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickExport()
 
     const modal = page.locator('[data-testid="ColourPaletteGetCode Component"]')
     await expect(modal).toBeVisible()
@@ -45,37 +35,28 @@ test.describe('Palette Export', () => {
 })
 
 test.describe('Palette Import', () => {
-  test('should open import modal', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickImport()
+  test('should open import modal', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickImport()
 
     const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
     await expect(modal).toBeVisible()
   })
 
-  test('should have import text area', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickImport()
+  test('should have import text area', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickImport()
 
     const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
     await expect(textarea).toBeVisible()
   })
 
-  test('should import valid XML palette', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
+  test('should import valid XML palette', async ({page, colourPalettePage}) => {
     const validXML = `<color-palette name="Test Palette" type="regular">
   <color>#FF0000</color>
   <color>#00FF00</color>
   <color>#0000FF</color>
 </color-palette>`
 
-    await palettePage.clickImport()
+    await colourPalettePage.clickImport()
 
     const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
     await textarea.fill(validXML)
@@ -91,19 +72,16 @@ test.describe('Palette Import', () => {
     await expect(modal).not.toBeVisible()
 
     // Palette name should be updated
-    const name = await palettePage.getPaletteName()
+    const name = await colourPalettePage.getPaletteName()
     expect(name).toBe('Test Palette')
 
     // Should have 3 colours
-    const colourCount = await palettePage.getColourCount()
+    const colourCount = await colourPalettePage.getColourCount()
     expect(colourCount).toBe(3)
   })
 
-  test('should show validation error for invalid XML', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickImport()
+  test('should show validation error for invalid XML', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickImport()
 
     const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
     await textarea.fill('invalid xml content')
@@ -117,11 +95,8 @@ test.describe('Palette Import', () => {
     await expect(validation).toBeVisible()
   })
 
-  test('should cancel import', async ({page}) => {
-    const palettePage = new ColourPalettePage(page)
-    await palettePage.goto()
-
-    await palettePage.clickImport()
+  test('should cancel import', async ({page, colourPalettePage}) => {
+    await colourPalettePage.clickImport()
 
     const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
     await expect(modal).toBeVisible()
