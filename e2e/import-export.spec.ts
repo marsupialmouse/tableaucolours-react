@@ -35,6 +35,9 @@ test.describe('Palette Export', () => {
 
     const codeText = await colourPalettePage.exportModal.getXMLContent()
 
+    // Ensure we got the XML content
+    expect(codeText).toBeTruthy()
+
     // Build expected XML structure
     const expectedXML = `<color-palette name="Test Export Palette" type="ordered-sequential">
   <color>#FF0000</color>
@@ -43,7 +46,7 @@ test.describe('Palette Export', () => {
 </color-palette>`
 
     // Compare actual XML to expected XML
-    expect(codeText?.trim()).toBe(expectedXML)
+    expect(codeText.trim()).toBe(expectedXML)
   })
 
   test('should close export modal', async ({colourPalettePage}) => {
