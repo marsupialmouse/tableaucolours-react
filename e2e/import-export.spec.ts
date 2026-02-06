@@ -28,9 +28,6 @@ test.describe('Palette Export', () => {
       expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
     }).toPass()
 
-    // Get the colours to verify
-    const colours = await colourPalettePage.getColours()
-
     await colourPalettePage.clickExport()
 
     // Check that code is displayed
@@ -38,24 +35,15 @@ test.describe('Palette Export', () => {
 
     const codeText = await colourPalettePage.exportModal.getXMLContent()
 
-    // Verify XML structure
-    expect(codeText).toMatch(/^<color-palette/)
-    expect(codeText).toMatch(/<\/color-palette>$/)
+    // Build expected XML structure
+    const expectedXML = `<color-palette name="Test Export Palette" type="ordered-sequential">
+  <color>#FF0000</color>
+  <color>#00FF00</color>
+  <color>#0000FF</color>
+</color-palette>`
 
-    // Verify name attribute
-    expect(codeText).toContain('name="Test Export Palette"')
-
-    // Verify type attribute
-    expect(codeText).toContain('type="ordered-sequential"')
-
-    // Verify each colour is present in the XML with correct structure
-    for (const colour of colours) {
-      expect(codeText).toContain(`<color>${colour}</color>`)
-    }
-
-    // Verify no extra colour tags
-    const colourTagMatches = codeText.match(/<color>#[0-9A-F]{6}<\/color>/g)
-    expect(colourTagMatches).toHaveLength(colours.length)
+    // Compare actual XML to expected XML
+    expect(codeText?.trim()).toBe(expectedXML)
   })
 
   test('should close export modal', async ({colourPalettePage}) => {
