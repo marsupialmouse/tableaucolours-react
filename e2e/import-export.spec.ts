@@ -1,55 +1,72 @@
 import {test, expect} from './fixtures/base'
 
 test.describe('Palette Export', () => {
-  test('should open export modal', async ({page, colourPalettePage}) => {
+  test('should open export modal', async ({colourPalettePage}) => {
     await colourPalettePage.clickExport()
 
     // Wait for content inside the dialog to be visible
-    const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
-    await expect(codeContainer).toBeVisible()
+    await expect(colourPalettePage.exportModal.codeContainer).toBeVisible()
   })
 
-  test('should display XML code in export modal', async ({page, colourPalettePage}) => {
+  test('should display XML code with correct palette data in export modal', async ({
+    colourPalettePage,
+  }) => {
+    // Set up a known palette state
+    await colourPalettePage.setPaletteName('Test Export Palette')
+    await colourPalettePage.setType('Sequential')
+
+    // Get the colours to verify
+    const colours = await colourPalettePage.getColours()
+
     await colourPalettePage.clickExport()
 
     // Check that code is displayed
-    const codeContainer = page.locator('[data-testid="ColourPaletteGetCode Code"]')
-    await expect(codeContainer).toBeVisible()
+    await expect(colourPalettePage.exportModal.codeContainer).toBeVisible()
 
-    const codeText = await codeContainer.textContent()
+    const codeText = await colourPalettePage.exportModal.getXMLContent()
+
+    // Verify structure
     expect(codeText).toContain('<color-palette')
     expect(codeText).toContain('</color-palette>')
+
+    // Verify name
+    expect(codeText).toContain('name="Test Export Palette"')
+
+    // Verify type
+    expect(codeText).toContain('type="ordered-sequential"')
+
+    // Verify all colours are present
+    for (const colour of colours) {
+      expect(codeText).toContain(`<color>${colour}</color>`)
+    }
   })
 
-  test('should close export modal', async ({page, colourPalettePage}) => {
+  test('should close export modal', async ({colourPalettePage}) => {
     await colourPalettePage.clickExport()
 
-    const modal = page.locator('[data-testid="ColourPaletteGetCode Component"]')
-    await expect(modal).toBeVisible()
+    await expect(colourPalettePage.exportModal.modal).toBeVisible()
 
     // Press Escape to close the modal
-    await page.keyboard.press('Escape')
+    await colourPalettePage.exportModal.close()
 
-    await expect(modal).not.toBeVisible()
+    await expect(colourPalettePage.exportModal.modal).not.toBeVisible()
   })
 })
 
 test.describe('Palette Import', () => {
-  test('should open import modal', async ({page, colourPalettePage}) => {
+  test('should open import modal', async ({colourPalettePage}) => {
     await colourPalettePage.clickImport()
 
-    const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
-    await expect(modal).toBeVisible()
+    await expect(colourPalettePage.importModal.modal).toBeVisible()
   })
 
-  test('should have import text area', async ({page, colourPalettePage}) => {
+  test('should have import text area', async ({colourPalettePage}) => {
     await colourPalettePage.clickImport()
 
-    const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
-    await expect(textarea).toBeVisible()
+    await expect(colourPalettePage.importModal.textarea).toBeVisible()
   })
 
-  test('should import valid XML palette', async ({page, colourPalettePage}) => {
+  test('should import valid XML palette with correct colours', async ({colourPalettePage}) => {
     const validXML = `<color-palette name="Test Palette" type="regular">
   <color>#FF0000</color>
   <color>#00FF00</color>
@@ -58,18 +75,15 @@ test.describe('Palette Import', () => {
 
     await colourPalettePage.clickImport()
 
-    const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
-    await textarea.fill(validXML)
+    await colourPalettePage.importModal.fillXML(validXML)
 
     // Wait for import button to be enabled (validation happens on change)
-    const importButton = page.getByRole('button', {name: 'Import'})
-    await expect(importButton).toBeEnabled()
+    await expect(colourPalettePage.importModal.importButton).toBeEnabled()
 
-    await importButton.click()
+    await colourPalettePage.importModal.clickImport()
 
     // Modal should close
-    const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
-    await expect(modal).not.toBeVisible()
+    await expect(colourPalettePage.importModal.modal).not.toBeVisible()
 
     // Palette name should be updated
     const name = await colourPalettePage.getPaletteName()
@@ -78,31 +92,31 @@ test.describe('Palette Import', () => {
     // Should have 3 colours
     const colourCount = await colourPalettePage.getColourCount()
     expect(colourCount).toBe(3)
+
+    // Verify the colours are correct
+    const colours = await colourPalettePage.getColours()
+    expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
   })
 
-  test('should show validation error for invalid XML', async ({page, colourPalettePage}) => {
+  test('should show validation error for invalid XML', async ({colourPalettePage}) => {
     await colourPalettePage.clickImport()
 
-    const textarea = page.locator('[data-testid="ColourPaletteImport Code"]')
-    await textarea.fill('invalid xml content')
+    await colourPalettePage.importModal.fillXML('invalid xml content')
 
     // Import button should be disabled for invalid XML
-    const importButton = page.getByRole('button', {name: 'Import'})
-    await expect(importButton).toBeDisabled()
+    await expect(colourPalettePage.importModal.importButton).toBeDisabled()
 
     // Should show validation message
-    const validation = page.locator('[data-testid="ColourPaletteImport Validation Message"]')
-    await expect(validation).toBeVisible()
+    await expect(colourPalettePage.importModal.validationMessage).toBeVisible()
   })
 
-  test('should cancel import', async ({page, colourPalettePage}) => {
+  test('should cancel import', async ({colourPalettePage}) => {
     await colourPalettePage.clickImport()
 
-    const modal = page.locator('[data-testid="ColourPaletteImport Component"]')
-    await expect(modal).toBeVisible()
+    await expect(colourPalettePage.importModal.modal).toBeVisible()
 
-    await page.getByRole('button', {name: 'Cancel'}).click()
+    await colourPalettePage.importModal.clickCancel()
 
-    await expect(modal).not.toBeVisible()
+    await expect(colourPalettePage.importModal.modal).not.toBeVisible()
   })
 })

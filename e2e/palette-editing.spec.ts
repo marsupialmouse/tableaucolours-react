@@ -17,9 +17,14 @@ test.describe('Colour Palette Creation', () => {
 })
 
 test.describe('Colour Palette Editing', () => {
-  test('should have initial colours', async ({colourPalettePage}) => {
+  test('should have initial colour of white', async ({colourPalettePage}) => {
+    // Should have exactly one colour initially
     const initialCount = await colourPalettePage.getColourCount()
-    expect(initialCount).toBeGreaterThan(0)
+    expect(initialCount).toBe(1)
+
+    // The initial colour should be white
+    const colours = await colourPalettePage.getColours()
+    expect(colours[0]).toBe('#FFFFFF')
   })
 
   test('should add a new colour', async ({colourPalettePage}) => {
@@ -31,18 +36,23 @@ test.describe('Colour Palette Editing', () => {
     expect(newCount).toBe(initialCount + 1)
   })
 
-  test('should remove a colour', async ({colourPalettePage}) => {
-    // Ensure we have at least 2 colours
-    const initialCount = await colourPalettePage.getColourCount()
-    if (initialCount < 2) {
-      await colourPalettePage.clickAddColour()
-    }
+  test('should remove the correct colour', async ({colourPalettePage}) => {
+    // Set up known colours for testing
+    // Add a second colour
+    await colourPalettePage.clickAddColour()
 
-    const countBeforeRemove = await colourPalettePage.getColourCount()
+    // Get the colours before removal
+    const coloursBeforeRemove = await colourPalettePage.getColours()
+    expect(coloursBeforeRemove.length).toBe(2)
 
+    // Remove the first colour (index 0)
     await colourPalettePage.clickRemoveColour(0)
 
-    const countAfterRemove = await colourPalettePage.getColourCount()
-    expect(countAfterRemove).toBe(countBeforeRemove - 1)
+    // Get the colours after removal
+    const coloursAfterRemove = await colourPalettePage.getColours()
+    expect(coloursAfterRemove.length).toBe(1)
+
+    // The remaining colour should be the second one from before
+    expect(coloursAfterRemove[0]).toBe(coloursBeforeRemove[1])
   })
 })

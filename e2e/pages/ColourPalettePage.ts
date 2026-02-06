@@ -1,7 +1,18 @@
-import {Page} from '@playwright/test'
+import {Page, FileChooser} from '@playwright/test'
+import {ImportModal} from './ImportModal'
+import {ExportModal} from './ExportModal'
+import {ImageExtractorModal} from './ImageExtractorModal'
 
 export class ColourPalettePage {
-  constructor(private page: Page) {}
+  readonly importModal: ImportModal
+  readonly exportModal: ExportModal
+  readonly imageExtractorModal: ImageExtractorModal
+
+  constructor(private page: Page) {
+    this.importModal = new ImportModal(page)
+    this.exportModal = new ExportModal(page)
+    this.imageExtractorModal = new ImageExtractorModal(page)
+  }
 
   async goto() {
     await this.page.goto('/')
@@ -49,6 +60,18 @@ export class ColourPalettePage {
     await this.page.locator(`button[title*="${type}"]`).click()
   }
 
+  async setType(type: string) {
+    // Open type selector
+    await this.typeSelector.click()
+    // Click the type in the selector list
+    await this.typeSelectorList.getByText(type).click()
+  }
+
+  async getSelectedType() {
+    const selectedElement = this.page.locator('[data-testid="ColourPaletteTypeSelector Selected"]')
+    return selectedElement.getAttribute('data-selected-type')
+  }
+
   async clickImport() {
     await this.page.locator('button[title="Import XML"]').click()
   }
@@ -91,7 +114,38 @@ export class ColourPalettePage {
     return this.page.locator('[data-testid="ImageZoom Slider"]')
   }
 
+  get openImageButton() {
+    return this.page.locator('button[title="Open image..."]')
+  }
+
   async uploadImage(imagePath: string) {
-    await this.fileInput.setInputFiles(imagePath)
+    // Set up file chooser listener before clicking the button
+    const fileChooserPromise = this.page.waitForEvent('filechooser')
+    await this.openImageButton.click()
+    const fileChooser = await fileChooserPromise
+    await fileChooser.setFiles(imagePath)
+  }
+
+  async clickOpenImageButton(): Promise<FileChooser> {
+    const fileChooserPromise = this.page.waitForEvent('filechooser')
+    await this.openImageButton.click()
+    return fileChooserPromise
+  }
+
+  async getColours() {
+    const items = await this.getColourItems()
+    const colours: string[] = []
+    for (const item of items) {
+      const title = await item.getAttribute('title')
+      if (title) {
+        // Title is in format "#FFFFFF (double click to edit)"
+        const regex = /^(#[0-9A-Fa-f]{6})/
+        const match = regex.exec(title)
+        if (match) {
+          colours.push(match[1].toUpperCase())
+        }
+      }
+    }
+    return colours
   }
 }
