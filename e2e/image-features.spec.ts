@@ -12,8 +12,7 @@ test.describe('Image File Operations', () => {
     colourPalettePage,
   }) => {
     // Click the button and verify file chooser opens
-    const fileChooserPromise = colourPalettePage.clickOpenImageButton()
-    const fileChooser = await fileChooserPromise
+    const fileChooser = await colourPalettePage.clickOpenImageButton()
 
     // Verify file chooser was opened
     expect(fileChooser).toBeTruthy()

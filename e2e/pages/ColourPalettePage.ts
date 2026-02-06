@@ -1,4 +1,4 @@
-import {Page, FileChooser} from '@playwright/test'
+import {Page} from '@playwright/test'
 import {ImportModal} from './ImportModal'
 import {ExportModal} from './ExportModal'
 import {ImageExtractorModal} from './ImageExtractorModal'
@@ -126,10 +126,10 @@ export class ColourPalettePage {
     await fileChooser.setFiles(imagePath)
   }
 
-  async clickOpenImageButton(): Promise<FileChooser> {
+  async clickOpenImageButton() {
     const fileChooserPromise = this.page.waitForEvent('filechooser')
     await this.openImageButton.click()
-    return fileChooserPromise
+    return await fileChooserPromise
   }
 
   async getColours() {
