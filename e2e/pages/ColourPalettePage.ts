@@ -60,4 +60,38 @@ export class ColourPalettePage {
   async isVisible() {
     return this.page.locator('[data-testid="ColourPaletteEditor Component"]').isVisible()
   }
+
+  // Type selector getters
+  get typeSelector() {
+    return this.page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
+  }
+
+  get typeSelectorList() {
+    return this.page.locator('[data-testid="ColourPaletteTypeSelector Selector"]')
+  }
+
+  // Image-related getters and methods
+  get fileInput() {
+    return this.page.locator('input[type="file"]')
+  }
+
+  get imageCanvas() {
+    return this.page.locator('[data-testid="ImageColourPickerImageCanvas Component"]')
+  }
+
+  get extractButton() {
+    return this.page.locator('button[title="Extract colours from image (magic!)"]')
+  }
+
+  get imageZoomComponent() {
+    return this.page.locator('[data-testid="ImageZoom Component"]')
+  }
+
+  get imageZoomSlider() {
+    return this.page.locator('[data-testid="ImageZoom Slider"]')
+  }
+
+  async uploadImage(imagePath: string) {
+    await this.fileInput.setInputFiles(imagePath)
+  }
 }

@@ -111,16 +111,18 @@ E2E tests follow these conventions:
    import {test, expect} from './fixtures/base'
 
    test.describe('Feature name', () => {
-     test('should do something when condition', async ({page, colourPalettePage}) => {
-       await colourPalettePage.goto()
+     test('should do something when condition', async ({colourPalettePage}) => {
+       // The page is already loaded and ready to use via the fixture
        // test steps...
-       await expect(page.locator('selector')).toBeVisible()
+       await colourPalettePage.clickAddColour()
+       await expect(colourPalettePage.getColourCount()).resolves.toBeGreaterThan(0)
      })
    })
    ```
 
-4. **Selectors**: Prefer `data-testid` attributes for stable selectors
-5. **Page objects**: Add reusable methods to `ColourPalettePage` class
+4. **Fixtures**: The `colourPalettePage` fixture automatically navigates to the app before each test
+5. **Selectors**: Prefer `data-testid` attributes for stable selectors
+6. **Page objects**: Add reusable methods to `ColourPalettePage` class
 
 #### Troubleshooting E2E Tests
 
