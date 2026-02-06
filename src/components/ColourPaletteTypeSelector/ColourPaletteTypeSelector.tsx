@@ -105,6 +105,7 @@ export default function ColourPaletteTypeSelector({
         tabIndex={tabIndex >= 0 ? tabIndex : undefined}
         onClick={toggleSelector}
         data-testid={TestIds.Selected}
+        data-selected-type={selectedType.id}
       >
         <div className={classes['palettetypes-selectedtype']}>
           <ColourPaletteTypeSelectorItem type={selectedType} />
