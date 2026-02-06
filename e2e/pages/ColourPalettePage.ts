@@ -56,10 +56,6 @@ export class ColourPalettePage {
     }
   }
 
-  async selectPaletteType(type: string) {
-    await this.page.locator(`button[title*="${type}"]`).click()
-  }
-
   async setType(type: string) {
     // Open type selector
     await this.typeSelector.click()
@@ -68,8 +64,11 @@ export class ColourPalettePage {
   }
 
   async getSelectedType() {
-    const selectedElement = this.page.locator('[data-testid="ColourPaletteTypeSelector Selected"]')
-    return selectedElement.getAttribute('data-selected-type')
+    const selectedElement = this.typeSelector.locator(
+      '[data-testid="ColourPaletteTypeSelector Selected"]'
+    )
+    const label = selectedElement.locator('label')
+    return label.textContent()
   }
 
   async clickImport() {
@@ -127,7 +126,7 @@ export class ColourPalettePage {
   }
 
   async clickOpenImageButton() {
-    const fileChooserPromise = this.page.waitForEvent('filechooser')
+    const fileChooserPromise = this.page.waitForEvent('filechooser', {timeout: 5000})
     await this.openImageButton.click()
     return await fileChooserPromise
   }
@@ -136,16 +135,51 @@ export class ColourPalettePage {
     const items = await this.getColourItems()
     const colours: string[] = []
     for (const item of items) {
-      const title = await item.getAttribute('title')
-      if (title) {
-        // Title is in format "#FFFFFF (double click to edit)"
-        const regex = /^(#[0-9A-Fa-f]{6})/
-        const match = regex.exec(title)
-        if (match) {
-          colours.push(match[1].toUpperCase())
-        }
+      const swatch = item.locator('[data-testid="ColourPaletteColourListItem Swatch"]')
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const backgroundColor: string = await swatch.evaluate((el: HTMLElement) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        return window.getComputedStyle(el).backgroundColor
+      })
+      // Convert RGB to hex
+      const rgbMatch = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(backgroundColor)
+      if (rgbMatch) {
+        const r = parseInt(rgbMatch[1], 10)
+        const g = parseInt(rgbMatch[2], 10)
+        const b = parseInt(rgbMatch[3], 10)
+        const hex =
+          '#' +
+          [r, g, b]
+            .map((x) => {
+              const hex = x.toString(16)
+              return hex.length === 1 ? '0' + hex : hex
+            })
+            .join('')
+            .toUpperCase()
+        colours.push(hex)
       }
     }
     return colours
+  }
+
+  async setColour(index: number, hex: string) {
+    const items = await this.getColourItems()
+    if (items[index]) {
+      // Double click to open colour picker
+      const swatch = items[index].locator('[data-testid="ColourPaletteColourListItem Swatch"]')
+      await swatch.dblclick()
+
+      // Wait for colour picker to open
+      const colourPicker = items[index].locator(
+        '[data-testid="ColourPaletteColourListItem Colour Picker"]'
+      )
+      await colourPicker.waitFor({state: 'visible'})
+
+      // Find and fill the hex input
+      const hexInput = colourPicker.locator('input[type="text"]')
+      await hexInput.clear()
+      await hexInput.fill(hex)
+      await hexInput.press('Enter')
+    }
   }
 }

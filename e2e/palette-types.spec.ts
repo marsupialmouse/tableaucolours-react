@@ -5,9 +5,9 @@ test.describe('Palette Type Switching', () => {
     // Default type should be visible
     await expect(colourPalettePage.typeSelector).toBeVisible()
 
-    // Should show the default type (regular)
+    // Should show the default type (Regular)
     const selectedType = await colourPalettePage.getSelectedType()
-    expect(selectedType).toBe('regular')
+    expect(selectedType).toBe('Regular')
   })
 
   test('should display available palette types when clicked', async ({colourPalettePage}) => {
@@ -29,7 +29,7 @@ test.describe('Palette Type Switching', () => {
 
     // Verify the type was changed
     const selectedType = await colourPalettePage.getSelectedType()
-    expect(selectedType).toBe('ordered-sequential')
+    expect(selectedType).toBe('Sequential')
   })
 
   test('should switch to Diverging palette type', async ({colourPalettePage}) => {
@@ -38,6 +38,6 @@ test.describe('Palette Type Switching', () => {
 
     // Verify the type was changed
     const selectedType = await colourPalettePage.getSelectedType()
-    expect(selectedType).toBe('ordered-diverging')
+    expect(selectedType).toBe('Diverging')
   })
 })

@@ -41,9 +41,17 @@ test.describe('Colour Palette Editing', () => {
     // Add a second colour
     await colourPalettePage.clickAddColour()
 
+    // Set the first colour to red to differentiate from white
+    await colourPalettePage.setColour(0, '#FF0000')
+
+    // Wait a bit for the colour to be set
+    await colourPalettePage.page.waitForTimeout(500)
+
     // Get the colours before removal
     const coloursBeforeRemove = await colourPalettePage.getColours()
     expect(coloursBeforeRemove.length).toBe(2)
+    expect(coloursBeforeRemove[0]).toBe('#FF0000')
+    expect(coloursBeforeRemove[1]).toBe('#FFFFFF')
 
     // Remove the first colour (index 0)
     await colourPalettePage.clickRemoveColour(0)
@@ -52,7 +60,7 @@ test.describe('Colour Palette Editing', () => {
     const coloursAfterRemove = await colourPalettePage.getColours()
     expect(coloursAfterRemove.length).toBe(1)
 
-    // The remaining colour should be the second one from before
-    expect(coloursAfterRemove[0]).toBe(coloursBeforeRemove[1])
+    // The remaining colour should be white (the second one from before)
+    expect(coloursAfterRemove[0]).toBe('#FFFFFF')
   })
 })

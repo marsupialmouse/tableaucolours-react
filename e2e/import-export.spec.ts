@@ -11,12 +11,23 @@ test.describe('Palette Export', () => {
   test('should display XML code with correct palette data in export modal', async ({
     colourPalettePage,
   }) => {
-    // Set up a known palette state
+    // Set up a known palette state with non-white colours
     await colourPalettePage.setPaletteName('Test Export Palette')
     await colourPalettePage.setType('Sequential')
 
+    // Add some colours and set them to non-white values
+    await colourPalettePage.clickAddColour()
+    await colourPalettePage.clickAddColour()
+    await colourPalettePage.setColour(0, '#FF0000')
+    await colourPalettePage.setColour(1, '#00FF00')
+    await colourPalettePage.setColour(2, '#0000FF')
+
+    // Wait for colours to be set
+    await colourPalettePage.page.waitForTimeout(500)
+
     // Get the colours to verify
     const colours = await colourPalettePage.getColours()
+    expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
 
     await colourPalettePage.clickExport()
 
@@ -25,20 +36,24 @@ test.describe('Palette Export', () => {
 
     const codeText = await colourPalettePage.exportModal.getXMLContent()
 
-    // Verify structure
-    expect(codeText).toContain('<color-palette')
-    expect(codeText).toContain('</color-palette>')
+    // Verify XML structure
+    expect(codeText).toMatch(/^<color-palette/)
+    expect(codeText).toMatch(/<\/color-palette>$/)
 
-    // Verify name
+    // Verify name attribute
     expect(codeText).toContain('name="Test Export Palette"')
 
-    // Verify type
+    // Verify type attribute
     expect(codeText).toContain('type="ordered-sequential"')
 
-    // Verify all colours are present
+    // Verify each colour is present in the XML with correct structure
     for (const colour of colours) {
       expect(codeText).toContain(`<color>${colour}</color>`)
     }
+
+    // Verify no extra colour tags
+    const colourTagMatches = codeText.match(/<color>#[0-9A-F]{6}<\/color>/g)
+    expect(colourTagMatches).toHaveLength(colours.length)
   })
 
   test('should close export modal', async ({colourPalettePage}) => {

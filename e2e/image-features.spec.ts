@@ -68,19 +68,20 @@ test.describe('Image Colour Extraction', () => {
     // Wait for modal
     await expect(colourPalettePage.imageExtractorModal.modal).toBeVisible()
 
+    // Get the number of colours to extract from the modal
+    const numberOfColoursToExtract =
+      await colourPalettePage.imageExtractorModal.getNumberOfColoursToExtract()
+
     // Click extract button in modal (default should replace colours)
     await colourPalettePage.imageExtractorModal.clickExtract()
 
     // Wait for extraction to complete and modal to close
     await expect(colourPalettePage.imageExtractorModal.modal).not.toBeVisible()
 
-    // Should have the default number of extracted colours (not initial + extracted)
-    // The default extraction typically extracts 10 colours
+    // Should have exactly the number of colours that were requested
     await expect(async () => {
       const newCount = await colourPalettePage.getColourCount()
-      // Verify colours were replaced, not added
-      expect(newCount).toBeGreaterThan(0)
-      expect(newCount).toBeLessThanOrEqual(10)
+      expect(newCount).toBe(numberOfColoursToExtract)
     }).toPass()
   })
 
@@ -105,6 +106,10 @@ test.describe('Image Colour Extraction', () => {
     const addRadio = page.getByLabel('Add to existing colours')
     await addRadio.check()
 
+    // Get the number of colours to extract from the modal
+    const numberOfColoursToExtract =
+      await colourPalettePage.imageExtractorModal.getNumberOfColoursToExtract()
+
     // Click extract button in modal
     await colourPalettePage.imageExtractorModal.clickExtract()
 
@@ -114,7 +119,7 @@ test.describe('Image Colour Extraction', () => {
     // Should have initial colours + extracted colours
     await expect(async () => {
       const newCount = await colourPalettePage.getColourCount()
-      expect(newCount).toBeGreaterThan(initialCount)
+      expect(newCount).toBe(initialCount + numberOfColoursToExtract)
     }).toPass()
   })
 
