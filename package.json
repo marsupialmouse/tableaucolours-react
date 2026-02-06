@@ -11,7 +11,7 @@
     "lint": "tsc --noEmit && eslint . --color",
     "lint:fix": "tsc --noEmit && eslint . --color --fix",
     "lint-staged": "lint-staged",
-    "format": "prettier --write ./src",
+    "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:e2e": "playwright test",
