@@ -3,7 +3,7 @@ import {ImportModal} from './ImportModal'
 import {ExportModal} from './ExportModal'
 import {ImageExtractorModal} from './ImageExtractorModal'
 
-export class ColourPalettePage {
+export class ColourPaletteEditor {
   readonly importModal: ImportModal
   readonly exportModal: ExportModal
   readonly imageExtractorModal: ImageExtractorModal
