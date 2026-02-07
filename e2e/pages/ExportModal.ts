@@ -4,11 +4,11 @@ export class ExportModal {
   constructor(private page: Page) {}
 
   get modal() {
-    return this.page.locator('[data-testid="ColourPaletteGetCode Component"]')
+    return this.page.getByTestId('ColourPaletteGetCode Component')
   }
 
   get codeContainer() {
-    return this.page.locator('[data-testid="ColourPaletteGetCode Code"]')
+    return this.page.getByTestId('ColourPaletteGetCode Code')
   }
 
   async isVisible() {
