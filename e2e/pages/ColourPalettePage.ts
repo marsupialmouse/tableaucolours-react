@@ -101,6 +101,10 @@ export class ColourPalettePage {
     return this.page.locator('[data-testid="ImageColourPickerImageCanvas Component"]')
   }
 
+  get imageCanvasElement() {
+    return this.page.locator('[data-testid="ImageColourPickerImage Canvas"]')
+  }
+
   get extractButton() {
     return this.page.locator('button[title="Extract colours from image (magic!)"]')
   }
@@ -136,11 +140,11 @@ export class ColourPalettePage {
     const colours: string[] = []
     for (const item of items) {
       const swatch = item.locator('[data-testid="ColourPaletteColourListItem Swatch"]')
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const backgroundColor: string = await swatch.evaluate((el: HTMLElement) => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-        return window.getComputedStyle(el).backgroundColor
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any */
+      const backgroundColor: string = await swatch.evaluate((el: any) => {
+        return el.ownerDocument.defaultView.getComputedStyle(el).backgroundColor
       })
+      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any */
       // Convert RGB to hex
       const rgbMatch = /rgb\((\d+),\s*(\d+),\s*(\d+)\)/.exec(backgroundColor)
       if (rgbMatch) {

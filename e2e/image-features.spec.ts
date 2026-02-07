@@ -22,8 +22,20 @@ test.describe('Image File Operations', () => {
     // Upload the image
     await colourPalettePage.uploadImage(testImagePath)
 
-    // Check if image canvas is visible (verifies image is displayed)
+    // Verify the image canvas container is visible
     await expect(colourPalettePage.imageCanvas).toBeVisible()
+
+    // Verify the actual canvas element with the image is visible
+    await expect(colourPalettePage.imageCanvasElement).toBeVisible()
+
+    // Verify the canvas has actual content (dimensions > 0)
+    const canvasElement = colourPalettePage.imageCanvasElement
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
+    const width = await canvasElement.evaluate((canvas: any) => canvas.width)
+    const height = await canvasElement.evaluate((canvas: any) => canvas.height)
+    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
+    expect(width).toBeGreaterThan(0)
+    expect(height).toBeGreaterThan(0)
   })
 
   test('should enable extract colours button when image is loaded', async ({colourPalettePage}) => {
