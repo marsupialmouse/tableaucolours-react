@@ -4,7 +4,7 @@ export class ImageExtractorModal {
   constructor(private page: Page) {}
 
   get modal() {
-    return this.page.locator('[data-testid="ImageColourExtractor Component"]')
+    return this.page.getByTestId('ImageColourExtractor Component')
   }
 
   get extractButton() {
@@ -16,7 +16,7 @@ export class ImageExtractorModal {
   }
 
   get numberInput() {
-    return this.page.locator('[data-testid="ImageColourExtractor Number Input"]')
+    return this.page.getByTestId('ImageColourExtractor Number Input')
   }
 
   async isVisible() {
@@ -38,5 +38,13 @@ export class ImageExtractorModal {
   async setNumberOfColoursToExtract(count: number) {
     await this.numberInput.clear()
     await this.numberInput.fill(count.toString())
+  }
+
+  async selectAddToExistingColours() {
+    await this.page.locator('label[for="addcolours"]').click()
+  }
+
+  async selectReplaceColours() {
+    await this.page.locator('label[for="replacecolours"]').click()
   }
 }

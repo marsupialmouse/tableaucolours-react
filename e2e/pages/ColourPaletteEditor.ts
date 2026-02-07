@@ -139,7 +139,7 @@ export class ColourPaletteEditor {
     const items = await this.getColourItems()
     const colours: string[] = []
     for (const item of items) {
-      const swatch = item.locator('[data-testid="ColourPaletteColourListItem Swatch"]')
+      const swatch = item.getByTestId('ColourPaletteColourListItem Swatch')
       /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any */
       const backgroundColor: string = await swatch.evaluate((el: any) => {
         return el.ownerDocument.defaultView.getComputedStyle(el).backgroundColor
@@ -180,9 +180,9 @@ export class ColourPaletteEditor {
       await colourPicker.waitFor({state: 'visible'})
 
       // Find and fill the hex input
-      const hexInput = colourPicker.locator('input[type="text"]')
+      const hexInput = colourPicker.locator('input').nth(0)
       await hexInput.clear()
-      await hexInput.fill(hex)
+      await hexInput.fill(hex.replace('#', ''))
       await hexInput.press('Enter')
     }
   }

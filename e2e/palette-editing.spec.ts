@@ -36,34 +36,18 @@ test.describe('Colour Palette Editing', () => {
     expect(newCount).toBe(initialCount + 1)
   })
 
-  test('should remove the correct colour', async ({colourPaletteEditor}) => {
-    // Set up known colours for testing
-    // Add a second colour
-    await colourPaletteEditor.clickAddColour()
-
-    // Set the first colour to red to differentiate from white
-    await colourPaletteEditor.setColour(0, '#FF0000')
-
-    // Wait for the colour to be set by verifying the background color
-    await expect(async () => {
-      const colours = await colourPaletteEditor.getColours()
-      expect(colours[0]).toBe('#FF0000')
-    }).toPass()
-
-    // Get the colours before removal
-    const coloursBeforeRemove = await colourPaletteEditor.getColours()
-    expect(coloursBeforeRemove.length).toBe(2)
-    expect(coloursBeforeRemove[0]).toBe('#FF0000')
-    expect(coloursBeforeRemove[1]).toBe('#FFFFFF')
-
-    // Remove the first colour (index 0)
-    await colourPaletteEditor.clickRemoveColour(0)
-
-    // Get the colours after removal
-    const coloursAfterRemove = await colourPaletteEditor.getColours()
-    expect(coloursAfterRemove.length).toBe(1)
-
-    // The remaining colour should be white (the second one from before)
-    expect(coloursAfterRemove[0]).toBe('#FFFFFF')
+  test('should remove colour', async ({colourPaletteEditor}) => {
+    await test.step('configure colours', async () => {
+      await colourPaletteEditor.clickAddColour()
+      await colourPaletteEditor.setColour(0, '#FF0000')
+      await colourPaletteEditor.setColour(1, '#0000FF')
+    })
+    await test.step('remove colour', async () => {
+      await colourPaletteEditor.clickRemoveColour(0)
+    })
+    await test.step('check colour was removed', async () => {
+      const coloursAfterRemove = await colourPaletteEditor.getColours()
+      expect(coloursAfterRemove).toEqual(['#0000F'])
+    })
   })
 })

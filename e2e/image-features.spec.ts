@@ -73,20 +73,14 @@ test.describe('Image Colour Extraction', () => {
     const initialCount = await colourPaletteEditor.getColourCount()
     expect(initialCount).toBeGreaterThan(1)
 
-    // Upload image
     await colourPaletteEditor.uploadImage(testImagePath)
-
-    // Click extract button
     await colourPaletteEditor.extractButton.click()
-
-    // Wait for modal
     await expect(colourPaletteEditor.imageExtractorModal.modal).toBeVisible()
 
-    // Get the number of colours to extract from the modal
     const numberOfColoursToExtract =
       await colourPaletteEditor.imageExtractorModal.getNumberOfColoursToExtract()
 
-    // Click extract button in modal (default should replace colours)
+    await colourPaletteEditor.imageExtractorModal.selectReplaceColours()
     await colourPaletteEditor.imageExtractorModal.clickExtract()
 
     // Wait for extraction to complete and modal to close
@@ -100,41 +94,25 @@ test.describe('Image Colour Extraction', () => {
   })
 
   test('should add colours when extracting from image with add option', async ({
-    page,
     colourPaletteEditor,
   }) => {
     // Start with known initial state
     const initialCount = await colourPaletteEditor.getColourCount()
     expect(initialCount).toBe(1)
 
-    // Upload image
     await colourPaletteEditor.uploadImage(testImagePath)
-
-    // Click extract button
     await colourPaletteEditor.extractButton.click()
-
-    // Wait for modal
     await expect(colourPaletteEditor.imageExtractorModal.modal).toBeVisible()
 
-    // Select "Add to existing colours" option
-    const addRadio = page.getByLabel('Add to existing colours')
-    await addRadio.check()
-
-    // Get the number of colours to extract from the modal
     const numberOfColoursToExtract =
       await colourPaletteEditor.imageExtractorModal.getNumberOfColoursToExtract()
 
-    // Click extract button in modal
+    await colourPaletteEditor.imageExtractorModal.selectAddToExistingColours()
     await colourPaletteEditor.imageExtractorModal.clickExtract()
 
-    // Wait for extraction to complete and modal to close
     await expect(colourPaletteEditor.imageExtractorModal.modal).not.toBeVisible()
-
-    // Should have initial colours + extracted colours
-    await expect(async () => {
-      const newCount = await colourPaletteEditor.getColourCount()
-      expect(newCount).toBe(initialCount + numberOfColoursToExtract)
-    }).toPass()
+    const newCount = await colourPaletteEditor.getColourCount()
+    expect(newCount).toBe(initialCount + numberOfColoursToExtract)
   })
 
   test('should close extraction modal with cancel', async ({colourPaletteEditor}) => {
