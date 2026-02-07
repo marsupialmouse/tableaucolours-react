@@ -18,13 +18,8 @@ test.describe('Colour Palette Creation', () => {
 
 test.describe('Colour Palette Editing', () => {
   test('should have initial colour of white', async ({colourPaletteEditor}) => {
-    // Should have exactly one colour initially
-    const initialCount = await colourPaletteEditor.getColourCount()
-    expect(initialCount).toBe(1)
-
-    // The initial colour should be white
     const colours = await colourPaletteEditor.getColours()
-    expect(colours[0]).toBe('#FFFFFF')
+    expect(colours).toEqual(['#FFFFFF'])
   })
 
   test('should add a new colour', async ({colourPaletteEditor}) => {
@@ -47,7 +42,7 @@ test.describe('Colour Palette Editing', () => {
     })
     await test.step('check colour was removed', async () => {
       const coloursAfterRemove = await colourPaletteEditor.getColours()
-      expect(coloursAfterRemove).toEqual(['#0000F'])
+      expect(coloursAfterRemove).toEqual(['#0000FF'])
     })
   })
 })
