@@ -72,10 +72,8 @@ test.describe('Image Colour Extraction', () => {
     })
 
     await test.step('verify extracted colours', async () => {
-      await expect(async () => {
-        const newCount = await colourPaletteEditor.getColourCount()
-        expect(newCount).toBe(5)
-      }).toPass()
+      const newCount = await colourPaletteEditor.getColourCount()
+      expect(newCount).toBe(5)
     })
   })
 
