@@ -64,17 +64,17 @@ test.describe('Image Colour Extraction', () => {
       await colourPaletteEditor.extractButton.click()
       await expect(colourPaletteEditor.imageExtractorModal.modal).toBeVisible()
 
-      const numberOfColoursToExtract =
-        await colourPaletteEditor.imageExtractorModal.getNumberOfColoursToExtract()
-
+      await colourPaletteEditor.imageExtractorModal.setNumberOfColoursToExtract(5)
       await colourPaletteEditor.imageExtractorModal.selectReplaceColours()
       await colourPaletteEditor.imageExtractorModal.clickExtract()
 
       await expect(colourPaletteEditor.imageExtractorModal.modal).not.toBeVisible()
+    })
 
+    await test.step('verify extracted colours', async () => {
       await expect(async () => {
         const newCount = await colourPaletteEditor.getColourCount()
-        expect(newCount).toBe(numberOfColoursToExtract)
+        expect(newCount).toBe(5)
       }).toPass()
     })
   })
@@ -92,15 +92,16 @@ test.describe('Image Colour Extraction', () => {
       await colourPaletteEditor.extractButton.click()
       await expect(colourPaletteEditor.imageExtractorModal.modal).toBeVisible()
 
-      const numberOfColoursToExtract =
-        await colourPaletteEditor.imageExtractorModal.getNumberOfColoursToExtract()
-
+      await colourPaletteEditor.imageExtractorModal.setNumberOfColoursToExtract(5)
       await colourPaletteEditor.imageExtractorModal.selectAddToExistingColours()
       await colourPaletteEditor.imageExtractorModal.clickExtract()
 
       await expect(colourPaletteEditor.imageExtractorModal.modal).not.toBeVisible()
+    })
+
+    await test.step('verify extracted colours', async () => {
       const newCount = await colourPaletteEditor.getColourCount()
-      expect(newCount).toBe(1 + numberOfColoursToExtract)
+      expect(newCount).toBe(6)
     })
   })
 

@@ -48,6 +48,7 @@ export class ColourPaletteEditor {
   async clickRemoveColour(index: number) {
     const items = await this.getColourItems()
     if (items[index]) {
+      // Hover to make remove button visible
       await items[index].hover()
       await items[index].getByTestId('ColourPaletteColourListItem Remove Button').click()
     }
