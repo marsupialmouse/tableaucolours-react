@@ -4,11 +4,11 @@ export class ImportModal {
   constructor(private page: Page) {}
 
   get modal() {
-    return this.page.locator('[data-testid="ColourPaletteImport Component"]')
+    return this.page.getByTestId('ColourPaletteImport Component')
   }
 
   get textarea() {
-    return this.page.locator('[data-testid="ColourPaletteImport Code"]')
+    return this.page.getByTestId('ColourPaletteImport Code')
   }
 
   get importButton() {
@@ -20,7 +20,7 @@ export class ImportModal {
   }
 
   get validationMessage() {
-    return this.page.locator('[data-testid="ColourPaletteImport Validation Message"]')
+    return this.page.getByTestId('ColourPaletteImport Validation Message')
   }
 
   async isVisible() {
