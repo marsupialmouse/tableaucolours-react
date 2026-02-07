@@ -34,11 +34,11 @@ export class ColourPaletteEditor {
   }
 
   async getColourItems() {
-    return this.page.locator('[data-testid="ColourPaletteColourListItem Component"]').all()
+    return this.page.getByTestId('ColourPaletteColourListItem Component').all()
   }
 
   async getColourCount() {
-    return this.page.locator('[data-testid="ColourPaletteColourListItem Component"]').count()
+    return this.page.getByTestId('ColourPaletteColourListItem Component').count()
   }
 
   async clickAddColour() {
@@ -50,9 +50,7 @@ export class ColourPaletteEditor {
     if (items[index]) {
       // Hover to make remove button visible
       await items[index].hover()
-      await items[index]
-        .locator('[data-testid="ColourPaletteColourListItem Remove Button"]')
-        .click()
+      await items[index].getByTestId('ColourPaletteColourListItem Remove Button').click()
     }
   }
 
@@ -64,9 +62,7 @@ export class ColourPaletteEditor {
   }
 
   async getSelectedType() {
-    const selectedElement = this.typeSelector.locator(
-      '[data-testid="ColourPaletteTypeSelector Selected"]'
-    )
+    const selectedElement = this.typeSelector.getByTestId('ColourPaletteTypeSelector Selected')
     const label = selectedElement.locator('label')
     return label.textContent()
   }
@@ -80,16 +76,16 @@ export class ColourPaletteEditor {
   }
 
   async isVisible() {
-    return this.page.locator('[data-testid="ColourPaletteEditor Component"]').isVisible()
+    return this.page.getByTestId('ColourPaletteEditor Component').isVisible()
   }
 
   // Type selector getters
   get typeSelector() {
-    return this.page.locator('[data-testid="ColourPaletteTypeSelector Component"]')
+    return this.page.getByTestId('ColourPaletteTypeSelector Component')
   }
 
   get typeSelectorList() {
-    return this.page.locator('[data-testid="ColourPaletteTypeSelector Selector"]')
+    return this.page.getByTestId('ColourPaletteTypeSelector Selector')
   }
 
   // Image-related getters and methods
@@ -98,11 +94,11 @@ export class ColourPaletteEditor {
   }
 
   get imageCanvas() {
-    return this.page.locator('[data-testid="ImageColourPickerImageCanvas Component"]')
+    return this.page.getByTestId('ImageColourPickerImageCanvas Component')
   }
 
   get imageCanvasElement() {
-    return this.page.locator('[data-testid="ImageColourPickerImage Canvas"]')
+    return this.page.getByTestId('ImageColourPickerImage Canvas')
   }
 
   get extractButton() {
@@ -110,11 +106,11 @@ export class ColourPaletteEditor {
   }
 
   get imageZoomComponent() {
-    return this.page.locator('[data-testid="ImageZoom Component"]')
+    return this.page.getByTestId('ImageZoom Component')
   }
 
   get imageZoomSlider() {
-    return this.page.locator('[data-testid="ImageZoom Slider"]')
+    return this.page.getByTestId('ImageZoom Slider')
   }
 
   get openImageButton() {
@@ -169,17 +165,12 @@ export class ColourPaletteEditor {
   async setColour(index: number, hex: string) {
     const items = await this.getColourItems()
     if (items[index]) {
-      // Double click to open colour picker
-      const swatch = items[index].locator('[data-testid="ColourPaletteColourListItem Swatch"]')
+      const swatch = items[index].getByTestId('ColourPaletteColourListItem Swatch')
       await swatch.dblclick()
 
-      // Wait for colour picker to open
-      const colourPicker = items[index].locator(
-        '[data-testid="ColourPaletteColourListItem Colour Picker"]'
-      )
+      const colourPicker = items[index].getByTestId('ColourPaletteColourListItem Colour Picker')
       await colourPicker.waitFor({state: 'visible'})
 
-      // Find and fill the hex input
       const hexInput = colourPicker.locator('input').nth(0)
       await hexInput.clear()
       await hexInput.fill(hex.replace('#', ''))
