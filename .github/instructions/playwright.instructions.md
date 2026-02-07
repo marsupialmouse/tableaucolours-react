@@ -7,12 +7,12 @@ applyTo: 'e2e/**/*'
 
 ### Code Quality Standards
 
-- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. Use `test.step()` to group interactions and improve test readability and reporting.
+- **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. When using test IDs, prefer `getByTestId()` over `locator('[data-testid="..."]')`. Use `test.step()` to group interactions and improve test readability and reporting.
 - **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `expect(locator).toBeVisible()` unless specifically testing for visibility changes.
   - **Verify Specific Values**: Always verify specific values (colours, names, types) not just existence. For example, verify the colour is `#FF0000`, not just that a colour exists.
   - **Test Initial State**: Always verify initial state before testing changes. For example, verify there is 1 white colour before testing colour addition.
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
-- **Clarity**: Use descriptive test and step titles that clearly state the intent. Add comments only to explain complex logic or non-obvious interactions. Use `test.step()` for bigger tests to break the test into logical, named steps.
+- **Clarity**: Use descriptive test and step titles that clearly state the intent. **Avoid obvious comments** that simply restate what the code does (e.g., `// Click the button` before `await button.click()`). Only add comments to explain complex logic, non-obvious interactions, or important context that isn't clear from the code itself. Use `test.step()` for bigger tests to break the test into logical, named steps.
 
 ### Test Structure
 
@@ -180,7 +180,7 @@ When components are difficult to test, consider improving the component's access
 
   // In test
   async getSelectedType() {
-    const selected = this.typeSelector.locator('[data-testid="ColourPaletteTypeSelector Selected"]')
+    const selected = this.typeSelector.getByTestId('ColourPaletteTypeSelector Selected')
     return selected.textContent()
   }
   ```
