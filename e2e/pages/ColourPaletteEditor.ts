@@ -180,10 +180,10 @@ export class ColourPaletteEditor {
 
   async getSelectedColourIndex() {
     const items = await this.getColourItems()
-    for (let i = 0; i < items.length; i++) {
-      const classList = await items[i].getAttribute('class')
+    for (let index = 0; index < items.length; index++) {
+      const classList = await items[index].getAttribute('class')
       if (classList?.includes('colour--selected')) {
-        return i
+        return index
       }
     }
     return -1
@@ -203,7 +203,7 @@ export class ColourPaletteEditor {
 
   async addColoursWithKeyboard(count: number) {
     const initialCount = await this.getColourCount()
-    for (let i = 0; i < count; i++) {
+    for (let colorIndex = 0; colorIndex < count; colorIndex++) {
       await this.page.keyboard.press('+')
     }
     // Wait for the last color to be added (unless we're at max)
