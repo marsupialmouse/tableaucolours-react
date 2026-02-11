@@ -200,4 +200,19 @@ export class ColourPaletteEditor {
     const selectedElement = this.typeSelector.getByTestId('ColourPaletteTypeSelector Selected')
     await selectedElement.focus()
   }
+
+  async addColoursWithKeyboard(count: number) {
+    const initialCount = await this.getColourCount()
+    for (let i = 0; i < count; i++) {
+      await this.page.keyboard.press('+')
+    }
+    // Wait for the last color to be added (unless we're at max)
+    const expectedCount = Math.min(initialCount + count, 20)
+    if (expectedCount > initialCount) {
+      await this.page
+        .getByTestId('ColourPaletteColourListItem Component')
+        .nth(expectedCount - 1)
+        .waitFor({state: 'attached', timeout: 5000})
+    }
+  }
 }
