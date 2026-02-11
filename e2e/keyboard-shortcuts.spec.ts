@@ -5,9 +5,7 @@ test.describe('Keyboard Shortcuts', () => {
     test.describe('Standard Navigation', () => {
       test('should move selection down with ArrowDown', async ({page, colourPaletteEditor}) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select first color', async () => {
@@ -25,9 +23,7 @@ test.describe('Keyboard Shortcuts', () => {
 
       test('should move selection up with ArrowUp', async ({page, colourPaletteEditor}) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select second color', async () => {
@@ -48,9 +44,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors (indexes 0-4 in col 1, index 5 in col 2)', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select first color (index 0)', async () => {
@@ -71,9 +65,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors (indexes 0-4 in col 1, index 5 in col 2)', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select last color (index 5)', async () => {
@@ -96,9 +88,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select first color (index 0)', async () => {
@@ -119,9 +109,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select first color (index 0)', async () => {
@@ -142,9 +130,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select last color (index 5)', async () => {
@@ -165,9 +151,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select last color (index 5)', async () => {
@@ -190,9 +174,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors (indexes 0-4 in col 1, index 5 in col 2)', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select middle color (index 2)', async () => {
@@ -213,9 +195,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select middle color (index 2)', async () => {
@@ -236,9 +216,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
         })
 
         await test.step('select bottom of first column (index 4)', async () => {
@@ -260,9 +238,7 @@ test.describe('Keyboard Shortcuts', () => {
     test.describe('Standard Reordering', () => {
       test('should move color down with Shift+ArrowDown', async ({page, colourPaletteEditor}) => {
         await test.step('setup: create 6 colors with distinct colors', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(0, '#FF0000')
         })
 
@@ -283,9 +259,7 @@ test.describe('Keyboard Shortcuts', () => {
 
       test('should move color up with Shift+ArrowUp', async ({page, colourPaletteEditor}) => {
         await test.step('setup: create 6 colors with distinct color at index 1', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(1, '#00FF00')
         })
 
@@ -309,9 +283,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 0', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(0, '#0000FF')
         })
 
@@ -335,9 +307,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 5', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(5, '#FFFF00')
         })
 
@@ -363,9 +333,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 0', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(0, '#FF00FF')
         })
 
@@ -389,9 +357,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 0', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(0, '#00FFFF')
         })
 
@@ -415,9 +381,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 5', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(5, '#808080')
         })
 
@@ -441,9 +405,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 5', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(5, '#C0C0C0')
         })
 
@@ -467,9 +429,7 @@ test.describe('Keyboard Shortcuts', () => {
         colourPaletteEditor,
       }) => {
         await test.step('setup: create 6 colors with distinct color at index 2', async () => {
-          for (let i = 0; i < 5; i++) {
-            await page.keyboard.press('+')
-          }
+          await colourPaletteEditor.addColoursWithKeyboard(5)
           await colourPaletteEditor.setColour(2, '#FF8800')
         })
 
@@ -493,8 +453,7 @@ test.describe('Keyboard Shortcuts', () => {
   test.describe('Color Deletion', () => {
     test('should delete selected color with Delete key', async ({page, colourPaletteEditor}) => {
       await test.step('setup: create 3 colors with distinct colors', async () => {
-        await page.keyboard.press('+')
-        await page.keyboard.press('+')
+        await colourPaletteEditor.addColoursWithKeyboard(2)
         await colourPaletteEditor.setColour(0, '#FF0000')
         await colourPaletteEditor.setColour(1, '#00FF00')
         await colourPaletteEditor.setColour(2, '#0000FF')
@@ -516,8 +475,7 @@ test.describe('Keyboard Shortcuts', () => {
 
     test('should delete selected color with Backspace key', async ({page, colourPaletteEditor}) => {
       await test.step('setup: create 3 colors with distinct colors', async () => {
-        await page.keyboard.press('+')
-        await page.keyboard.press('+')
+        await colourPaletteEditor.addColoursWithKeyboard(2)
         await colourPaletteEditor.setColour(0, '#FF0000')
         await colourPaletteEditor.setColour(1, '#00FF00')
         await colourPaletteEditor.setColour(2, '#0000FF')
@@ -597,14 +555,14 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test.describe('Add Color Shortcut', () => {
-    test('should add new color with + key', async ({page, colourPaletteEditor}) => {
+    test('should add new color with + key', async ({colourPaletteEditor}) => {
       await test.step('verify initial color count', async () => {
         const initialCount = await colourPaletteEditor.getColourCount()
         expect(initialCount).toBe(1)
       })
 
       await test.step('press + key and verify new color was added', async () => {
-        await page.keyboard.press('+')
+        await colourPaletteEditor.addColoursWithKeyboard(1)
         const newCount = await colourPaletteEditor.getColourCount()
         expect(newCount).toBe(2)
       })
@@ -617,19 +575,16 @@ test.describe('Keyboard Shortcuts', () => {
     })
 
     test('should not add color when at maximum limit (20 colors)', async ({
-      page,
       colourPaletteEditor,
     }) => {
       await test.step('setup: create 20 colors (maximum)', async () => {
-        for (let i = 0; i < 19; i++) {
-          await page.keyboard.press('+')
-        }
+        await colourPaletteEditor.addColoursWithKeyboard(19)
         const count = await colourPaletteEditor.getColourCount()
         expect(count).toBe(20)
       })
 
       await test.step('press + key and verify no new color was added', async () => {
-        await page.keyboard.press('+')
+        await colourPaletteEditor.addColoursWithKeyboard(1)
         const count = await colourPaletteEditor.getColourCount()
         expect(count).toBe(20)
       })
