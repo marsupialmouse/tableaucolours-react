@@ -42,7 +42,7 @@ export class ColourPaletteEditor {
   }
 
   async clickAddColour() {
-    await this.page.locator('button[title="Add colour (+)"]').click()
+    await this.page.locator('button[title="Add colour (+)"]').click({force: true})
   }
 
   async clickRemoveColour(index: number) {
@@ -176,5 +176,28 @@ export class ColourPaletteEditor {
       await hexInput.fill(hex.replace('#', ''))
       await hexInput.press('Enter')
     }
+  }
+
+  async getSelectedColourIndex() {
+    const items = await this.getColourItems()
+    for (let i = 0; i < items.length; i++) {
+      const classList = await items[i].getAttribute('class')
+      if (classList?.includes('colour--selected')) {
+        return i
+      }
+    }
+    return -1
+  }
+
+  async clickColour(index: number) {
+    const items = await this.getColourItems()
+    if (items[index]) {
+      await items[index].click()
+    }
+  }
+
+  async focusTypeSelector() {
+    const selectedElement = this.typeSelector.getByTestId('ColourPaletteTypeSelector Selected')
+    await selectedElement.focus()
   }
 }
