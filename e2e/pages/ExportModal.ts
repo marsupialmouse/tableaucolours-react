@@ -11,12 +11,24 @@ export class ExportModal {
     return this.page.getByTestId('ColourPaletteGetCode Code')
   }
 
+  get copyButton() {
+    return this.page.getByTestId('ColourPaletteGetCode Button')
+  }
+
   async isVisible() {
     return this.modal.isVisible()
   }
 
   async getXMLContent() {
     return this.codeContainer.textContent()
+  }
+
+  async clickCopyToClipboard() {
+    await this.copyButton.click()
+  }
+
+  async getCopyButtonText() {
+    return this.copyButton.textContent()
   }
 
   async close() {
