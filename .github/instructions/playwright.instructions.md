@@ -10,9 +10,13 @@ applyTo: 'e2e/**/*'
 - **Locators**: Prioritize user-facing, role-based locators (`getByRole`, `getByLabel`, `getByText`, etc.) for resilience and accessibility. When using test IDs, prefer `getByTestId()` over `locator('[data-testid="..."]')`. Use `test.step()` to group interactions and improve test readability and reporting.
 - **Assertions**: Use auto-retrying web-first assertions. These assertions start with the `await` keyword (e.g., `await expect(locator).toHaveText()`). Avoid `expect(locator).toBeVisible()` unless specifically testing for visibility changes.
   - **Verify Specific Values**: Always verify specific values (colours, names, types) not just existence. For example, verify the colour is `#FF0000`, not just that a colour exists.
-  - **Test Initial State**: Always verify initial state before testing changes. For example, verify there is 1 white colour before testing colour addition.
+  - **Avoid redundant assertions**: If `toEqual([...])` checks array equality, don't also check `.length`
+  - **Don't verify setup conditions**: Unless needed for timing - trust that helper methods work
 - **Timeouts**: Rely on Playwright's built-in auto-waiting mechanisms. Avoid hard-coded waits or increased default timeouts.
 - **Clarity**: Use descriptive test and step titles that clearly state the intent. **Avoid obvious comments** that simply restate what the code does (e.g., `// Click the button` before `await button.click()`). Only add comments to explain complex logic, non-obvious interactions, or important context that isn't clear from the code itself. Use `test.step()` for bigger tests to break the test into logical, named steps.
+- **Inline single-use variables**: Cleaner and more readable than creating intermediate variables
+- **Use parameterised tests**: When testing multiple permutations, use parameterised tests with a `.forEach` loop.
+- **Use Australian English**: Use Australian English in comments and code.
 
 ### Test Structure
 
@@ -40,6 +44,8 @@ applyTo: 'e2e/**/*'
 - **Getters for Elements**: Use getters (not methods) for frequently accessed elements to keep the API clean.
 - **Methods for Actions**: Create methods for user actions (e.g., `clickAddColour()`, `setType()`).
 - **Methods for Queries**: Create methods for getting state (e.g., `getColours()`, `getSelectedType()`).
+- **Helper methods**: Create methods for common patterns (e.g., `selectColour()` = click + verify selected)
+- **Remove unused methods**: after refactoring - keep page objects lean
 
 ### File Chooser Handling
 
