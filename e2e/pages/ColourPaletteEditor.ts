@@ -237,16 +237,9 @@ export class ColourPaletteEditor {
         await dialog.accept()
       })
 
-      // Click the delete button using JavaScript evaluation
-      // Note: This button has a unique issue where Playwright reports it as having zero
-      // dimensions (width: 0, height: 0) and being outside the viewport, even though:
-      // 1. The button exists in the DOM and is functional
-      // 2. Adjacent buttons (Import XML, Get XML, Add colour) work fine with .click({force: true})
-      // 3. The button is visible in screenshots
-      // Root cause: The parent <li> has overflow:hidden and the button relies on FontAwesome
-      // icon rendering for dimensions. Playwright's actionability checks may calculate dimensions
-      // before the icon font is fully rendered, resulting in zero size.
-      // JavaScript evaluation bypasses these checks and clicks the DOM element directly.
+      // The "Delete all colours" button is hidden in the DOM (display:none or visibility:hidden)
+      // when setColours() is called. Playwright correctly refuses to click hidden elements.
+      // Use JavaScript evaluation to click it directly, bypassing visibility checks.
       await this.page.evaluate(`
         const button = document.querySelector('button[title="Delete all colours"]');
         if (button) button.click();
