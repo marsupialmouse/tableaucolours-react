@@ -17,6 +17,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     headless: true, // Force headless mode for all browsers
+    permissions: ['clipboard-read', 'clipboard-write'],
   },
 
   projects: [

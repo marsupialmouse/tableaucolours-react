@@ -40,14 +40,12 @@ test.describe('Palette Export', () => {
     })
 
     await test.step('verify initial button state', async () => {
-      const buttonText = await colourPaletteEditor.exportModal.getCopyButtonText()
-      expect(buttonText).toBe('Copy to clipboard')
+      await expect(colourPaletteEditor.exportModal.copyButton).toHaveText('Copy to clipboard')
     })
 
     await test.step('click copy and verify feedback', async () => {
       await colourPaletteEditor.exportModal.clickCopyToClipboard()
-      const buttonText = await colourPaletteEditor.exportModal.getCopyButtonText()
-      expect(buttonText).toContain('Copied')
+      await expect(colourPaletteEditor.exportModal.copyButton).toContainText('Copied')
     })
   })
   ;[
