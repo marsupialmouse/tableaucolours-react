@@ -237,7 +237,10 @@ export class ColourPaletteEditor {
         await dialog.accept()
       })
 
-      // Click the delete button using JavaScript evaluation to bypass viewport issues
+      // Click the delete button using JavaScript evaluation
+      // Note: Unlike other buttons in the UI, this button consistently fails with
+      // "Element is outside of the viewport" error even with {force: true}.
+      // JavaScript evaluation bypasses Playwright's actionability checks and works reliably.
       await this.page.evaluate(`
         const button = document.querySelector('button[title="Delete all colours"]');
         if (button) button.click();
