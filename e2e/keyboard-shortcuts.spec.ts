@@ -4,73 +4,45 @@ test.describe('Keyboard Shortcuts', () => {
   test.describe('Color Grid Navigation', () => {
     test.describe('Standard Navigation', () => {
       test('should move selection down with ArrowDown', async ({page, colourPaletteEditor}) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(0)
 
-        await test.step('select first color', async () => {
-          await colourPaletteEditor.selectColour(0)
-        })
+        await page.keyboard.press('ArrowDown')
 
-        await test.step('press ArrowDown and verify selection moved to index 1', async () => {
-          await page.keyboard.press('ArrowDown')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(1)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(1)
       })
 
       test('should move selection up with ArrowUp', async ({page, colourPaletteEditor}) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(2)
 
-        await test.step('select third color (index 2)', async () => {
-          await colourPaletteEditor.selectColour(2)
-        })
+        await page.keyboard.press('ArrowUp')
 
-        await test.step('press ArrowUp and verify selection moved to index 1', async () => {
-          await page.keyboard.press('ArrowUp')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(1)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(1)
       })
 
       test('should move selection right to next column with ArrowRight', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 7 colors (indexes 0-4 in col 1, 5-6 in col 2)', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(6)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(6)
+        await colourPaletteEditor.selectColour(0)
 
-        await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.selectColour(0)
-        })
+        await page.keyboard.press('ArrowRight')
 
-        await test.step('press ArrowRight and verify selection moved to index 5 (next column)', async () => {
-          await page.keyboard.press('ArrowRight')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(5)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(5)
       })
 
       test('should move selection left to previous column with ArrowLeft', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 11 colors (indexes 0-4 in col 1, 5-9 in col 2, 10 in col 3)', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(10)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(10)
+        await colourPaletteEditor.selectColour(7)
 
-        await test.step('select color at index 7 (row 2, col 2)', async () => {
-          await colourPaletteEditor.selectColour(7)
-        })
+        await page.keyboard.press('ArrowLeft')
 
-        await test.step('press ArrowLeft and verify selection moved to index 2 (row 2, col 1)', async () => {
-          await page.keyboard.press('ArrowLeft')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
       })
     })
 
@@ -79,76 +51,48 @@ test.describe('Keyboard Shortcuts', () => {
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(0)
 
-        await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.selectColour(0)
-        })
+        await page.keyboard.press('ArrowUp')
 
-        await test.step('press ArrowUp and verify no change', async () => {
-          await page.keyboard.press('ArrowUp')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(0)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(0)
       })
 
       test('should not change selection when at top-left and pressing ArrowLeft', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(0)
 
-        await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.selectColour(0)
-        })
+        await page.keyboard.press('ArrowLeft')
 
-        await test.step('press ArrowLeft and verify no change', async () => {
-          await page.keyboard.press('ArrowLeft')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(0)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(0)
       })
 
       test('should not change selection when at last item and pressing ArrowDown', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(5)
 
-        await test.step('select last color (index 5)', async () => {
-          await colourPaletteEditor.selectColour(5)
-        })
+        await page.keyboard.press('ArrowDown')
 
-        await test.step('press ArrowDown and verify no change', async () => {
-          await page.keyboard.press('ArrowDown')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(5)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(5)
       })
 
       test('should not change selection when at last item and pressing ArrowRight', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(5)
 
-        await test.step('select last color (index 5)', async () => {
-          await colourPaletteEditor.selectColour(5)
-        })
+        await page.keyboard.press('ArrowRight')
 
-        await test.step('press ArrowRight and verify no change', async () => {
-          await page.keyboard.press('ArrowRight')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(5)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(5)
       })
     })
 
@@ -157,57 +101,36 @@ test.describe('Keyboard Shortcuts', () => {
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors (indexes 0-4 in col 1, index 5 in col 2)', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(2)
 
-        await test.step('select middle color (index 2)', async () => {
-          await colourPaletteEditor.selectColour(2)
-        })
+        await page.keyboard.press('ArrowRight')
 
-        await test.step('press ArrowRight and verify no change (no item at index 7)', async () => {
-          await page.keyboard.press('ArrowRight')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
       })
 
       test('should not change selection when at middle of column and pressing ArrowLeft to empty slot', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(2)
 
-        await test.step('select middle color (index 2)', async () => {
-          await colourPaletteEditor.selectColour(2)
-        })
+        await page.keyboard.press('ArrowLeft')
 
-        await test.step('press ArrowLeft and verify no change (no item at index -3)', async () => {
-          await page.keyboard.press('ArrowLeft')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
       })
 
       test('should not wrap to next column when at bottom of column and pressing ArrowDown', async ({
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-        })
+        await colourPaletteEditor.addColoursWithKeyboard(5)
+        await colourPaletteEditor.selectColour(4)
 
-        await test.step('select bottom of first column (index 4)', async () => {
-          await colourPaletteEditor.selectColour(4)
-        })
+        await page.keyboard.press('ArrowDown')
 
-        await test.step('press ArrowDown and verify no change (no wrap to next column)', async () => {
-          await page.keyboard.press('ArrowDown')
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(4)
-        })
+        expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(4)
       })
     })
   })
@@ -227,7 +150,7 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select first color', async () => {
-          await colourPaletteEditor.clickColour(0)
+          await colourPaletteEditor.selectColour(0)
         })
 
         await test.step('press Shift+ArrowDown and verify color moved to index 1', async () => {
@@ -241,8 +164,7 @@ test.describe('Keyboard Shortcuts', () => {
             '#FF00FF',
             '#00FFFF',
           ])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(1)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(1)
         })
       })
 
@@ -259,7 +181,7 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select third color (index 2)', async () => {
-          await colourPaletteEditor.clickColour(2)
+          await colourPaletteEditor.selectColour(2)
         })
 
         await test.step('press Shift+ArrowUp and verify color moved to index 1', async () => {
@@ -273,8 +195,7 @@ test.describe('Keyboard Shortcuts', () => {
             '#FF00FF',
             '#00FFFF',
           ])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(1)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(1)
         })
       })
 
@@ -294,7 +215,7 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.clickColour(0)
+          await colourPaletteEditor.selectColour(0)
         })
 
         await test.step('press Shift+ArrowRight and verify color moved to index 5', async () => {
@@ -308,8 +229,7 @@ test.describe('Keyboard Shortcuts', () => {
             '#00FFFF',
             '#FF0000',
           ])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(5)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(5)
         })
       })
 
@@ -330,7 +250,7 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select color at index 6 (row 1, col 2)', async () => {
-          await colourPaletteEditor.clickColour(6)
+          await colourPaletteEditor.selectColour(6)
         })
 
         await test.step('press Shift+ArrowLeft and verify color moved to index 1 (row 1, col 1)', async () => {
@@ -345,8 +265,7 @@ test.describe('Keyboard Shortcuts', () => {
             '#FF00FF',
             '#00FFFF',
           ])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(1)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(1)
         })
       })
     })
@@ -361,15 +280,14 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.clickColour(0)
+          await colourPaletteEditor.selectColour(0)
         })
 
         await test.step('press Shift+ArrowUp and verify no change', async () => {
           await page.keyboard.press('Shift+ArrowUp')
           const colours = await colourPaletteEditor.getColours()
           expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(0)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(0)
         })
       })
 
@@ -382,15 +300,14 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select first color (index 0)', async () => {
-          await colourPaletteEditor.clickColour(0)
+          await colourPaletteEditor.selectColour(0)
         })
 
         await test.step('press Shift+ArrowLeft and verify no change', async () => {
           await page.keyboard.press('Shift+ArrowLeft')
           const colours = await colourPaletteEditor.getColours()
           expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(0)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(0)
         })
       })
 
@@ -403,15 +320,14 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select last color (index 2)', async () => {
-          await colourPaletteEditor.clickColour(2)
+          await colourPaletteEditor.selectColour(2)
         })
 
         await test.step('press Shift+ArrowDown and verify no change', async () => {
           await page.keyboard.press('Shift+ArrowDown')
           const colours = await colourPaletteEditor.getColours()
           expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
         })
       })
 
@@ -424,15 +340,14 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select last color (index 2)', async () => {
-          await colourPaletteEditor.clickColour(2)
+          await colourPaletteEditor.selectColour(2)
         })
 
         await test.step('press Shift+ArrowRight and verify no change', async () => {
           await page.keyboard.press('Shift+ArrowRight')
           const colours = await colourPaletteEditor.getColours()
           expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
         })
       })
 
@@ -452,7 +367,7 @@ test.describe('Keyboard Shortcuts', () => {
         })
 
         await test.step('select middle color (index 2)', async () => {
-          await colourPaletteEditor.clickColour(2)
+          await colourPaletteEditor.selectColour(2)
         })
 
         await test.step('press Shift+ArrowRight and verify no change (cannot move to empty slot)', async () => {
@@ -466,8 +381,7 @@ test.describe('Keyboard Shortcuts', () => {
             '#FF00FF',
             '#00FFFF',
           ])
-          const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(2)
+          expect(await colourPaletteEditor.getSelectedColourIndex()).toBe(2)
         })
       })
     })
@@ -480,7 +394,7 @@ test.describe('Keyboard Shortcuts', () => {
       })
 
       await test.step('select middle color (index 1)', async () => {
-        await colourPaletteEditor.clickColour(1)
+        await colourPaletteEditor.selectColour(1)
       })
 
       await test.step('press Delete and verify color was removed', async () => {
@@ -496,7 +410,7 @@ test.describe('Keyboard Shortcuts', () => {
       })
 
       await test.step('select middle color (index 1)', async () => {
-        await colourPaletteEditor.clickColour(1)
+        await colourPaletteEditor.selectColour(1)
       })
 
       await test.step('press Backspace and verify color was removed', async () => {
