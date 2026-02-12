@@ -50,14 +50,11 @@ test.describe('Palette Export', () => {
       expect(buttonText).toContain('Copied')
     })
   })
-
-  const exportTypeTestCases = [
+  ;[
     {selectedType: 'Regular', expectedXmlType: 'regular'},
     {selectedType: 'Sequential', expectedXmlType: 'ordered-sequential'},
     {selectedType: 'Diverging', expectedXmlType: 'ordered-diverging'},
-  ]
-
-  for (const {selectedType, expectedXmlType} of exportTypeTestCases) {
+  ].forEach(({selectedType, expectedXmlType}) => {
     test(`should export ${selectedType} palette with correct type`, async ({
       colourPaletteEditor,
     }) => {
@@ -67,7 +64,7 @@ test.describe('Palette Export', () => {
       const xmlContent = await colourPaletteEditor.exportModal.getXMLContent()
       expect(xmlContent).toContain(`type="${expectedXmlType}"`)
     })
-  }
+  })
 
   test('should close export modal', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.clickExport()
@@ -109,14 +106,11 @@ test.describe('Palette Import', () => {
     const colours = await colourPaletteEditor.getColours()
     expect(colours).toEqual(['#FF0000', '#00FF00', '#0000FF'])
   })
-
-  const importTypeTestCases = [
+  ;[
     {xmlType: 'regular', expectedType: 'Regular'},
     {xmlType: 'ordered-sequential', expectedType: 'Sequential'},
     {xmlType: 'ordered-diverging', expectedType: 'Diverging'},
-  ]
-
-  for (const {xmlType, expectedType} of importTypeTestCases) {
+  ].forEach(({xmlType, expectedType}) => {
     test(`should import ${expectedType} palette type correctly`, async ({colourPaletteEditor}) => {
       const xml = `<color-palette name="Test" type="${xmlType}">
   <color>#FF0000</color>
@@ -129,7 +123,7 @@ test.describe('Palette Import', () => {
       const selectedType = await colourPaletteEditor.getSelectedType()
       expect(selectedType).toBe(expectedType)
     })
-  }
+  })
 
   test('should show validation error for invalid XML', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.clickImport()
