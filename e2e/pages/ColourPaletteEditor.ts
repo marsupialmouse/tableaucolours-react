@@ -215,4 +215,43 @@ export class ColourPaletteEditor {
         .waitFor({state: 'attached', timeout: 5000})
     }
   }
+
+  async addColours(hexColors: string[]) {
+    const initialCount = await this.getColourCount()
+
+    // If we already have one default white color and need to add more, add (length - 1) more
+    const colorsNeeded = hexColors.length - initialCount
+    const colorsToAdd = Math.min(Math.max(0, colorsNeeded), 20 - initialCount)
+
+    // Add the required number of colors using keyboard
+    for (let i = 0; i < colorsToAdd; i++) {
+      await this.page.keyboard.press('+')
+    }
+
+    // Wait for colors to be added
+    const expectedCount = initialCount + colorsToAdd
+    if (expectedCount > initialCount) {
+      await this.page
+        .getByTestId('ColourPaletteColourListItem Component')
+        .nth(expectedCount - 1)
+        .waitFor({state: 'attached', timeout: 5000})
+    }
+
+    // Set each color to the specified hex value
+    for (let i = 0; i < hexColors.length; i++) {
+      await this.setColour(i, hexColors[i])
+    }
+  }
+
+  async getSelectedColourCount() {
+    const items = await this.getColourItems()
+    let count = 0
+    for (const item of items) {
+      const classList = await item.getAttribute('class')
+      if (classList?.includes('colour--selected')) {
+        count++
+      }
+    }
+    return count
+  }
 }
