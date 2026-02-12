@@ -260,7 +260,7 @@ export class ColourPaletteEditor {
       await this.page
         .getByTestId('ColourPaletteColourListItem Component')
         .nth(i)
-        .waitFor({state: 'attached', timeout: 5000})
+        .waitFor({state: 'visible', timeout: 5000})
 
       // Set the color's hex value
       await this.setColour(i, hexColors[i])
@@ -269,8 +269,8 @@ export class ColourPaletteEditor {
 
   async selectColour(index: number) {
     await this.clickColour(index)
-    const selectedIndex = await this.getSelectedColourIndex()
-    expect(selectedIndex).toBe(index)
+    const colourItem = this.page.getByTestId('ColourPaletteColourListItem Component').nth(index)
+    await expect(colourItem).toHaveClass(/selected/)
   }
 
   async getSelectedColourCount() {
