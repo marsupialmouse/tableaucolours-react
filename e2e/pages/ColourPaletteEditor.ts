@@ -230,25 +230,34 @@ export class ColourPaletteEditor {
   async setColours(hexColors: string[]) {
     const initialCount = await this.getColourCount()
 
-    // Delete all existing colors if there's more than 1
-    if (initialCount > 1) {
-      const deleteAllButton = this.page.locator('button[title="Delete all colours"]')
-      await deleteAllButton.scrollIntoViewIfNeeded()
-      await deleteAllButton.click({force: true})
-      // Wait for colors to be deleted (should have 1 default white color left)
+    // Delete all existing colors if there are any
+    if (initialCount > 0) {
+      // Set up dialog handler
+      this.page.once('dialog', async (dialog) => {
+        await dialog.accept()
+      })
+
+      // Click the delete button using JavaScript evaluation to bypass viewport issues
+      await this.page.evaluate(`
+        const button = document.querySelector('button[title="Delete all colours"]');
+        if (button) button.click();
+      `)
+
+      // Wait for colors to be deleted (should have 0 colors)
       await this.page.waitForFunction(
-        `document.querySelectorAll('[data-testid="ColourPaletteColourListItem Component"]').length === 1`,
+        `document.querySelectorAll('[data-testid="ColourPaletteColourListItem Component"]').length === 0`,
         {timeout: 5000}
       )
     }
 
-    // If we need more colors than the 1 default, add them
-    if (hexColors.length > 1) {
-      for (let i = 1; i < hexColors.length; i++) {
-        await this.page.keyboard.press('+')
-      }
+    // Add all the colors needed
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    for (let i = 0; i < hexColors.length; i++) {
+      await this.page.keyboard.press('+')
+    }
 
-      // Wait for colors to be added
+    // Wait for colors to be added
+    if (hexColors.length > 0) {
       await this.page
         .getByTestId('ColourPaletteColourListItem Component')
         .nth(hexColors.length - 1)
