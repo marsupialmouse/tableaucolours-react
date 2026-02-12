@@ -237,13 +237,9 @@ export class ColourPaletteEditor {
         await dialog.accept()
       })
 
-      // The "Delete all colours" button is hidden in the DOM (display:none or visibility:hidden)
-      // when setColours() is called. Playwright correctly refuses to click hidden elements.
-      // Use JavaScript evaluation to click it directly, bypassing visibility checks.
-      await this.page.evaluate(`
-        const button = document.querySelector('button[title="Delete all colours"]');
-        if (button) button.click();
-      `)
+      // Click the delete all button
+      // Use {force: true} like clickAddColour() to handle icon button click issues
+      await this.page.locator('button[title="Delete all colours"]').click({force: true})
 
       // Wait for colors to be deleted (should have 0 colors)
       await this.page.waitForFunction(
