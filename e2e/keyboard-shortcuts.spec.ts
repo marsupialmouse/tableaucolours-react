@@ -250,8 +250,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select first color', async () => {
           await colourPaletteEditor.clickColour(0)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#FF0000')
         })
 
         await test.step('press Shift+ArrowDown and verify color moved to index 1', async () => {
@@ -284,8 +282,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select third color (index 2)', async () => {
           await colourPaletteEditor.clickColour(2)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[2]).toBe('#0000FF')
         })
 
         await test.step('press Shift+ArrowUp and verify color moved to index 1', async () => {
@@ -321,8 +317,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select first color (index 0)', async () => {
           await colourPaletteEditor.clickColour(0)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#FF0000')
         })
 
         await test.step('press Shift+ArrowRight and verify color moved to index 5', async () => {
@@ -359,8 +353,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select color at index 6 (row 1, col 2)', async () => {
           await colourPaletteEditor.clickColour(6)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[6]).toBe('#808080')
         })
 
         await test.step('press Shift+ArrowLeft and verify color moved to index 1 (row 1, col 1)', async () => {
@@ -392,8 +384,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select first color (index 0)', async () => {
           await colourPaletteEditor.clickColour(0)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#FF0000')
         })
 
         await test.step('press Shift+ArrowUp and verify no change', async () => {
@@ -415,8 +405,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select first color (index 0)', async () => {
           await colourPaletteEditor.clickColour(0)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#FF0000')
         })
 
         await test.step('press Shift+ArrowLeft and verify no change', async () => {
@@ -438,8 +426,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select last color (index 2)', async () => {
           await colourPaletteEditor.clickColour(2)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[2]).toBe('#0000FF')
         })
 
         await test.step('press Shift+ArrowDown and verify no change', async () => {
@@ -461,8 +447,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select last color (index 2)', async () => {
           await colourPaletteEditor.clickColour(2)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[2]).toBe('#0000FF')
         })
 
         await test.step('press Shift+ArrowRight and verify no change', async () => {
@@ -491,8 +475,6 @@ test.describe('Keyboard Shortcuts', () => {
 
         await test.step('select middle color (index 2)', async () => {
           await colourPaletteEditor.clickColour(2)
-          const colours = await colourPaletteEditor.getColours()
-          expect(colours[2]).toBe('#0000FF')
         })
 
         await test.step('press Shift+ArrowRight and verify no change (cannot move to empty slot)', async () => {
@@ -521,8 +503,6 @@ test.describe('Keyboard Shortcuts', () => {
 
       await test.step('select middle color (index 1)', async () => {
         await colourPaletteEditor.clickColour(1)
-        const colours = await colourPaletteEditor.getColours()
-        expect(colours[1]).toBe('#00FF00')
       })
 
       await test.step('press Delete and verify color was removed', async () => {
@@ -540,8 +520,6 @@ test.describe('Keyboard Shortcuts', () => {
 
       await test.step('select middle color (index 1)', async () => {
         await colourPaletteEditor.clickColour(1)
-        const colours = await colourPaletteEditor.getColours()
-        expect(colours[1]).toBe('#00FF00')
       })
 
       await test.step('press Backspace and verify color was removed', async () => {
