@@ -272,16 +272,4 @@ export class ColourPaletteEditor {
     const colourItem = this.page.getByTestId('ColourPaletteColourListItem Component').nth(index)
     await expect(colourItem).toHaveClass(/selected/)
   }
-
-  async getSelectedColourCount() {
-    const items = await this.getColourItems()
-    let count = 0
-    for (const item of items) {
-      const classList = await item.getAttribute('class')
-      if (classList?.includes('colour--selected')) {
-        count++
-      }
-    }
-    return count
-  }
 }
