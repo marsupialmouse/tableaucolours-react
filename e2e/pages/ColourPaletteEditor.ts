@@ -180,13 +180,24 @@ export class ColourPaletteEditor {
 
   async getSelectedColourIndex() {
     const items = await this.getColourItems()
+    let selectedIndex = -1
+    let selectedCount = 0
+
     for (let index = 0; index < items.length; index++) {
       const classList = await items[index].getAttribute('class')
       if (classList?.includes('colour--selected')) {
-        return index
+        selectedIndex = index
+        selectedCount++
       }
     }
-    return -1
+
+    if (selectedCount > 1) {
+      throw new Error(
+        `Expected exactly one selected color, but found ${String(selectedCount)} selected colors`
+      )
+    }
+
+    return selectedIndex
   }
 
   async clickColour(index: number) {
@@ -216,7 +227,7 @@ export class ColourPaletteEditor {
     }
   }
 
-  async addColours(hexColors: string[]) {
+  async setColours(hexColors: string[]) {
     const initialCount = await this.getColourCount()
 
     // If we already have one default white color and need to add more, add (length - 1) more
