@@ -36,6 +36,8 @@ test.describe('Keyboard Shortcuts', () => {
           await page.keyboard.press('ArrowUp')
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
           expect(selectedIndex).toBe(0)
+          const selectedCount = await colourPaletteEditor.getSelectedColourCount()
+          expect(selectedCount).toBe(1)
         })
       })
 
@@ -64,20 +66,20 @@ test.describe('Keyboard Shortcuts', () => {
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors (indexes 0-4 in col 1, index 5 in col 2)', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
+        await test.step('setup: create 11 colors (indexes 0-4 in col 1, 5-9 in col 2, 10 in col 3)', async () => {
+          await colourPaletteEditor.addColoursWithKeyboard(10)
         })
 
-        await test.step('select last color (index 5)', async () => {
-          await colourPaletteEditor.clickColour(5)
+        await test.step('select color at index 7 (row 2, col 2)', async () => {
+          await colourPaletteEditor.clickColour(7)
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(5)
+          expect(selectedIndex).toBe(7)
         })
 
-        await test.step('press ArrowLeft and verify selection moved to index 0 (previous column)', async () => {
+        await test.step('press ArrowLeft and verify selection moved to index 2 (row 2, col 1)', async () => {
           await page.keyboard.press('ArrowLeft')
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
-          expect(selectedIndex).toBe(0)
+          expect(selectedIndex).toBe(2)
         })
       })
     })
@@ -238,8 +240,14 @@ test.describe('Keyboard Shortcuts', () => {
     test.describe('Standard Reordering', () => {
       test('should move color down with Shift+ArrowDown', async ({page, colourPaletteEditor}) => {
         await test.step('setup: create 6 colors with distinct colors', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-          await colourPaletteEditor.setColour(0, '#FF0000')
+          await colourPaletteEditor.addColours([
+            '#FF0000',
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
         })
 
         await test.step('select first color', async () => {
@@ -251,16 +259,29 @@ test.describe('Keyboard Shortcuts', () => {
         await test.step('press Shift+ArrowDown and verify color moved to index 1', async () => {
           await page.keyboard.press('Shift+ArrowDown')
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[1]).toBe('#FF0000')
+          expect(colours).toEqual([
+            '#00FF00',
+            '#FF0000',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
           expect(selectedIndex).toBe(1)
         })
       })
 
       test('should move color up with Shift+ArrowUp', async ({page, colourPaletteEditor}) => {
-        await test.step('setup: create 6 colors with distinct color at index 1', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-          await colourPaletteEditor.setColour(1, '#00FF00')
+        await test.step('setup: create 6 colors with distinct colors', async () => {
+          await colourPaletteEditor.addColours([
+            '#FF0000',
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
         })
 
         await test.step('select second color (index 1)', async () => {
@@ -272,7 +293,14 @@ test.describe('Keyboard Shortcuts', () => {
         await test.step('press Shift+ArrowUp and verify color moved to index 0', async () => {
           await page.keyboard.press('Shift+ArrowUp')
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#00FF00')
+          expect(colours).toEqual([
+            '#00FF00',
+            '#FF0000',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
           expect(selectedIndex).toBe(0)
         })
@@ -282,21 +310,34 @@ test.describe('Keyboard Shortcuts', () => {
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors with distinct color at index 0', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-          await colourPaletteEditor.setColour(0, '#0000FF')
+        await test.step('setup: create 6 colors with distinct colors', async () => {
+          await colourPaletteEditor.addColours([
+            '#FF0000',
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
         })
 
         await test.step('select first color (index 0)', async () => {
           await colourPaletteEditor.clickColour(0)
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#0000FF')
+          expect(colours[0]).toBe('#FF0000')
         })
 
         await test.step('press Shift+ArrowRight and verify color moved to index 5', async () => {
           await page.keyboard.press('Shift+ArrowRight')
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[5]).toBe('#0000FF')
+          expect(colours).toEqual([
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+            '#FF0000',
+          ])
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
           expect(selectedIndex).toBe(5)
         })
@@ -306,21 +347,34 @@ test.describe('Keyboard Shortcuts', () => {
         page,
         colourPaletteEditor,
       }) => {
-        await test.step('setup: create 6 colors with distinct color at index 5', async () => {
-          await colourPaletteEditor.addColoursWithKeyboard(5)
-          await colourPaletteEditor.setColour(5, '#FFFF00')
+        await test.step('setup: create 6 colors with distinct colors', async () => {
+          await colourPaletteEditor.addColours([
+            '#FF0000',
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+            '#00FFFF',
+          ])
         })
 
         await test.step('select last color (index 5)', async () => {
           await colourPaletteEditor.clickColour(5)
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[5]).toBe('#FFFF00')
+          expect(colours[5]).toBe('#00FFFF')
         })
 
         await test.step('press Shift+ArrowLeft and verify color moved to index 0', async () => {
           await page.keyboard.press('Shift+ArrowLeft')
           const colours = await colourPaletteEditor.getColours()
-          expect(colours[0]).toBe('#FFFF00')
+          expect(colours).toEqual([
+            '#00FFFF',
+            '#FF0000',
+            '#00FF00',
+            '#0000FF',
+            '#FFFF00',
+            '#FF00FF',
+          ])
           const selectedIndex = await colourPaletteEditor.getSelectedColourIndex()
           expect(selectedIndex).toBe(0)
         })
@@ -453,10 +507,7 @@ test.describe('Keyboard Shortcuts', () => {
   test.describe('Color Deletion', () => {
     test('should delete selected color with Delete key', async ({page, colourPaletteEditor}) => {
       await test.step('setup: create 3 colors with distinct colors', async () => {
-        await colourPaletteEditor.addColoursWithKeyboard(2)
-        await colourPaletteEditor.setColour(0, '#FF0000')
-        await colourPaletteEditor.setColour(1, '#00FF00')
-        await colourPaletteEditor.setColour(2, '#0000FF')
+        await colourPaletteEditor.addColours(['#FF0000', '#00FF00', '#0000FF'])
       })
 
       await test.step('select middle color (index 1)', async () => {
@@ -475,10 +526,7 @@ test.describe('Keyboard Shortcuts', () => {
 
     test('should delete selected color with Backspace key', async ({page, colourPaletteEditor}) => {
       await test.step('setup: create 3 colors with distinct colors', async () => {
-        await colourPaletteEditor.addColoursWithKeyboard(2)
-        await colourPaletteEditor.setColour(0, '#FF0000')
-        await colourPaletteEditor.setColour(1, '#00FF00')
-        await colourPaletteEditor.setColour(2, '#0000FF')
+        await colourPaletteEditor.addColours(['#FF0000', '#00FF00', '#0000FF'])
       })
 
       await test.step('select middle color (index 1)', async () => {
@@ -555,27 +603,20 @@ test.describe('Keyboard Shortcuts', () => {
   })
 
   test.describe('Add Color Shortcut', () => {
-    test('should add new color with + key', async ({colourPaletteEditor}) => {
-      await test.step('verify initial color count', async () => {
-        const initialCount = await colourPaletteEditor.getColourCount()
-        expect(initialCount).toBe(1)
-      })
+    test('should add new color with + key', async ({page, colourPaletteEditor}) => {
+      const initialCount = await colourPaletteEditor.getColourCount()
 
-      await test.step('press + key and verify new color was added', async () => {
-        await colourPaletteEditor.addColoursWithKeyboard(1)
-        const newCount = await colourPaletteEditor.getColourCount()
-        expect(newCount).toBe(2)
-      })
+      await page.keyboard.press('+')
 
-      await test.step('verify the new color is at the end', async () => {
-        const colours = await colourPaletteEditor.getColours()
-        expect(colours.length).toBe(2)
-        expect(colours[1]).toBe('#FFFFFF')
-      })
+      const newCount = await colourPaletteEditor.getColourCount()
+      expect(newCount).toBe(initialCount + 1)
+      const colours = await colourPaletteEditor.getColours()
+      expect(colours[newCount - 1]).toBe('#FFFFFF')
     })
 
     test('should not add color when at maximum limit (20 colors)', async ({
       colourPaletteEditor,
+      page,
     }) => {
       await test.step('setup: create 20 colors (maximum)', async () => {
         await colourPaletteEditor.addColoursWithKeyboard(19)
@@ -583,11 +624,14 @@ test.describe('Keyboard Shortcuts', () => {
         expect(count).toBe(20)
       })
 
-      await test.step('press + key and verify no new color was added', async () => {
-        await colourPaletteEditor.addColoursWithKeyboard(1)
-        const count = await colourPaletteEditor.getColourCount()
-        expect(count).toBe(20)
-      })
+      const colorsBeforeAdd = await colourPaletteEditor.getColours()
+
+      await page.keyboard.press('+')
+
+      const count = await colourPaletteEditor.getColourCount()
+      expect(count).toBe(20)
+      const colorsAfterAdd = await colourPaletteEditor.getColours()
+      expect(colorsAfterAdd).toEqual(colorsBeforeAdd)
     })
   })
 })
