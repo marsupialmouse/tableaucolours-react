@@ -1,4 +1,4 @@
-import {Page} from '@playwright/test'
+import {Page, expect} from '@playwright/test'
 import {ImportModal} from './ImportModal'
 import {ExportModal} from './ExportModal'
 import {ImageExtractorModal} from './ImageExtractorModal'
@@ -237,9 +237,12 @@ export class ColourPaletteEditor {
         await dialog.accept()
       })
 
-      // Click the delete all button
-      // Use {force: true} like clickAddColour() to handle icon button click issues
-      await this.page.locator('button[title="Delete all colours"]').click({force: true})
+      // Click the delete all button using evaluate() to bypass viewport checks
+      // The button may be outside viewport when there are many colors
+      await this.page.evaluate(`
+        const button = document.querySelector('button[title="Delete all colours"]');
+        if (button) button.click();
+      `)
 
       // Wait for colors to be deleted (should have 0 colors)
       await this.page.waitForFunction(
@@ -248,24 +251,26 @@ export class ColourPaletteEditor {
       )
     }
 
-    // Add all the colors needed
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
+    // Add colors one at a time, waiting for each to become visible before setting its hex value
     for (let i = 0; i < hexColors.length; i++) {
+      // Add a color
       await this.page.keyboard.press('+')
-    }
 
-    // Wait for colors to be added
-    if (hexColors.length > 0) {
+      // Wait for the color to become visible
       await this.page
         .getByTestId('ColourPaletteColourListItem Component')
-        .nth(hexColors.length - 1)
+        .nth(i)
         .waitFor({state: 'attached', timeout: 5000})
-    }
 
-    // Set each color to the specified hex value
-    for (let i = 0; i < hexColors.length; i++) {
+      // Set the color's hex value
       await this.setColour(i, hexColors[i])
     }
+  }
+
+  async selectColour(index: number) {
+    await this.clickColour(index)
+    const selectedIndex = await this.getSelectedColourIndex()
+    expect(selectedIndex).toBe(index)
   }
 
   async getSelectedColourCount() {
