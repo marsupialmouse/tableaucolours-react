@@ -230,21 +230,28 @@ export class ColourPaletteEditor {
   async setColours(hexColors: string[]) {
     const initialCount = await this.getColourCount()
 
-    // If we already have one default white color and need to add more, add (length - 1) more
-    const colorsNeeded = hexColors.length - initialCount
-    const colorsToAdd = Math.min(Math.max(0, colorsNeeded), 20 - initialCount)
-
-    // Add the required number of colors using keyboard
-    for (let i = 0; i < colorsToAdd; i++) {
-      await this.page.keyboard.press('+')
+    // Delete all existing colors if there's more than 1
+    if (initialCount > 1) {
+      const deleteAllButton = this.page.locator('button[title="Delete all colours"]')
+      await deleteAllButton.scrollIntoViewIfNeeded()
+      await deleteAllButton.click({force: true})
+      // Wait for colors to be deleted (should have 1 default white color left)
+      await this.page.waitForFunction(
+        `document.querySelectorAll('[data-testid="ColourPaletteColourListItem Component"]').length === 1`,
+        {timeout: 5000}
+      )
     }
 
-    // Wait for colors to be added
-    const expectedCount = initialCount + colorsToAdd
-    if (expectedCount > initialCount) {
+    // If we need more colors than the 1 default, add them
+    if (hexColors.length > 1) {
+      for (let i = 1; i < hexColors.length; i++) {
+        await this.page.keyboard.press('+')
+      }
+
+      // Wait for colors to be added
       await this.page
         .getByTestId('ColourPaletteColourListItem Component')
-        .nth(expectedCount - 1)
+        .nth(hexColors.length - 1)
         .waitFor({state: 'attached', timeout: 5000})
     }
 
