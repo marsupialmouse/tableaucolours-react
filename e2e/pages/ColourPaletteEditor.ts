@@ -142,6 +142,14 @@ export class ColourPaletteEditor {
     return parseInt(text?.replace('%', '') ?? '100', 10)
   }
 
+  async getImageDimensions(): Promise<{width: number; height: number}> {
+    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
+    const width: number = await this.imageCanvasElement.evaluate((canvas: any) => canvas.width)
+    const height: number = await this.imageCanvasElement.evaluate((canvas: any) => canvas.height)
+    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
+    return {width, height}
+  }
+
   async getHintText(): Promise<string | null> {
     return this.imageCanvasHint.textContent()
   }

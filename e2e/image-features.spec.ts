@@ -128,70 +128,111 @@ test.describe('Image Zoom', () => {
   })
 
   test('should zoom in with Shift+Wheel', async ({colourPaletteEditor, page}) => {
-    await colourPaletteEditor.selectColour(0)
-    await colourPaletteEditor.uploadImage(testImagePath)
-    const initialZoom = await colourPaletteEditor.getZoomPercentage()
-
-    await colourPaletteEditor.imageCanvasImage.hover()
-    await page.keyboard.down('Shift')
-
-    await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
-      el.dispatchEvent(new WheelEvent('wheel', {deltaY: -100, shiftKey: true, bubbles: true}))
+    await test.step('setup colour and image', async () => {
+      await colourPaletteEditor.setColour(0, '#FF0000')
+      await colourPaletteEditor.selectColour(0)
+      await colourPaletteEditor.uploadImage(testImagePath)
     })
 
-    await page.keyboard.up('Shift')
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+    const initialDimensions = await colourPaletteEditor.getImageDimensions()
 
-    const newZoom = await colourPaletteEditor.getZoomPercentage()
-    expect(newZoom).toBeGreaterThan(initialZoom)
+    await test.step('perform zoom in with Shift+Wheel', async () => {
+      await colourPaletteEditor.imageCanvasImage.hover()
+      await page.keyboard.down('Shift')
+
+      await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
+        el.dispatchEvent(new WheelEvent('wheel', {deltaY: -100, shiftKey: true, bubbles: true}))
+      })
+
+      await page.keyboard.up('Shift')
+    })
+
+    await test.step('verify zoom increased', async () => {
+      const newZoom = await colourPaletteEditor.getZoomPercentage()
+      expect(newZoom).toBeGreaterThan(initialZoom)
+
+      const newDimensions = await colourPaletteEditor.getImageDimensions()
+      expect(newDimensions.width).toBeGreaterThan(initialDimensions.width)
+      expect(newDimensions.height).toBeGreaterThan(initialDimensions.height)
+    })
   })
 
   test('should zoom out with Shift+Wheel', async ({colourPaletteEditor, page}) => {
-    await colourPaletteEditor.selectColour(0)
-    await colourPaletteEditor.uploadImage(testImagePath)
-    const initialZoom = await colourPaletteEditor.getZoomPercentage()
-
-    await colourPaletteEditor.imageCanvasImage.hover()
-    await page.keyboard.down('Shift')
-
-    await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
-      el.dispatchEvent(new WheelEvent('wheel', {deltaY: 100, shiftKey: true, bubbles: true}))
+    await test.step('setup colour and image', async () => {
+      await colourPaletteEditor.setColour(0, '#FF0000')
+      await colourPaletteEditor.selectColour(0)
+      await colourPaletteEditor.uploadImage(testImagePath)
     })
 
-    await page.keyboard.up('Shift')
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+    const initialDimensions = await colourPaletteEditor.getImageDimensions()
 
-    const newZoom = await colourPaletteEditor.getZoomPercentage()
-    expect(newZoom).toBeLessThan(initialZoom)
+    await test.step('perform zoom out with Shift+Wheel', async () => {
+      await colourPaletteEditor.imageCanvasImage.hover()
+      await page.keyboard.down('Shift')
+
+      await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
+        el.dispatchEvent(new WheelEvent('wheel', {deltaY: 100, shiftKey: true, bubbles: true}))
+      })
+
+      await page.keyboard.up('Shift')
+    })
+
+    await test.step('verify zoom decreased', async () => {
+      const newZoom = await colourPaletteEditor.getZoomPercentage()
+      expect(newZoom).toBeLessThan(initialZoom)
+
+      const newDimensions = await colourPaletteEditor.getImageDimensions()
+      expect(newDimensions.width).toBeLessThan(initialDimensions.width)
+      expect(newDimensions.height).toBeLessThan(initialDimensions.height)
+    })
   })
 
   test('should zoom in with zoom in button', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.uploadImage(testImagePath)
     const initialZoom = await colourPaletteEditor.getZoomPercentage()
+    const initialDimensions = await colourPaletteEditor.getImageDimensions()
 
     await colourPaletteEditor.imageZoomInButton.click()
 
     const newZoom = await colourPaletteEditor.getZoomPercentage()
     expect(newZoom).toBeGreaterThan(initialZoom)
+
+    const newDimensions = await colourPaletteEditor.getImageDimensions()
+    expect(newDimensions.width).toBeGreaterThan(initialDimensions.width)
+    expect(newDimensions.height).toBeGreaterThan(initialDimensions.height)
   })
 
   test('should zoom out with zoom out button', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.uploadImage(testImagePath)
     const initialZoom = await colourPaletteEditor.getZoomPercentage()
+    const initialDimensions = await colourPaletteEditor.getImageDimensions()
 
     await colourPaletteEditor.imageZoomOutButton.click()
 
     const newZoom = await colourPaletteEditor.getZoomPercentage()
     expect(newZoom).toBeLessThan(initialZoom)
+
+    const newDimensions = await colourPaletteEditor.getImageDimensions()
+    expect(newDimensions.width).toBeLessThan(initialDimensions.width)
+    expect(newDimensions.height).toBeLessThan(initialDimensions.height)
   })
 
   test('should zoom with slider', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.uploadImage(testImagePath)
     const initialZoom = await colourPaletteEditor.getZoomPercentage()
+    const initialDimensions = await colourPaletteEditor.getImageDimensions()
 
     // Move slider to the right (higher value = more zoom)
     await colourPaletteEditor.imageZoomSlider.fill('75')
 
     const newZoom = await colourPaletteEditor.getZoomPercentage()
     expect(newZoom).toBeGreaterThan(initialZoom)
+
+    const newDimensions = await colourPaletteEditor.getImageDimensions()
+    expect(newDimensions.width).toBeGreaterThan(initialDimensions.width)
+    expect(newDimensions.height).toBeGreaterThan(initialDimensions.height)
   })
 })
 
@@ -202,21 +243,22 @@ test.describe('Canvas Hints', () => {
     colourPaletteEditor,
   }) => {
     const hintText = await colourPaletteEditor.getHintText()
-    expect(hintText).toContain('Open')
-    expect(hintText).toContain('paste')
-    expect(hintText).toContain('drop')
+    expect(hintText).toBe('Open, paste or drop an image to get started')
   })
 
   test('should show hint to select colour after image loaded', async ({colourPaletteEditor}) => {
     await colourPaletteEditor.uploadImage(testImagePath)
     await expect(colourPaletteEditor.imageCanvasElement).toBeVisible()
 
-    await expect(colourPaletteEditor.imageCanvasHint).toContainText('Select a colour')
+    await expect(colourPaletteEditor.imageCanvasHint).toHaveText(
+      'Select a colour in the palette to pick colours from the image'
+    )
   })
 
   test('should hide hint when colour is selected and image is loaded', async ({
     colourPaletteEditor,
   }) => {
+    await colourPaletteEditor.setColour(0, '#FF0000')
     await colourPaletteEditor.selectColour(0)
     await colourPaletteEditor.uploadImage(testImagePath)
 
