@@ -126,4 +126,223 @@ test.describe('Image Zoom', () => {
     await colourPaletteEditor.uploadImage(testImagePath)
     await expect(colourPaletteEditor.imageZoomSlider).toBeVisible()
   })
+
+  test('should zoom in with Shift+Wheel', async ({colourPaletteEditor, page}) => {
+    await colourPaletteEditor.selectColour(0)
+    await colourPaletteEditor.uploadImage(testImagePath)
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+
+    await colourPaletteEditor.imageCanvasImage.hover()
+    await page.keyboard.down('Shift')
+
+    await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
+      el.dispatchEvent(new WheelEvent('wheel', {deltaY: -100, shiftKey: true, bubbles: true}))
+    })
+
+    await page.keyboard.up('Shift')
+
+    const newZoom = await colourPaletteEditor.getZoomPercentage()
+    expect(newZoom).toBeGreaterThan(initialZoom)
+  })
+
+  test('should zoom out with Shift+Wheel', async ({colourPaletteEditor, page}) => {
+    await colourPaletteEditor.selectColour(0)
+    await colourPaletteEditor.uploadImage(testImagePath)
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+
+    await colourPaletteEditor.imageCanvasImage.hover()
+    await page.keyboard.down('Shift')
+
+    await colourPaletteEditor.imageCanvasImage.evaluate((el) => {
+      el.dispatchEvent(new WheelEvent('wheel', {deltaY: 100, shiftKey: true, bubbles: true}))
+    })
+
+    await page.keyboard.up('Shift')
+
+    const newZoom = await colourPaletteEditor.getZoomPercentage()
+    expect(newZoom).toBeLessThan(initialZoom)
+  })
+
+  test('should zoom in with zoom in button', async ({colourPaletteEditor}) => {
+    await colourPaletteEditor.uploadImage(testImagePath)
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+
+    await colourPaletteEditor.imageZoomInButton.click()
+
+    const newZoom = await colourPaletteEditor.getZoomPercentage()
+    expect(newZoom).toBeGreaterThan(initialZoom)
+  })
+
+  test('should zoom out with zoom out button', async ({colourPaletteEditor}) => {
+    await colourPaletteEditor.uploadImage(testImagePath)
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+
+    await colourPaletteEditor.imageZoomOutButton.click()
+
+    const newZoom = await colourPaletteEditor.getZoomPercentage()
+    expect(newZoom).toBeLessThan(initialZoom)
+  })
+
+  test('should zoom with slider', async ({colourPaletteEditor}) => {
+    await colourPaletteEditor.uploadImage(testImagePath)
+    const initialZoom = await colourPaletteEditor.getZoomPercentage()
+
+    // Move slider to the right (higher value = more zoom)
+    await colourPaletteEditor.imageZoomSlider.fill('75')
+
+    const newZoom = await colourPaletteEditor.getZoomPercentage()
+    expect(newZoom).toBeGreaterThan(initialZoom)
+  })
+})
+
+test.describe('Canvas Hints', () => {
+  const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
+
+  test('should show initial hint to open, paste or drop an image', async ({
+    colourPaletteEditor,
+  }) => {
+    const hintText = await colourPaletteEditor.getHintText()
+    expect(hintText).toContain('Open')
+    expect(hintText).toContain('paste')
+    expect(hintText).toContain('drop')
+  })
+
+  test('should show hint to select colour after image loaded', async ({colourPaletteEditor}) => {
+    await colourPaletteEditor.uploadImage(testImagePath)
+    await expect(colourPaletteEditor.imageCanvasElement).toBeVisible()
+
+    await expect(colourPaletteEditor.imageCanvasHint).toContainText('Select a colour')
+  })
+
+  test('should hide hint when colour is selected and image is loaded', async ({
+    colourPaletteEditor,
+  }) => {
+    await colourPaletteEditor.selectColour(0)
+    await colourPaletteEditor.uploadImage(testImagePath)
+
+    await expect(colourPaletteEditor.imageCanvasHint).not.toBeVisible()
+  })
+})
+
+test.describe('Drag and Drop', () => {
+  const testImagePath = join(__dirname, 'fixtures', 'test-images', 'sample.png')
+
+  test('should show drop target overlay when dragging image over canvas', async ({
+    colourPaletteEditor,
+  }) => {
+    await colourPaletteEditor.imageCanvas.evaluate((el) => {
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(new File([''], 'test.png', {type: 'image/png'}))
+      el.dispatchEvent(new DragEvent('dragenter', {dataTransfer, bubbles: true}))
+    })
+
+    await expect(colourPaletteEditor.imageDropTarget).toBeVisible()
+  })
+
+  test('should hide drop target overlay when drag leaves canvas', async ({colourPaletteEditor}) => {
+    await test.step('trigger dragenter to show overlay', async () => {
+      await colourPaletteEditor.imageCanvas.evaluate((el) => {
+        const dataTransfer = new DataTransfer()
+        dataTransfer.items.add(new File([''], 'test.png', {type: 'image/png'}))
+        el.dispatchEvent(new DragEvent('dragenter', {dataTransfer, bubbles: true}))
+      })
+
+      await expect(colourPaletteEditor.imageDropTarget).toBeVisible()
+    })
+
+    await test.step('trigger dragleave on drop target to hide overlay', async () => {
+      await colourPaletteEditor.imageDropTarget.evaluate((el) => {
+        el.dispatchEvent(new DragEvent('dragleave', {bubbles: true}))
+      })
+
+      await expect(colourPaletteEditor.imageDropTarget).not.toBeVisible()
+    })
+  })
+
+  test('should load image when dropped on canvas', async ({colourPaletteEditor, page}) => {
+    const fs = await import('fs')
+    const imageBuffer = fs.readFileSync(testImagePath)
+    const base64Image = imageBuffer.toString('base64')
+
+    await page.evaluate(
+      ({base64, canvasSelector}) => {
+        const canvas = document.querySelector(canvasSelector)
+        if (!canvas) throw new Error('Canvas not found')
+
+        const byteCharacters = atob(base64)
+        const byteArray = new Uint8Array(byteCharacters.length)
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArray[i] = byteCharacters.charCodeAt(i)
+        }
+        const blob = new Blob([byteArray], {type: 'image/png'})
+        const file = new File([blob], 'test.png', {type: 'image/png'})
+
+        const dataTransfer = new DataTransfer()
+        dataTransfer.items.add(file)
+
+        canvas.dispatchEvent(new DragEvent('drop', {dataTransfer, bubbles: true}))
+      },
+      {
+        base64: base64Image,
+        canvasSelector: '[data-testid="ImageColourPickerImageCanvas Component"]',
+      }
+    )
+
+    await expect(colourPaletteEditor.imageCanvasElement).toBeVisible()
+    await expect(colourPaletteEditor.extractButton).toBeEnabled()
+  })
+
+  test('should replace existing image when new image is dropped', async ({
+    colourPaletteEditor,
+    page,
+  }) => {
+    await colourPaletteEditor.uploadImage(testImagePath)
+    await expect(colourPaletteEditor.extractButton).toBeEnabled()
+
+    const fs = await import('fs')
+    const imageBuffer = fs.readFileSync(testImagePath)
+    const base64Image = imageBuffer.toString('base64')
+
+    await page.evaluate(
+      ({base64, canvasSelector}) => {
+        const canvas = document.querySelector(canvasSelector)
+        if (!canvas) throw new Error('Canvas not found')
+
+        const byteCharacters = atob(base64)
+        const byteArray = new Uint8Array(byteCharacters.length)
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteArray[i] = byteCharacters.charCodeAt(i)
+        }
+        const blob = new Blob([byteArray], {type: 'image/png'})
+        const file = new File([blob], 'replacement.png', {type: 'image/png'})
+
+        const dataTransfer = new DataTransfer()
+        dataTransfer.items.add(file)
+
+        canvas.dispatchEvent(new DragEvent('drop', {dataTransfer, bubbles: true}))
+      },
+      {
+        base64: base64Image,
+        canvasSelector: '[data-testid="ImageColourPickerImageCanvas Component"]',
+      }
+    )
+
+    await expect(colourPaletteEditor.imageCanvasElement).toBeVisible()
+    await expect(colourPaletteEditor.extractButton).toBeEnabled()
+  })
+
+  test('should ignore non-image files dropped on canvas', async ({colourPaletteEditor, page}) => {
+    await page.evaluate((canvasSelector) => {
+      const canvas = document.querySelector(canvasSelector)
+      if (!canvas) throw new Error('Canvas not found')
+
+      const file = new File(['hello world'], 'test.txt', {type: 'text/plain'})
+      const dataTransfer = new DataTransfer()
+      dataTransfer.items.add(file)
+
+      canvas.dispatchEvent(new DragEvent('drop', {dataTransfer, bubbles: true}))
+    }, '[data-testid="ImageColourPickerImageCanvas Component"]')
+
+    await expect(colourPaletteEditor.extractButton).toBeDisabled()
+  })
 })

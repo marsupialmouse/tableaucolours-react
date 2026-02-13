@@ -97,6 +97,10 @@ export class ColourPaletteEditor {
     return this.page.getByTestId('ImageColourPickerImageCanvas Component')
   }
 
+  get imageCanvasImage() {
+    return this.page.getByTestId('ImageColourPickerImageCanvas Image')
+  }
+
   get imageCanvasElement() {
     return this.page.getByTestId('ImageColourPickerImage Canvas')
   }
@@ -111,6 +115,35 @@ export class ColourPaletteEditor {
 
   get imageZoomSlider() {
     return this.page.getByTestId('ImageZoom Slider')
+  }
+
+  get imageZoomInButton() {
+    return this.page.getByTestId('ImageZoom Zoom In')
+  }
+
+  get imageZoomOutButton() {
+    return this.page.getByTestId('ImageZoom Zoom Out')
+  }
+
+  get imageZoomPercentage() {
+    return this.page.getByTestId('ImageZoom Percentage')
+  }
+
+  get imageCanvasHint() {
+    return this.page.getByTestId('ImageColourPickerImageCanvas Hint')
+  }
+
+  get imageDropTarget() {
+    return this.page.getByTestId('ImageColourPickerImageCanvas Drop Target')
+  }
+
+  async getZoomPercentage(): Promise<number> {
+    const text = await this.imageZoomPercentage.textContent()
+    return parseInt(text?.replace('%', '') ?? '100', 10)
+  }
+
+  async getHintText(): Promise<string | null> {
+    return this.imageCanvasHint.textContent()
   }
 
   get openImageButton() {
