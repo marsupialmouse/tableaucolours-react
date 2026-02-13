@@ -143,11 +143,11 @@ export class ColourPaletteEditor {
   }
 
   async getImageDimensions(): Promise<{width: number; height: number}> {
-    /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
-    const width: number = await this.imageCanvasElement.evaluate((canvas: any) => canvas.width)
-    const height: number = await this.imageCanvasElement.evaluate((canvas: any) => canvas.height)
-    /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any */
-    return {width, height}
+    const box = await this.imageCanvasElement.boundingBox()
+    if (!box) {
+      throw new Error('Image canvas element not found or not visible')
+    }
+    return {width: box.width, height: box.height}
   }
 
   async getHintText(): Promise<string | null> {
