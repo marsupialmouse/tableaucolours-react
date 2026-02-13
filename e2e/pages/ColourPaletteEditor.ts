@@ -272,4 +272,13 @@ export class ColourPaletteEditor {
     const colourItem = this.page.getByTestId('ColourPaletteColourListItem Component').nth(index)
     await expect(colourItem).toHaveClass(/selected/)
   }
+
+  // Discard palette getters and methods
+  get discardPaletteButton() {
+    return this.page.locator('button[title="Delete all colours"]')
+  }
+
+  async clickDiscardPalette() {
+    await this.discardPaletteButton.click()
+  }
 }
