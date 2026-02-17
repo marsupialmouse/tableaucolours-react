@@ -8,6 +8,7 @@ import classes from './ColourPaletteColourListItem.module.less'
 import {useSelector} from 'react-redux'
 import {selectColourPaletteColours} from 'src/stores/colourPaletteSlice.ts'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes.ts'
+import {DragDropProvider} from '../ColourPaletteColourList/DragDropContext'
 
 interface WrapperProps {
   canRemove?: boolean
@@ -22,7 +23,9 @@ interface RenderProps extends WrapperProps {
 
 function render({colour, canRemove, index, isSelected, isDragging}: RenderProps) {
   renderWithProviders(
-    <StateWrapper canRemove={canRemove} index={index} isDragging={isDragging} />,
+    <DragDropProvider>
+      <StateWrapper canRemove={canRemove} index={index} isDragging={isDragging} />
+    </DragDropProvider>,
     {
       preloadedState: {
         colourPalette: {

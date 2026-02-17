@@ -1,3 +1,5 @@
+@import 'src/variables.less';
+
 .colourlist {
   margin: 0;
   padding: 0;
@@ -6,4 +8,14 @@
   grid-gap: 1rem;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(5, 1fr);
+}
+
+.dropIndicator {
+  width: 5rem;
+  height: 5rem;
+  border: 2px dashed @border-colour-active;
+  border-radius: 0.2rem;
+  background-color: fade(@border-colour-active, 10%);
+  box-sizing: border-box;
+  pointer-events: none;
 }

@@ -322,4 +322,16 @@ export class ColourPaletteEditor {
   async clickDiscardPalette() {
     await this.discardPaletteButton.click()
   }
+
+  // Drag and drop methods
+  get colourList() {
+    return this.page.getByTestId('ColourPaletteColourList')
+  }
+
+  async dragColour(fromIndex: number, toIndex: number) {
+    const items = await this.getColourItems()
+    if (items[fromIndex] && items[toIndex]) {
+      await items[fromIndex].dragTo(items[toIndex])
+    }
+  }
 }

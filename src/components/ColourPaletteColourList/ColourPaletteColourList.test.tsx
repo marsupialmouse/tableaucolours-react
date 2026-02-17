@@ -1,5 +1,5 @@
 import {describe, expect, it, test} from 'vitest'
-import {screen} from '@testing-library/react'
+import {fireEvent, screen} from '@testing-library/react'
 import ColourPaletteColourList from './ColourPaletteColourList'
 import {ColourPaletteTypes} from 'src/types/ColourPaletteTypes'
 import {createColours, renderWithProviders, userEvent} from 'src/testing/test-utils'
@@ -324,5 +324,146 @@ describe('Colour palette colour list', () => {
     await userEvent.keyboard('{backspace}')
 
     expect(getItemColours(), 'Colour deleted').toEqual(expectedColours)
+  })
+
+  describe('drag and drop reordering', () => {
+    // Helper to create a mock DataTransfer for drag events
+    const createDragEvent = () => ({
+      dataTransfer: {
+        effectAllowed: 'none',
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        setData: () => {},
+        getData: () => '',
+      },
+    })
+
+    it('adds dragging class when drag starts', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      fireEvent.dragStart(items[0], createDragEvent())
+
+      expect(items[0]).toHaveClass(classes['colour--dragging'])
+    })
+
+    it('removes dragging class when drag ends', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragEnd(items[0])
+
+      expect(items[0]).not.toHaveClass(classes['colour--dragging'])
+    })
+
+    it('reorders colours when dropped on valid target', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+      const initialColours = getItemColours()
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragOver(items[2])
+      fireEvent.drop(screen.getByTestId('ColourPaletteColourList'))
+
+      const expectedColours = [initialColours[1], initialColours[2], initialColours[0]]
+      expect(getItemColours()).toEqual(expectedColours)
+    })
+
+    it('cancels reorder when drag ends without drop on list', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+      const initialColours = getItemColours()
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragOver(items[2])
+      fireEvent.dragEnd(items[0])
+
+      expect(getItemColours()).toEqual(initialColours)
+    })
+
+    it('shifts colours visually during drag', () => {
+      renderListWithColours({numberOfColours: 4, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragOver(items[2])
+
+      // Items 1 and 2 should shift to fill the gap
+      expect(items[1]).toHaveStyle('grid-column: 1; grid-row: 1')
+      expect(items[2]).toHaveStyle('grid-column: 1; grid-row: 2')
+    })
+
+    it('does nothing when colour is dropped on itself', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+      const initialColours = getItemColours()
+
+      fireEvent.dragStart(items[1], createDragEvent())
+      fireEvent.dragOver(items[1])
+      fireEvent.drop(screen.getByTestId('ColourPaletteColourList'))
+
+      expect(getItemColours()).toEqual(initialColours)
+    })
+
+    it('does not reorder when only one colour exists', () => {
+      renderListWithColours({numberOfColours: 1, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+      const initialColours = getItemColours()
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragEnd(items[0])
+
+      expect(getItemColours()).toEqual(initialColours)
+    })
+
+    it('does not allow dragging when colour picker is open', async () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      // Open colour picker by double-clicking swatch
+      const swatch = items[0].querySelector('[data-testid="ColourPaletteColourListItem Swatch"]')
+      if (swatch) {
+        await userEvent.dblClick(swatch)
+      }
+
+      // Verify item is not draggable
+      expect(items[0]).toHaveAttribute('draggable', 'false')
+    })
+
+    it('moves colour to end when dropped on empty grid space', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+      const initialColours = getItemColours()
+      const list = screen.getByTestId('ColourPaletteColourList')
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      // Simulate dragOver on the list container (empty space)
+      fireEvent.dragOver(list)
+      fireEvent.drop(list)
+
+      // First colour should now be at the end
+      const expectedColours = [initialColours[1], initialColours[2], initialColours[0]]
+      expect(getItemColours()).toEqual(expectedColours)
+    })
+
+    it('shows drop indicator when dragging to different position', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      fireEvent.dragStart(items[0], createDragEvent())
+      fireEvent.dragOver(items[2])
+
+      expect(screen.getByTestId('DropIndicator')).toBeInTheDocument()
+    })
+
+    it('does not show drop indicator when dragging to same position', () => {
+      renderListWithColours({numberOfColours: 3, selectedIndex: 0})
+      const items = screen.getAllByRole('listitem')
+
+      fireEvent.dragStart(items[1], createDragEvent())
+      fireEvent.dragOver(items[1])
+
+      expect(screen.queryByTestId('DropIndicator')).not.toBeInTheDocument()
+    })
   })
 })
